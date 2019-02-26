@@ -7,15 +7,12 @@ from sklearn.feature_selection import SelectKBest
 from sklearn.decomposition import PCA
 
 import matplotlib.pyplot as plt
-%matplotlib inline
 
 #import data
 df_data = pd.read_csv("data.csv")
 df_data_labels = pd.read_csv("labels.csv")
 
 df_data_labels.head()
-
-finalDf = pd.concat([, df_data[['Unnamed: 0']]], axis = 1)
 
 
 #df_names=list(df_data.columns.values)
