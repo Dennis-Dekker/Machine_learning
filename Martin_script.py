@@ -28,6 +28,7 @@ finalDf = pd.concat([df_data[['Unnamed: 0']]], axis = 1)
 x = df_data.drop('Unnamed: 0', 1)
 y = df_data['Unnamed: 0']
 
+print(x.head())
 #PCA
 pca = PCA(n_components=2)
 principalComponents = pca.fit_transform(x)
