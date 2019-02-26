@@ -63,15 +63,23 @@ def calculate_PCA(x, y, df_data_labels, n = 2):
     return pca, finalDf
     
 def plot_PCA(finalDf):
+    """Plot PCA's
+    
+    First plot of normal PCA.
+    Second plot PCA colored by Class.
+    """ 
+    
     #plotting
     fig_PCA = plt.scatter(finalDf.iloc[:,0], finalDf.iloc[:,1], s=4, alpha=0.3, cmap='RdYlBu_r')
-    fig_PCA.figure.savefig('images/PCA_test.png')
+    path_PCA_figure = 'images/PCA_test.png'
+    fig_PCA.figure.savefig(path_PCA_figure)
+    print("Image saved to: " + path_PCA_figure)
 
     #plot by class
-
-    pca_color=sns.pairplot(x_vars=["principal component 1"], y_vars=["principal component 2"], data=finalDf, hue="Class", size=5)
-    pca_color.savefig("images/PCA_color.png")
-    print("image saved")
+    pca_color=sns.pairplot(x_vars=["principal component 1"], y_vars=["principal component 2"], data=finalDf, hue="Class", height=5)
+    path_PCA_figure_color = "images/PCA_color.png"
+    pca_color.savefig(path_PCA_figure_color)
+    print("Image saved to: " + path_PCA_figure_color)
 
 def main():
     """Main function.
