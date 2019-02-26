@@ -51,8 +51,8 @@ fig_PCA.figure.savefig('PCA_test.png')
 # df_data_labels.iloc[:,1] = pd.factorize(df_data_labels.iloc[:,1])
 # print(df_data_labels.head())
 ##################################
-sns.pairplot(x_vars=["principal component 1"], y_vars=["principal component 2"], data=finalDf, hue="Class", size=5)
-
+pca_color=sns.pairplot(x_vars=["principal component 1"], y_vars=["principal component 2"], data=finalDf, hue="Class", size=5)
+pca_colo.savefig("PCA_color.png")
 ###################################
 # labels_list=df_data_labels[["Class"]]
 # print(labels_list)
