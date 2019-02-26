@@ -10,7 +10,7 @@ import matplotlib.pyplot as plt
 
 #import data
 
-allFiles = glob.glob("data/*.csv")
+allFiles = glob.glob("data/data*.csv")
 list_ = []
 for file_ in allFiles:
     df = pd.read_csv(file_,index_col=None, header=0)
