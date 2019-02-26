@@ -47,6 +47,7 @@ fig_PCA.figure.savefig('PCA_test.png')
 
 #plot by class
 labels_list=df_data_labels.iloc[:,1]
+print(labels_list)
 colors=["red", "blue","green","yellow","purple"]
 fig_PCA = plt.scatter(finalDf.iloc[:,0], finalDf.iloc[:,1], c=labels_list, s=4, alpha=0.3, cmap=matplotlib.colors.ListedColormap(colors))
 fig_PCA.figure.savefig('PCA_colors.png')
