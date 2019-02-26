@@ -48,6 +48,6 @@ print(pca.explained_variance_)
 #plot by class
 
 pca_color=sns.pairplot(x_vars=["principal component 1"], y_vars=["principal component 2"], data=finalDf, hue="Class", size=5)
-pca_color.savefig("images/PCA_color.png")
+pca_color.savefig("PCA_color.png")
 print("image saved")
 
