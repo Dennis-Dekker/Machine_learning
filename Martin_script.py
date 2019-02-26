@@ -36,7 +36,7 @@ principalDf = pd.DataFrame(data = principalComponents
              , columns = ['principal component 1', 'principal component 2'])
 
 
-finalDf = pd.concat([principalDf, df_data_label[["Class"]]],axis=1)
+finalDf = pd.concat([principalDf, df_data_labels[["Class"]]],axis=1)
 col1=finalDf.iloc[:,0]
 col1.head()
 
@@ -44,3 +44,5 @@ col1.head()
 #plotting
 fig_PCA = plt.scatter(finalDf.iloc[:,0], finalDf.iloc[:,1], s=4, alpha=0.3, cmap='RdYlBu_r')
 fig_PCA.figure.savefig('PCA_test.png')
+
+#plot by class
