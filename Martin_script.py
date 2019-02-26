@@ -62,15 +62,16 @@ def calculate_PCA(x, y, df_data_labels, n = 2):
     
     return pca, finalDf
     
-#plotting
-fig_PCA = plt.scatter(finalDf.iloc[:,0], finalDf.iloc[:,1], s=4, alpha=0.3, cmap='RdYlBu_r')
-fig_PCA.figure.savefig('images/PCA_test.png')
+def plot_PCA(finalDf):
+    #plotting
+    fig_PCA = plt.scatter(finalDf.iloc[:,0], finalDf.iloc[:,1], s=4, alpha=0.3, cmap='RdYlBu_r')
+    fig_PCA.figure.savefig('images/PCA_test.png')
 
-#plot by class
+    #plot by class
 
-pca_color=sns.pairplot(x_vars=["principal component 1"], y_vars=["principal component 2"], data=finalDf, hue="Class", size=5)
-pca_color.savefig("images/PCA_color.png")
-print("image saved")
+    pca_color=sns.pairplot(x_vars=["principal component 1"], y_vars=["principal component 2"], data=finalDf, hue="Class", size=5)
+    pca_color.savefig("images/PCA_color.png")
+    print("image saved")
 
 def main():
     """Main function.
@@ -88,6 +89,8 @@ def main():
     #calculate PCA 
     pca, finalDf = calculate_PCA(x, y, df_data_labels)
     
+    #plot PCA 
+    plot_PCA(finalDf)
 
 if __name__ == '__main__':
     main()
