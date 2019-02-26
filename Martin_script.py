@@ -47,6 +47,7 @@ fig_PCA.figure.savefig('PCA_test.png')
 
 #plot by class
 df_data_labels = pd.factorize(df_data_labels.iloc[:,1])
+print(df_data_labels.head())
 
 labels_list=df_data_labels[["Class"]]
 print(labels_list)
