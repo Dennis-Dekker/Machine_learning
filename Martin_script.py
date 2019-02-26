@@ -56,9 +56,12 @@ def calculate_PCA(x, y, df_data_labels, n = 2):
 
     #add class information to the output of PCA
     finalDf = pd.concat([principalDf, df_data_labels[["Class"]]],axis=1)
-
-    print(pca.explained_variance_)
-
+    
+    #uncomment next line for debugging
+    #print(pca.explained_variance_)
+    
+    return pca, finalDf
+    
 #plotting
 fig_PCA = plt.scatter(finalDf.iloc[:,0], finalDf.iloc[:,1], s=4, alpha=0.3, cmap='RdYlBu_r')
 fig_PCA.figure.savefig('images/PCA_test.png')
@@ -77,6 +80,13 @@ def main():
     
     #process dataframe 
     x, y = process_data_frame(df_data)
+    
+    #determine amount of PC's for analysis
+    #TODO 
+    # n = calculate_amount_PCs()
+    
+    #calculate PCA 
+    pca, finalDf = calculate_PCA(x, y, df_data_labels)
     
 
 if __name__ == '__main__':
