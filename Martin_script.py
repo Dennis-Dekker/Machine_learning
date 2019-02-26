@@ -8,10 +8,9 @@ from sklearn.decomposition import PCA
 
 import matplotlib.pyplot as plt
 
-
 #import data
-df_data = pd.read_csv("data.csv")
-df_data_labels = pd.read_csv("labels.csv")
+df_data = pd.read_csv("data/TCGA-PANCAN-HiSeq-801x20531.tar.gz")
+df_data_labels = pd.read_csv("data/labels.csv")
 
 df_data_labels.head()
 
