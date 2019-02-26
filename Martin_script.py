@@ -25,7 +25,7 @@ print(df_data_labels.head())
 
 finalDf = pd.concat([df_data[['Unnamed: 0']]], axis = 1)
 #df_names=list(df_data.columns.values)
-x = df_data.drop('Unnamed: 0', 1)
+x = df_data.drop(['Unnamed: 0','Unnamed: 0.1'], 1)
 y = df_data['Unnamed: 0']
 
 print(x.head())
