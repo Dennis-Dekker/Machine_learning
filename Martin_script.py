@@ -9,7 +9,7 @@ from sklearn.decomposition import PCA
 import matplotlib.pyplot as plt
 %matplotlib inline
 
-
+#import data
 df_data = pd.read_csv("data.csv")
 df_data_labels = pd.read_csv("labels.csv")
 
