@@ -17,6 +17,7 @@ for file_ in allFiles:
     list_.append(df)
 
 df_data = pd.concat(list_, axis = 0, ignore_index = True)
+
 df_data_labels = pd.read_csv("data/labels.csv")
 
 df_data_labels.head()
