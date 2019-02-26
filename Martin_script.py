@@ -49,7 +49,7 @@ fig_PCA.figure.savefig('PCA_test.png')
 df_data_labels = pd.Categorical(pd.factorize(df_data_labels[["Class"]]))
 
 labels_list=df_data_labels[["Class"]]
-#print(labels_list)
+print(labels_list)
 colors=["red", "blue","green","yellow","purple"]
 fig_PCA = plt.scatter(finalDf.iloc[:,0], finalDf.iloc[:,1], c=labels_list, s=4, alpha=0.3, cmap=matplotlib.colors.ListedColormap(colors))
 fig_PCA.figure.savefig('PCA_colors.png')
