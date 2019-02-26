@@ -44,6 +44,7 @@ col1.head()
 
 print(principalComponents.explained_variance_)
 
+
 #plotting
 fig_PCA = plt.scatter(finalDf.iloc[:,0], finalDf.iloc[:,1], s=4, alpha=0.3, cmap='RdYlBu_r')
 fig_PCA.figure.savefig('PCA_test.png')
