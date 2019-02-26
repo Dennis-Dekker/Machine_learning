@@ -46,10 +46,8 @@ fig_PCA = plt.scatter(finalDf.iloc[:,0], finalDf.iloc[:,1], s=4, alpha=0.3, cmap
 fig_PCA.figure.savefig('PCA_test.png')
 
 #plot by class
-df_data_labels.iloc[:,1] = pd.factorize(df_data_labels.iloc[:,1])
-print(df_data_labels.head())
+labels_list = pd.factorize(df_data_labels.iloc[:,1])
 
-labels_list=df_data_labels[["Class"]]
 print(labels_list)
 colors=["red", "blue","green","yellow","purple"]
 fig_PCA = plt.scatter(finalDf.iloc[:,0], finalDf.iloc[:,1], c=labels_list, s=4, alpha=0.3, cmap=matplotlib.colors.ListedColormap(colors))
