@@ -17,10 +17,10 @@ for file_ in allFiles:
     list_.append(df)
 
 df_data = pd.concat(list_, axis = 0, ignore_index = True)
-
+print(df_data.head())
 df_data_labels = pd.read_csv("data/labels.csv")
 
-df_data_labels.head()
+print(df_data_labels.head())
 
 #df_names=list(df_data.columns.values)
 x = df_data.drop('Unnamed: 0', 1)
