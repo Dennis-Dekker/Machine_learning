@@ -46,7 +46,7 @@ fig_PCA = plt.scatter(finalDf.iloc[:,0], finalDf.iloc[:,1], s=4, alpha=0.3, cmap
 fig_PCA.figure.savefig('PCA_test.png')
 
 #plot by class
-df_data_labels = pd.Categorical(pd.factorize(df_data_labels[["Class"]]))
+df_data_labels = pd.factorize(df_data_labels[["Class"]])
 
 labels_list=df_data_labels[["Class"]]
 print(labels_list)
