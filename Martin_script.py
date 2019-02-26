@@ -49,7 +49,7 @@ fig_PCA = plt.scatter(finalDf.iloc[:,0], finalDf.iloc[:,1], s=4, alpha=0.3, cmap
 fig_PCA.figure.savefig('PCA_test.png')
 
 #plot by class
-##################################
+
 pca_color=sns.pairplot(x_vars=["principal component 1"], y_vars=["principal component 2"], data=finalDf, hue="Class", size=5)
 pca_color.savefig("images/PCA_color.svg",format="svg", dpi=1200)
-###################################
+
