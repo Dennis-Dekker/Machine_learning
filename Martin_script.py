@@ -36,7 +36,7 @@ principalDf = pd.DataFrame(data = principalComponents
              , columns = ['principal component 1', 'principal component 2'])
 
 
-finalDf = pd.concat([principalDf, df_data[['Unnamed: 0']]], axis = 1)
+finalDf = pd.concat([principalDf, df_data_label[["Class"]]],axis=1)
 col1=finalDf.iloc[:,0]
 col1.head()
 
