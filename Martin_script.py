@@ -5,7 +5,7 @@ import sklearn
 from sklearn.preprocessing import StandardScaler
 from sklearn.feature_selection import SelectKBest
 from sklearn.decomposition import PCA
-
+import matplotlib
 import matplotlib.pyplot as plt
 
 #import data
@@ -46,3 +46,7 @@ fig_PCA = plt.scatter(finalDf.iloc[:,0], finalDf.iloc[:,1], s=4, alpha=0.3, cmap
 fig_PCA.figure.savefig('PCA_test.png')
 
 #plot by class
+labels_list=df_data_labels.iloc[:,1]
+colors=["red", "blue","green","yellow","purple"]
+fig_PCA = plt.scatter(finalDf.iloc[:,0], finalDf.iloc[:,1], c=labels_list, s=4, alpha=0.3, cmap=matplotlib.colors.ListedColormap(colors))
+fig_PCA.figure.savefig('PCA_colors.png')
