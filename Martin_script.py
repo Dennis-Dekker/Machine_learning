@@ -10,28 +10,27 @@ import matplotlib
 import matplotlib.pyplot as plt
 import seaborn
 
-#import data
-
+#import data from .csv files
 allFiles = glob.glob("data/data*.csv")
 list_ = []
 for file_ in allFiles:
     df = pd.read_csv(file_,index_col=None)
     list_.append(df)
 
+#expression data
 df_data = pd.concat(list_, axis = 0, ignore_index = True)
-print(df_data.head())
+#labels frame
 df_data_labels = pd.read_csv("data/labels.csv")
 
-print(df_data_labels.head())
 
 
 finalDf = pd.concat([df_data[['Unnamed: 0']]], axis = 1)
-#df_names=list(df_data.columns.values)
+#remove Unnamed columns from the dataset
 x = df_data.drop(['Unnamed: 0','Unnamed: 0.1'], 1)
+#remove Unnamed column from the labels
 y = df_data['Unnamed: 0']
 
-print(x.head())
-#PCA
+#PCA selecting the first two components.
 pca = PCA(n_components=2)
 principalComponents = pca.fit_transform(x)
 principalDf = pd.DataFrame(data = principalComponents
