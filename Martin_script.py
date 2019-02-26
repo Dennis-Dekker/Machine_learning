@@ -13,7 +13,7 @@ import seaborn
 def load_data():
     """Load data from .csv files.
     
-    df_data: dataframe of gene expression data (from splitted .csv files).
+    df_data: dataframe of gene expression data (merged from splitted .csv files).
     df_data_labels: dataframe with sample annotation.
     """
     #import data from .csv files
@@ -44,9 +44,9 @@ def process_data_frame(df_data):
     return x, y
 
 def calculate_PCA(x, y, df_data_labels, n = 2):
-    """Calculate n amoutn of component
+    """Calculate n principal components
     
-    
+    finalDf: dataframe of pca with labels.
     """
     #PCA selecting the first two components.
     pca = PCA(n_components=2)
