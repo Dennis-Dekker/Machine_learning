@@ -8,6 +8,7 @@ from sklearn.feature_selection import SelectKBest
 from sklearn.decomposition import PCA
 import matplotlib
 import matplotlib.pyplot as plt
+import seaborn
 
 #import data
 
