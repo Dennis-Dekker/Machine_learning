@@ -14,25 +14,22 @@ df_data_labels = pd.read_csv("data/labels.csv")
 
 df_data_labels.head()
 
-#hellooo, i'm davide
-#hi davide
-
 #df_names=list(df_data.columns.values)
 x = df_data.drop('Unnamed: 0', 1)
 y = df_data['Unnamed: 0']
 
+#PCA
 pca = PCA(n_components=2)
 principalComponents = pca.fit_transform(x)
 principalDf = pd.DataFrame(data = principalComponents
              , columns = ['principal component 1', 'principal component 2'])
 
 
-#
 finalDf = pd.concat([principalDf, df_data[['Unnamed: 0']]], axis = 1)
 col1=finalDf.iloc[:,0]
 col1.head()
 
 
-#PCA
+#plotting
 fig_PCA = plt.scatter(finalDf.iloc[:,0], finalDf.iloc[:,1], s=4, alpha=0.3, cmap='RdYlBu_r')
 fig_PCA.figure.savefig('PCA_test.png')
