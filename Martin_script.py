@@ -41,13 +41,13 @@ finalDf = pd.concat([principalDf, df_data_labels[["Class"]]],axis=1)
 
 print(pca.explained_variance_)
 
-#plotting
-# fig_PCA = plt.scatter(finalDf.iloc[:,0], finalDf.iloc[:,1], s=4, alpha=0.3, cmap='RdYlBu_r')
-# fig_PCA.figure.savefig('PCA_test.png')
+plotting
+fig_PCA = plt.scatter(finalDf.iloc[:,0], finalDf.iloc[:,1], s=4, alpha=0.3, cmap='RdYlBu_r')
+fig_PCA.figure.savefig('images/PCA_test.png')
 
 #plot by class
 
 pca_color=sns.pairplot(x_vars=["principal component 1"], y_vars=["principal component 2"], data=finalDf, hue="Class", size=5)
-pca_color.savefig("PCA_color.png")
+pca_color.savefig("images/PCA_color.png")
 print("image saved")
 
