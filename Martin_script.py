@@ -2,6 +2,7 @@ import numpy as np
 import pandas as pd
 import glob
 import sklearn
+import seaborn as sns
 from sklearn.preprocessing import StandardScaler
 from sklearn.feature_selection import SelectKBest
 from sklearn.decomposition import PCA
@@ -46,8 +47,13 @@ fig_PCA = plt.scatter(finalDf.iloc[:,0], finalDf.iloc[:,1], s=4, alpha=0.3, cmap
 fig_PCA.figure.savefig('PCA_test.png')
 
 #plot by class
-labels_list = pd.factorize(df_data_labels.iloc[:,1])
+df_data_labels.iloc[:,1] = pd.factorize(df_data_labels.iloc[:,1])
+print(df_data_labels.head())
+##################################
+sns.pairplot(x_vars=["principal component 1"], y_vars=["principal component 2"], data=finalDf, hue="Class", size=5)
 
+###################################
+labels_list=df_data_labels[["Class"]]
 print(labels_list)
 colors=["red", "blue","green","yellow","purple"]
 fig_PCA = plt.scatter(finalDf.iloc[:,0], finalDf.iloc[:,1], c=labels_list, s=4, alpha=0.3, cmap=matplotlib.colors.ListedColormap(colors))
