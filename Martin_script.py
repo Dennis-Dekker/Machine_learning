@@ -13,7 +13,7 @@ import matplotlib.pyplot as plt
 allFiles = glob.glob("data/data*.csv")
 list_ = []
 for file_ in allFiles:
-    df = pd.read_csv(file_,index_col=None, header=0)
+    df = pd.read_csv(file_,index_col=None)
     list_.append(df)
 
 df_data = pd.concat(list_, axis = 0, ignore_index = True)
