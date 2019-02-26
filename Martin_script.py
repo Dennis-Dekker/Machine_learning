@@ -14,7 +14,7 @@ df_data_labels = pd.read_csv("data/labels.csv")
 
 df_data_labels.head()
 
-#hellooo
+#hellooo, i'm davide
 
 #df_names=list(df_data.columns.values)
 x = df_data.drop('Unnamed: 0', 1)
