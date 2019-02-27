@@ -2,7 +2,7 @@
 Machine learning Project - mRNA expression data
 
 ## Goal
-Select the best classification method -> test the method (discuss)
+Test different classification methods (discuss) --> Select the best method 
 
 ## Dataset
 Gene expression ([RNA-seq](https://archive.ics.uci.edu/ml/datasets/gene+expression+cancer+RNA-Seq#)) of five different cancer types.
