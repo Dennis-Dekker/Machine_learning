@@ -1,3 +1,5 @@
+<img align="right" width="516" height="200" src="https://blog.omictools.com/wp-content/uploads/2017/11/Banner-RNAseq-QC-omictools.png">
+
 # Machine_learning
 Machine learning Project - mRNA expression data
 
