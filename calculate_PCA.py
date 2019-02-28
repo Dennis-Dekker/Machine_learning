@@ -8,7 +8,6 @@ from sklearn.feature_selection import SelectKBest
 from sklearn.decomposition import PCA
 import matplotlib
 import matplotlib.pyplot as plt
-import seaborn
 
 def load_data():
     """Load data from .csv files.
@@ -62,7 +61,7 @@ def calculate_PCA(x, y, df_data_labels, n = 2):
     
     return pca, finalDf
     
-def plot_PCA(finalDf):
+def plot_PCA(finalDf, pca):
     """Plot PCA's
     
     First plot of normal PCA.
@@ -72,12 +71,16 @@ def plot_PCA(finalDf):
     #plotting
     fig_PCA = plt.scatter(finalDf.iloc[:,0], finalDf.iloc[:,1], s=4, alpha=0.3, cmap='RdYlBu_r')
     path_PCA_figure = 'images/PCA_test.png'
+    plt.xlabel("PC1 (" + str(round(pca.explained_variance_ratio_[0]*100, 1)) + "%)")
+    plt.ylabel("PC2 (" + str(round(pca.explained_variance_ratio_[1]*100, 1)) + "%)")
     fig_PCA.figure.savefig(path_PCA_figure)
     print("Image saved to: " + path_PCA_figure)
 
     #plot by class
     pca_color=sns.pairplot(x_vars=["principal component 1"], y_vars=["principal component 2"], data=finalDf, hue="Class", height=5)
     path_PCA_figure_color = "images/PCA_color.png"
+    pca_color.set(xlabel = "PC1 (" + str(round(pca.explained_variance_ratio_[0]*100, 1)) + "%)")
+    pca_color.set(ylabel = "PC2 (" + str(round(pca.explained_variance_ratio_[1]*100, 1)) + "%)")
     pca_color.savefig(path_PCA_figure_color)
     print("Image saved to: " + path_PCA_figure_color)
 
@@ -98,7 +101,7 @@ def main():
     pca, finalDf = calculate_PCA(x, y, df_data_labels)
     
     #plot PCA 
-    plot_PCA(finalDf)
+    plot_PCA(finalDf, pca)
 
 if __name__ == '__main__':
     main()
