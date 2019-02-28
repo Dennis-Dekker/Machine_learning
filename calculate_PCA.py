@@ -86,7 +86,9 @@ def plot_PCA(finalDf, pca):
 
 def calculate_amount_PCs(x):
     pca_trafo = PCA().fit(x)
-    plt.semilogy(pca_trafo.explained_variance_ratio, '--o')
+    plt.semilogy(pca_trafo.explained_variance_ratio_[::100], '--o')
+    plt.semilogy(pca_trafo.explained_variance_ratio_.cumsum()[::100], '--o')
+    plt.savefig("images/test_explained_variance.png")
     return 2
 
 def main():
@@ -103,10 +105,10 @@ def main():
     n = calculate_amount_PCs(x)
     
     #calculate PCA 
-    pca, finalDf = calculate_PCA(x, y, df_data_labels)
+    #pca, finalDf = calculate_PCA(x, y, df_data_labels)
     
     #plot PCA 
-    plot_PCA(finalDf, pca)
+    #plot_PCA(finalDf, pca)
 
 if __name__ == '__main__':
     main()
