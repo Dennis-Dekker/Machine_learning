@@ -95,7 +95,7 @@ def main():
     
     #determine amount of PC's for analysis
     #TODO 
-    # n = calculate_amount_PCs()
+    n = calculate_amount_PCs()
     
     #calculate PCA 
     pca, finalDf = calculate_PCA(x, y, df_data_labels)
