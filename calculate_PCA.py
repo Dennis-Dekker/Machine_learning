@@ -84,6 +84,9 @@ def plot_PCA(finalDf, pca):
     pca_color.savefig(path_PCA_figure_color)
     print("Image saved to: " + path_PCA_figure_color)
 
+def calculate_amount_PCs():
+    print("hello")
+
 def main():
     """Main function.
     """
