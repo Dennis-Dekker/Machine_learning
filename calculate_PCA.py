@@ -84,8 +84,10 @@ def plot_PCA(finalDf, pca):
     pca_color.savefig(path_PCA_figure_color)
     print("Image saved to: " + path_PCA_figure_color)
 
-def calculate_amount_PCs():
-    print("hello")
+def calculate_amount_PCs(x):
+    pca_trafo = PCA().fit(x)
+    plt.semilogy(pca_trafo.explained_variance_ratio, '--o')
+    return 2
 
 def main():
     """Main function.
@@ -98,7 +100,7 @@ def main():
     
     #determine amount of PC's for analysis
     #TODO 
-    n = calculate_amount_PCs()
+    n = calculate_amount_PCs(x)
     
     #calculate PCA 
     pca, finalDf = calculate_PCA(x, y, df_data_labels)
