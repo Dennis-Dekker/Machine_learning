@@ -1,5 +1,6 @@
 import numpy as np
 import synapseclient
+import pandas
  
 syn = synapseclient.Synapse()
 syn.login('Machine_learning_project_70','Group_70')
@@ -20,9 +21,7 @@ with open(syn2320114.path, 'r') as f:
     for line in f:
         values = [line.strip().split('\t')[0]]
         values.extend([float(x) for x in line.strip().split('\t')[1:]])
-        print(values)
         for i in range(len(labels)):
             data[labels[i]].append(values[i])
 
 ## load the data matrix into a numpy array
-#np.loadtxt(fname=syn2320114.path, skiprows=1)
