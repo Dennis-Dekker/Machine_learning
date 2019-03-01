@@ -14,6 +14,26 @@ from sklearn.model_selection import train_test_split
 from sklearn.svm import SVC 
 
 
+def decision_tree(X_train, X_test, y_train, y_test):
+    dtree_model = DecisionTreeClassifier().fit(X_train, y_train) 
+    dtree_predictions = dtree_model.predict(X_test) 
+    # creating a confusion matrix 
+    cm = confusion_matrix(y_test, dtree_predictions)
+    return cm
+
+
+def support_vector_machine(X_train, X_test, y_train, y_test):
+     # training a linear SVM classifier 
+    svm_model_linear = SVC().fit(X_train, y_train) 
+    svm_predictions = svm_model_linear.predict(X_test) 
+    
+    # model accuracy for X_test   
+    accuracy = svm_model_linear.score(X_test, y_test) 
+    
+    # creating a confusion matrix 
+    cm = confusion_matrix(y_test, svm_predictions)
+
+    return cm, accuracy
 
 def main():
     Data = pd.read_csv("data/PCA_transformed_data.csv", header=None)
@@ -24,25 +44,14 @@ def main():
     X_train, X_test, y_train, y_test = train_test_split(Data, Labels[["Class"]], random_state = 0) 
     
     #decision tree classifier
-    dtree_model = DecisionTreeClassifier().fit(X_train, y_train) 
-    dtree_predictions = dtree_model.predict(X_test) 
-    # creating a confusion matrix 
-    cm = confusion_matrix(y_test, dtree_predictions)
+    
     print("Decision tree")
+    cm_dt=decision_tree(X_train, X_test, y_train, y_test)
     print(cm)
-
-    # training a linear SVM classifier 
-    svm_model_linear = SVC(kernel = 'polinomial', C = 1).fit(X_train, y_train) 
-    svm_predictions = svm_model_linear.predict(X_test) 
-    
-    # model accuracy for X_test   
-    accuracy = svm_model_linear.score(X_test, y_test) 
-    
-    # creating a confusion matrix 
-    cm = confusion_matrix(y_test, svm_predictions) 
     print("SVM")
-    print(cm)
-    print(accuracy)
+    cm_svm, accuracy_svm=support_vector_machine(X_train, X_test, y_train, y_test)
+    print(cm_svm)
+    print(accuracy_svm)
 
 
 main()
