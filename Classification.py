@@ -11,7 +11,7 @@ import matplotlib.pyplot as plt
 
 def main():
     Data = pd.read_csv("data/PCA_transformed_data.csv", header=None)
-    Labels=pd.read_csv("data/labels.csv",header=None)
+    Labels=pd.read_csv("data/labels.csv")
     print(Data.head())
     print(Labels.head())
 
