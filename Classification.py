@@ -14,6 +14,10 @@ from sklearn.model_selection import train_test_split
 from sklearn.svm import SVC
 from sklearn.neighbors import KNeighborsClassifier
 from mlxtend.plotting import plot_decision_regions
+from sklearn import datasets
+import pylab as pl
+
+
 
 
 
@@ -54,13 +58,22 @@ def k_nearest_neighbors(X_train, X_test, y_train, y_test):
 def plot_boundaries(svm_model, X,y):
     # Plot Decision Region using mlxtend's  plotting function
     #s = pd.Series(['PRAD','LUAD','BRCA','KIRC','COAD'])
-    labels, uniques = pd.factorize(y.iloc[:, 0].tolist())
-    #y=y.values.astype(np.int64)
-    plot_decision_regions(X=X.values, y=labels, clf=svm_model, legend=2)
-    plt.xlabel(X.columns[0])
-    plt.ylabel(X.columns[1])
-    plt.title('SVM Decision Region Boundary', size=16)
-    plt.show()
+    # labels, uniques = pd.factorize(y.iloc[:, 0].tolist())
+    # #print(labels)
+    # #y=y.values.astype(np.int64)
+    # print(X.values)
+    # plot_decision_regions(X=X.values, y=labels, clf=svm_model, legend=2)
+    # plt.xlabel(X.columns[0])
+    # plt.ylabel(X.columns[1])
+    # plt.title('SVM Decision Region Boundary', size=16)
+    # plt.show()
+    # Plotting decision regions
+    x_min, x_max = X[:, 0].min() - 1, X[:, 0].max() + 1
+    y_min, y_max = X[:, 1].min() - 1, X[:, 1].max() + 1
+    xx, yy = np.meshgrid(np.arange(x_min, x_max, 0.1),
+                        np.arange(y_min, y_max, 0.1))
+    pl.set_cmap(pl.cm.Paired)
+
 
 
 def main():
