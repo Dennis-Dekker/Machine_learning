@@ -43,6 +43,6 @@ Keep track on what we still have to do. Please update this list with new todo's.
 
 ## Workflow
 - [ ] PCA: try to apply it within cancer types
-- [ ] find important features --> DEG (Differentially expressed genes)
+- [ ] find important features %rarr; DEG (Differentially expressed genes)
 - [ ] KEGG analysis (Pathways) 
 
