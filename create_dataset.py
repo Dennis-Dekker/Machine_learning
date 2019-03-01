@@ -20,6 +20,7 @@ def load_dataset_ids():
             pass
         else:
             ID_dict[line.split(" ")[0]] = line.strip().split()[1:]
+            
     
     return ID_dict
 
@@ -31,9 +32,11 @@ def download_data_synapse(list_datasets):
     syn.login('Machine_learning_project_70','Group_70')
 
     # Obtain a pointer and download the data
+    print("loading dataset:")
     for cancer_type in list_datasets:
         list_datasets[cancer_type][0] = syn.get(entity = list_datasets[cancer_type][0])
         list_datasets[cancer_type][1] = syn.get(entity = list_datasets[cancer_type][1])
+        print(cancer_type)
     
     return list_datasets
 
