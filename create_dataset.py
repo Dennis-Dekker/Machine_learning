@@ -80,7 +80,6 @@ def load_annotation_files(dataset):
             data = {label: [] for label in labels}
             for line in f:
                 values = line.split('\t')
-                #values.extend([float(x) for x in line.strip().split('\t')[1:]])
                 for i in range(len(labels)):
                     data[labels[i]].append(values[i])
             if cancer_type == list(dataset.keys())[0]:
