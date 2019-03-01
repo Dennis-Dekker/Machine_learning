@@ -24,7 +24,7 @@ def decision_tree(X_train, X_test, y_train, y_test):
 
 def support_vector_machine(X_train, X_test, y_train, y_test):
      # training a linear SVM classifier 
-    svm_model_linear = SVC().fit(X_train, y_train) 
+    svm_model_linear = SVC(kernel = 'linear', C = 1).fit(X_train, y_train.values.ravel()) 
     svm_predictions = svm_model_linear.predict(X_test) 
     
     # model accuracy for X_test   
@@ -47,7 +47,7 @@ def main():
     
     print("Decision tree")
     cm_dt=decision_tree(X_train, X_test, y_train, y_test)
-    print(cm)
+    print(cm_dt)
     print("SVM")
     cm_svm, accuracy_svm=support_vector_machine(X_train, X_test, y_train, y_test)
     print(cm_svm)
