@@ -11,7 +11,9 @@ import matplotlib.pyplot as plt
 from sklearn.tree import DecisionTreeClassifier 
 from sklearn.metrics import confusion_matrix 
 from sklearn.model_selection import train_test_split 
-from sklearn.svm import SVC 
+from sklearn.svm import SVC
+from sklearn.neighbors import KNeighborsClassifier 
+
 
 
 def decision_tree(X_train, X_test, y_train, y_test):
@@ -35,6 +37,17 @@ def support_vector_machine(X_train, X_test, y_train, y_test):
 
     return cm, accuracy
 
+def k_nearest_neighbors(X_train, X_test, y_train, y_test):
+    # training a KNN classifier 
+    knn = KNeighborsClassifier(n_neighbors = 7).fit(X_train, y_train) 
+    
+    # accuracy on X_test 
+    accuracy = knn.score(X_test, y_test)     
+    # creating a confusion matrix 
+    knn_predictions = knn.predict(X_test)  
+    cm = confusion_matrix(y_test, knn_predictions)
+    return cm, accuracy
+
 def main():
     Data = pd.read_csv("data/PCA_transformed_data.csv", header=None)
     Labels=pd.read_csv("data/labels.csv")
@@ -48,10 +61,15 @@ def main():
     print("Decision tree")
     cm_dt=decision_tree(X_train, X_test, y_train, y_test)
     print(cm_dt)
+    #SVM
     print("SVM")
     cm_svm, accuracy_svm=support_vector_machine(X_train, X_test, y_train, y_test)
     print(cm_svm)
     print(accuracy_svm)
+    #KNN
+    cm_knn, accuracy_knn=k_nearest_neighbors(X_train, X_test, y_train, y_test)
+    print(cm_knn)
+    print(accuracy_knn)
 
 if __name__ == '__main__':
     main()
