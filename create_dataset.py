@@ -8,3 +8,5 @@
  
  # Get the path to the local copy of the data file
  filepath = syn2320114.path 
+ 
+ print(filepath)
