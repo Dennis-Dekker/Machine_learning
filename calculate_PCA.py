@@ -42,7 +42,7 @@ def process_data_frame(df_data):
     
     return x, y
 
-def calculate_PCA(x, y, df_data_labels, n = 2):
+def calculate_PCA(x, y, df_data_labels):
     """Calculate n principal components
     
     finalDf: dataframe of pca with labels.
@@ -51,15 +51,18 @@ def calculate_PCA(x, y, df_data_labels, n = 2):
     pca = PCA(n_components=2)
     principalComponents = pca.fit_transform(x)
     principalDf = pd.DataFrame(data = principalComponents
-                 , columns = ['principal component 1', 'principal component 2'])
+                  , columns = ['principal component 1', 'principal component 2'])
 
     #add class information to the output of PCA
     finalDf = pd.concat([principalDf, df_data_labels[["Class"]]],axis=1)
     
+    # 10 components
+    pca = PCA(n_components=10)
+    principalComponents = pca.fit_transform(x)
     #uncomment next line for debugging
     #print(pca.explained_variance_)
     
-    return pca, finalDf
+    return pca, finalDf, principalComponents
     
 def plot_PCA(finalDf, pca):
     """Plot PCA's
@@ -84,6 +87,19 @@ def plot_PCA(finalDf, pca):
     pca_color.savefig(path_PCA_figure_color)
     print("Image saved to: " + path_PCA_figure_color)
 
+def calculate_amount_PCs(x):
+    pca_trafo = PCA().fit(x)
+    print(pca_trafo.explained_variance_ratio_[0:10])
+    plt.semilogy(pca_trafo.explained_variance_ratio_[0:10]*100, '--o')
+    plt.semilogy(pca_trafo.explained_variance_ratio_.cumsum()[0:10]*100, '--o')
+    plt.ylabel('Explained variance ratio')
+    plt.xlabel('Principal components')
+    plt.savefig("images/test_explained_variance.png")
+    return 2
+
+def store_pca_result(all_component):
+    np.savetxt("data/PCA_transformed_data.csv", all_component, delimiter=",")
+
 def main():
     """Main function.
     """
@@ -95,13 +111,14 @@ def main():
     
     #determine amount of PC's for analysis
     #TODO 
-    # n = calculate_amount_PCs()
+    #n = calculate_amount_PCs(x)
     
     #calculate PCA 
-    pca, finalDf = calculate_PCA(x, y, df_data_labels)
+    pca, finalDf, all_compon = calculate_PCA(x, y, df_data_labels)
     
+    store_pca_result(all_compon)
     #plot PCA 
-    plot_PCA(finalDf, pca)
+    #plot_PCA(finalDf, pca)
 
 if __name__ == '__main__':
     main()
