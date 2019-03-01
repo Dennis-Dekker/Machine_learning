@@ -36,10 +36,6 @@ def download_data_synapse(list_datasets):
         list_datasets[cancer_type][1] = syn.get(entity = list_datasets[cancer_type][1])
         
     print(list_datasets)
-    # inspect properties
-    # print(type(syn2320114)) 
-    # print(syn2320114.name)
-    # print(syn2320114.path)
     
     return list_datasets
 
