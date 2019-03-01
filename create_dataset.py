@@ -62,6 +62,7 @@ def main():
     ## second is annotation file.
     ID_dict = load_dataset_ids()
     list_datasets = download_data_synapse(ID_dict)
+    print(list_datasets)
     
     for cancer_type  in list_datasets:
         load_dataset(cancer_type)
