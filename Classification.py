@@ -53,9 +53,10 @@ def k_nearest_neighbors(X_train, X_test, y_train, y_test):
 
 def plot_boundaries(svm_model, X,y):
     # Plot Decision Region using mlxtend's  plotting function
-    y.update(y.apply(pd.to_numeric))
-    print(y)
-    plot_decision_regions(X=X.values, y=y.astype(np.integer), clf=svm_model, legend=2)
+    #s = pd.Series(['PRAD','LUAD','BRCA','KIRC','COAD'])
+    labels, uniques = pd.factorize(y.iloc[:, 0].tolist())
+    #y=y.values.astype(np.int64)
+    plot_decision_regions(X=X.values, y=labels, clf=svm_model, legend=2)
     plt.xlabel(X.columns[0])
     plt.ylabel(X.columns[1])
     plt.title('SVM Decision Region Boundary', size=16)
