@@ -19,7 +19,7 @@ def load_dataset_ids():
         if line[0] == "#":
             pass
         else:
-            ID_dict[line.split("\t")[0]] = line.split("\t")
+            ID_dict[line.split(" ")[0]] = line.strip().split()[1:]
     print(ID_dict)
     
     return ID_dict
@@ -56,13 +56,14 @@ def load_dataset(dataset):
                 
     return data
 
-## load the data matrix into a pandas dataframe
-df = pd.DataFrame.from_dict(data)
-print(df.iloc[0:5,0:5])
+def data_to_pandas():
+    ## load the data matrix into a pandas dataframe
+    df = pd.DataFrame.from_dict(data)
+    print(df.iloc[0:5,0:5])
 
 def main():
     ID_dict = load_dataset_ids()
-    break
+    pass
     list_datasets = download_data_synapse()
     
     
