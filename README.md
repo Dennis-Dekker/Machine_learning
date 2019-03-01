@@ -40,6 +40,7 @@ Keep track on what we still have to do. Please update this list with new todo's.
 - [x] Rewrite PCA scripts structure.
 - [ ] Calculate amount of PC's needed (PCA script).
 - [ ] Review PCA script (especially investigate explained variation values).
+- [ ] Download data of different cancer types from [Synapse](https://www.synapse.org/#!Synapse:syn4301332) and merge with annotations (also from Synapse).
 
 ## Workflow
 - [ ] PCA: try to apply it within cancer types
