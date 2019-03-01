@@ -1,29 +1,70 @@
 import numpy as np
 import synapseclient
-import pandas
- 
-syn = synapseclient.Synapse()
-syn.login('Machine_learning_project_70','Group_70')
+import pandas as pd
 
-# Obtain a pointer and download the data
-syn2320114 = syn.get(entity='syn2320114')
- 
-# inspect properties
-print(type(syn2320114))
- 
-print(syn2320114.name)
-print(syn2320114.path)
+"""Create dataset from Synapse 
 
-## load the data matrix into a dictionary with an entry for each column
-with open(syn2320114.path, 'r') as f:
-    labels = f.readline().strip().split('\t')
-    data = {label: [] for label in labels}
+Start with 5 cancer types:
+- BRCA
+- LUAD
+- PRAD
+- KIRC
+- COAD
+"""
+
+def load_dataset_ids():
+    f = open("data/synapse_dataset_IDs.txt", "r")
+    ID_dict = {}
     for line in f:
-        values = [line.strip().split('\t')[0]]
-        values.extend([float(x) for x in line.strip().split('\t')[1:]])
-        for i in range(len(labels)):
-            data[labels[i]].append(values[i])
+        if line[0] == "#":
+            pass
+        else:
+            ID_dict[line.split("\t")[0]] = line.split("\t")
+    print(ID_dict)
+    
+    return ID_dict
+
+def download_data_synapse():
+    """Download data from Synapse 
+    """
+    
+    syn = synapseclient.Synapse()
+    syn.login('Machine_learning_project_70','Group_70')
+
+    # Obtain a pointer and download the data
+    syn2320114 = syn.get(entity='syn2320114')
+    syn1446065 = syn.get(entity='syn1446065')
+ 
+    # inspect properties
+    # print(type(syn2320114)) 
+    # print(syn2320114.name)
+    # print(syn2320114.path)
+    
+    return list_datasets
+
+def load_dataset(dataset):
+        
+    ## load the data matrix into a dictionary with an entry for each column
+    with open(dataset.path, 'r') as f:
+        labels = f.readline().strip().split('\t')
+        data = {label: [] for label in labels}
+        for line in f:
+            values = [line.strip().split('\t')[0]]
+            values.extend([float(x) for x in line.strip().split('\t')[1:]])
+            for i in range(len(labels)):
+                data[labels[i]].append(values[i])
+                
+    return data
 
 ## load the data matrix into a pandas dataframe
 df = pd.DataFrame.from_dict(data)
-print(df.iloc([0:5,0:5]))
+print(df.iloc[0:5,0:5])
+
+def main():
+    ID_dict = load_dataset_ids()
+    break
+    list_datasets = download_data_synapse()
+    
+    
+if __name__ == '__main__':
+    main()
