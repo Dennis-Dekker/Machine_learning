@@ -18,7 +18,7 @@ with open(syn2320114.path, 'r') as f:
     labels = f.readline().strip().split('\t')
     data = {label: [] for label in labels}
     for line in f:
-        values = line.strip().split('\t')[0]
+        values = [line.strip().split('\t')[0]]
         values = values.extend([float(x) for x in line.strip().split('\t')[-1]])
         for i in range(len(labels)):
             data[labels[i]].append(values[i])
