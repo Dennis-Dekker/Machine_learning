@@ -96,8 +96,15 @@ def main():
     ID_dict = load_dataset_ids()
     list_datasets = download_data_synapse(ID_dict)
     
-    #data = load_dataset(list_datasets)
+    # Load datasets
+    data = load_dataset(list_datasets)
     annotation = load_annotation_files(list_datasets)
+    
+    # transpose expression dataset 
+    data = data.transpose()
+    
+    
+    
     
 if __name__ == '__main__':
     main()
