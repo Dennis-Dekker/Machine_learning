@@ -53,5 +53,5 @@ def main():
     print(cm_svm)
     print(accuracy_svm)
 
-
-main()
+if __name__ == '__main__':
+    main()
