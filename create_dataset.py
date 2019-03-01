@@ -34,8 +34,6 @@ def download_data_synapse(list_datasets):
     for cancer_type in list_datasets:
         list_datasets[cancer_type][0] = syn.get(entity = list_datasets[cancer_type][0])
         list_datasets[cancer_type][1] = syn.get(entity = list_datasets[cancer_type][1])
-        
-    print(list_datasets)
     
     return list_datasets
 
@@ -59,8 +57,14 @@ def data_to_pandas():
     print(df.iloc[0:5,0:5])
 
 def main():
+    
+    # Get cancer_type IDs from Synapse. First value dict is expression data, 
+    ## second is annotation file.
     ID_dict = load_dataset_ids()
     list_datasets = download_data_synapse(ID_dict)
+    
+    for cancer_type  in list_datasets:
+        load_dataset(cancer_type)
     
     
 if __name__ == '__main__':
