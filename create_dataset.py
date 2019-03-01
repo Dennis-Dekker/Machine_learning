@@ -24,4 +24,6 @@ with open(syn2320114.path, 'r') as f:
         for i in range(len(labels)):
             data[labels[i]].append(values[i])
 
-## load the data matrix into a numpy array
+## load the data matrix into a pandas dataframe
+df = pd.DataFrame.from_dict(data)
+print(df.iloc([[0:5],[0:5]]))
