@@ -15,7 +15,6 @@ from sklearn.svm import SVC
 from sklearn.neighbors import KNeighborsClassifier
 from mlxtend.plotting import plot_decision_regions
 from sklearn import datasets
-import pylab as pl
 
 
 
@@ -57,8 +56,7 @@ def k_nearest_neighbors(X_train, X_test, y_train, y_test):
 
 def plot_boundaries(svm_model, X,y):
     # Plot Decision Region using mlxtend's  plotting function
-    #s = pd.Series(['PRAD','LUAD','BRCA','KIRC','COAD'])
-    # labels, uniques = pd.factorize(y.iloc[:, 0].tolist())
+    labels, uniques = pd.factorize(y.iloc[:, 0].tolist())
     # #print(labels)
     # #y=y.values.astype(np.int64)
     # print(X.values)
@@ -68,12 +66,25 @@ def plot_boundaries(svm_model, X,y):
     # plt.title('SVM Decision Region Boundary', size=16)
     # plt.show()
     # Plotting decision regions
+    X=X.values
     x_min, x_max = X[:, 0].min() - 1, X[:, 0].max() + 1
     y_min, y_max = X[:, 1].min() - 1, X[:, 1].max() + 1
     xx, yy = np.meshgrid(np.arange(x_min, x_max, 0.1),
                         np.arange(y_min, y_max, 0.1))
-    pl.set_cmap(pl.cm.Paired)
-
+    fig, ax = plt.subplots()
+    X0, X1 = X[:, 0], X[:, 1]
+    Z = svm_model.predict(np.c_[xx.ravel(), yy.ravel()])
+    Z = Z.reshape(xx.shape)
+    ax.contourf(xx, yy, Z, cmap=plt.cm.coolwarm, alpha=0.8)
+    # Plot also the training points
+    ax.scatter(X0, X1, c=labels, cmap=plt.cm.coolwarm, s=20, edgecolors='k')
+    ax.set_ylabel('PC2')
+    ax.set_xlabel('PC1')
+    ax.set_xticks(())
+    ax.set_yticks(())
+    ax.set_title("SVM doundaries")
+    ax.legend()
+    plt.show()
 
 
 def main():
@@ -94,7 +105,7 @@ def main():
     cm_svm, accuracy_svm, svm_model=support_vector_machine(X_train, X_test, y_train, y_test)
     print(cm_svm)
     print(accuracy_svm)
-    plot_boundaries(svm_model, X_train, y_train)
+    #plot_boundaries(svm_model, X_train, y_train)
     #KNN
     print("KNN")
     cm_knn, accuracy_knn=k_nearest_neighbors(X_train, X_test, y_train, y_test)
