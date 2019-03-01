@@ -15,4 +15,7 @@ def main():
     print(Data.head())
     print(Labels.head())
 
+    X_train, X_test, y_train, y_test = train_test_split(Data, Labels, random_state = 0) 
+    
+
 main()
