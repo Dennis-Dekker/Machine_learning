@@ -41,3 +41,8 @@ Keep track on what we still have to do. Please update this list with new todo's.
 - [ ] Calculate amount of PC's needed (PCA script).
 - [ ] Review PCA script (especially investigate explained variation values).
 
+## Workflow
+- [ ] PCA: try to apply it within cancer types
+- [ ] find important features --> DEG (Differentially expressed genes)
+- [ ] KEGG analysis (Pathways) 
+
