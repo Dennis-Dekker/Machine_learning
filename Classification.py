@@ -37,7 +37,7 @@ def support_vector_machine(X_train, X_test, y_train, y_test):
     # creating a confusion matrix 
     cm = confusion_matrix(y_test, svm_predictions)
 
-    return cm, accuracy
+    return cm, accuracy, svm_model_linear
 
 def k_nearest_neighbors(X_train, X_test, y_train, y_test):
     # training a KNN classifier 
@@ -49,6 +49,18 @@ def k_nearest_neighbors(X_train, X_test, y_train, y_test):
     knn_predictions = knn.predict(X_test)  
     cm = confusion_matrix(y_test, knn_predictions)
     return cm, accuracy
+
+
+def plot_boundaries(svm_model, X,y):
+    # Plot Decision Region using mlxtend's  plotting function
+    y.update(y.apply(pd.to_numeric))
+    print(y)
+    plot_decision_regions(X=X.values, y=y.astype(np.integer), clf=svm_model, legend=2)
+    plt.xlabel(X.columns[0])
+    plt.ylabel(X.columns[1])
+    plt.title('SVM Decision Region Boundary', size=16)
+    plt.show()
+
 
 def main():
     Data = pd.read_csv("data/PCA_transformed_data.csv", header=None)
@@ -65,9 +77,10 @@ def main():
     print(cm_dt)
     #SVM
     print("SVM")
-    cm_svm, accuracy_svm=support_vector_machine(X_train, X_test, y_train, y_test)
+    cm_svm, accuracy_svm, svm_model=support_vector_machine(X_train, X_test, y_train, y_test)
     print(cm_svm)
     print(accuracy_svm)
+    plot_boundaries(svm_model, X_train, y_train)
     #KNN
     print("KNN")
     cm_knn, accuracy_knn=k_nearest_neighbors(X_train, X_test, y_train, y_test)
