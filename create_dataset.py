@@ -38,7 +38,9 @@ def download_data_synapse(list_datasets):
     return list_datasets
 
 def load_dataset(dataset):
-    
+    """Load dataset of every downloaded Synapse dataset. 
+    If multiple dataset are loaded, concatenate them to one dataframe.
+    """ 
     
     for cancer_type in dataset:
         ## load the data matrix into a dataframe.
@@ -60,7 +62,29 @@ def load_dataset(dataset):
 def data_to_pandas(data):
     ## load the data matrix into a pandas dataframe
     df = pd.DataFrame.from_dict(data)
+    print(df.shape)
     
+    return df
+    
+def load_annotation_files(dataset):
+    """Load annotation of every downloaded Synapse dataset. 
+    If multiple dataset are loaded, concatenate them to one dataframe.
+    """ 
+    for cancer_type in dataset:
+        ## load the data matrix into a dataframe.
+        with open(dataset[cancer_type][1].path, 'r') as f:
+            labels = f.readline().strip().split('\t')
+            data = {label: [] for label in labels}
+            for line in f:
+                values = line.split('\t')
+                #values.extend([float(x) for x in line.strip().split('\t')[1:]])
+                for i in range(len(labels)):
+                    data[labels[i]].append(values[i])
+            if cancer_type == list(dataset.keys())[0]:
+                df = data_to_pandas(data)
+            else:
+                df = pd.concat([df, data_to_pandas(data)], axis = 1)
+                
     return df
 
 def main():
@@ -70,9 +94,8 @@ def main():
     ID_dict = load_dataset_ids()
     list_datasets = download_data_synapse(ID_dict)
     
-    data = load_dataset(list_datasets)
-    print(data.shape)
-    print(data.iloc[20530, 1795])
+    #data = load_dataset(list_datasets)
+    annotation = load_annotation_files(list_datasets)
     
 if __name__ == '__main__':
     main()
