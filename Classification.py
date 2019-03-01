@@ -12,7 +12,9 @@ from sklearn.tree import DecisionTreeClassifier
 from sklearn.metrics import confusion_matrix 
 from sklearn.model_selection import train_test_split 
 from sklearn.svm import SVC
-from sklearn.neighbors import KNeighborsClassifier 
+from sklearn.neighbors import KNeighborsClassifier
+from mlxtend.plotting import plot_decision_regions
+
 
 
 
@@ -51,8 +53,8 @@ def k_nearest_neighbors(X_train, X_test, y_train, y_test):
 def main():
     Data = pd.read_csv("data/PCA_transformed_data.csv", header=None)
     Labels=pd.read_csv("data/labels.csv")
-    print(Data.head())
-    print(Labels.head())
+    #selecting only 2 components
+    Data=Data.iloc[:,1:3]
     #split dataset in training and testing
     X_train, X_test, y_train, y_test = train_test_split(Data, Labels[["Class"]], random_state = 0) 
     
