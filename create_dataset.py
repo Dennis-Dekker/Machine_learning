@@ -18,9 +18,10 @@ with open(syn2320114.path, 'r') as f:
     labels = f.readline().strip().split('\t')
     data = {label: [] for label in labels}
     for line in f:
-        values = [float(x) for x in line.strip().split('\t')]
+        values = line.strip().split('\t')[0]
+        values = values.extend([float(x) for x in line.strip().split('\t')[-1]])
         for i in range(len(labels)):
             data[labels[i]].append(values[i])
 
 ## load the data matrix into a numpy array
-np.loadtxt(fname=syn2320114.path, skiprows=1)
+#np.loadtxt(fname=syn2320114.path, skiprows=1)
