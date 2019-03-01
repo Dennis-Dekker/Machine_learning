@@ -10,4 +10,7 @@ import matplotlib
 import matplotlib.pyplot as plt
 
 def main():
-        
+    Data = pd.read_csv("data/PCA_transformed_data.csv",index_col=None)
+    Labels=pd.read_csv("data/labels.csv", index_col=None)
+    print(Data.head())
+    print(Labels.head())
