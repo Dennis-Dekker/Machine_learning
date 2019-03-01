@@ -87,6 +87,9 @@ def load_annotation_files(dataset):
             else:
                 df = pd.concat([df, data_to_pandas(data)], axis = 1)
                 
+    # filter dataframe 
+    df = df.filter(items = ["#","gender","bcr_patient_uuid","patient_id","bcr_patient_barcode","age_at_initial_pathologic_diagnosis"])
+    
     return df
 
 def main():
