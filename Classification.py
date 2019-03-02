@@ -20,45 +20,52 @@ from sklearn.metrics import roc_curve, auc
 from sklearn.preprocessing import label_binarize
 from sklearn.multiclass import OneVsRestClassifier
 
-def roc_plot(X_test, y_test, linear, tree, knn):
+def roc_plot(X_train,y_train,X_test, y_test, linear, tree, knn):
+    """
+    This function should calculate the roc plot for every class of SVM classifier
+    using every class ALl-against-all. Then make the average for the different classes
+    and plot.  NOT WORKING: stucked at classifier.fit
+    """
     #convert dataframe to list(numbers instead of labels)
-    labels, uniques = pd.factorize(y_test.iloc[:, 0].tolist())
+    labels_test, uniques = pd.factorize(y_test.iloc[:, 0].tolist())
+    labelst_train,uniques = pd.factorize(y_train.iloc[:,0].tolist())
     # Binarize the output
-    y = label_binarize(labels, classes=[0, 1, 2, 3, 4])
+    y_test = label_binarize(labels_test, classes=[0, 1, 2, 3, 4])
+    y_train=label_binarize(labelst_train,classes=[0, 1, 2, 3, 4])
     n_classes = 5
+    print("begore oVr")
     # Learn to predict each class against the other
-    classifier = OneVsRestClassifier(svm.SVC(kernel='linear', probability=True,
-                                 random_state=random_state))
+    classifier = OneVsRestClassifier(SVC(kernel='linear', probability=True,
+                                random_state=0, verbose=100))
+    print("im here")
+    print(y_train)
     y_score = classifier.fit(X_train, y_train).decision_function(X_test)
-
-    ##########
-    y_linear = linear.predict_proba(X_test)
-    y_tree  = tree.predict_proba(X_test)
-    y_knn   = knn.predict_proba(X_test)
-
-    # Compute the points on the curve
-    curve_linear = sklearn.metrics.roc_curve(y_test, y_linear[:, 1])
-    curve_tree   = sklearn.metrics.roc_curve(y_test, y_tree[:, 1])
-    curve_knn    = sklearn.metrics.roc_curve(y_test, y_knn[:, 1])
-
-    auc_linear = auc(curve_linear[0], curve_linear[1])
-    auc_tree   = auc(curve_tree[0], curve_tree[1])
-    auc_knn    = auc(curve_knn[0], curve_knn[1])
-
-    plt.plot(curve_linear[0], curve_linear[1], label='linear (area = %0.2f)' % auc_linear)
-    plt.plot(curve_tree[0], curve_tree[1], label='tree (area = %0.2f)' % auc_tree)
-    plt.plot(curve_knn[0], curve_knn[1], label='knn (area = %0.2f)'% auc_knn)
-
+    print("hello")
+    #compute ROC curve for each class
+    fpr=dict()
+    tpr=dict()
+    roc_auc=dict()
+    for i in range(n_classes):
+        fpr[i],tpr[i], _ = roc_curve(y_test[:,i],y_score[:,i])
+        roc_auc[i]=auc(fpr[i],tpr[i])
+    
+    #compute micro-average ROC
+    fpr["micro"],tpr["micro"],_=roc_curve(y_test.ravel(), y_score.ravel())
+    roc_auc["micro"] = auc(fpr["micro"], tpr["micro"])
+    #plot class 2
+    print("hello 2")
+    plt.figure()
+    lw = 2
+    plt.plot(fpr[2], tpr[2], color='darkorange',
+            lw=lw, label='ROC curve (area = %0.2f)' % roc_auc[2])
+    plt.plot([0, 1], [0, 1], color='navy', lw=lw, linestyle='--')
     plt.xlim([0.0, 1.0])
-    plt.ylim([0.0, 1.0])
+    plt.ylim([0.0, 1.05])
     plt.xlabel('False Positive Rate')
     plt.ylabel('True Positive Rate')
-    plt.title('ROC curve')
-
-    plt.legend()
-
-
-
+    plt.title('Receiver operating characteristic example')
+    plt.legend(loc="lower right")
+    plt.show()
 
 
 def decision_tree(X_train, X_test, y_train, y_test):
@@ -82,8 +89,12 @@ def support_vector_machine(X_train, X_test, y_train, y_test):
     # creating a confusion matrix 
     cm = confusion_matrix(y_test, svm_predictions)
 
-    # labels, uniques = pd.factorize(y_test.iloc[:, 0].tolist())
-    # plot_decision_regions(X_test.as_matrix()[:200], labels[:200], clf=linear,res=0.1)
+    labels, uniques = pd.factorize(y_test.iloc[:, 0].tolist())
+    # labels=labels.astype('U')
+    # labels = np.array(labels, dtype=data.astype('U'))
+    # print(labels.dtype)
+    # print(X_test.as_matrix().dtype)
+    # plot_decision_regions(X_test.as_matrix()[:200], labels[:200], clf=linear, res=0.1)
     # plt.show()
 
     return cm, accuracy, svm_model_linear, linear
@@ -169,8 +180,8 @@ def main():
     cm_knn, accuracy_knn, knn=k_nearest_neighbors(X_train, X_test, y_train, y_test)
     plot_accuracy("K-NN", cm_knn, accuracy_knn)
 
-    #roc plot
-    roc_plot(X_test, y_test, svm_model, tree, knn)
+    #roc plot --> IS NOT WORKING (IDK why)
+    #roc_plot(X_train, y_train, X_test, y_test, svm_model, tree, knn)
 
 
 
