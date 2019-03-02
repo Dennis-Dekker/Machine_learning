@@ -26,7 +26,8 @@ def decision_tree(X_train, X_test, y_train, y_test):
     dtree_predictions = dtree_model.predict(X_test) 
     # creating a confusion matrix 
     cm = confusion_matrix(y_test, dtree_predictions)
-    return cm
+    accuracy=accuracy_score(dtree_predictions)
+    return cm,accuracy
 
 
 def support_vector_machine(X_train, X_test, y_train, y_test):
@@ -101,8 +102,9 @@ def main():
     #decision tree classifier
     
     print("Decision tree")
-    cm_dt=decision_tree(X_train, X_test, y_train, y_test)
+    cm_dt, acc_dt=decision_tree(X_train, X_test, y_train, y_test)
     print(cm_dt)
+    print(acc_dt)
     #SVM
     print("SVM")
     cm_svm, accuracy_svm, svm_model=support_vector_machine(X_train, X_test, y_train, y_test)
