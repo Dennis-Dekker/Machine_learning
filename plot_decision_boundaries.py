@@ -38,6 +38,9 @@ print(__doc__)
 import numpy as np
 import matplotlib.pyplot as plt
 from sklearn import svm, datasets
+from sklearn.model_selection import train_test_split 
+import pandas as pd
+
 
 
 def make_meshgrid(x, y, h=.02):
@@ -88,10 +91,10 @@ Labels=pd.read_csv("data/labels.csv")
 Data=Data.iloc[:,1:3]
 #split dataset in training and testing
 X_train, X_test, y_train, y_test = train_test_split(Data, Labels[["Class"]], random_state = 0)
-labels, uniques = pd.factorize(y_train.iloc[:, 0].tolist())
+y, uniques = pd.factorize(y_train.iloc[:, 0].tolist())
 X=X_train.values
 print(X)
-print(labels)
+print(y)
 #print(X)
 #print(y)
 # we create an instance of SVM and fit out data. We do not scale our
