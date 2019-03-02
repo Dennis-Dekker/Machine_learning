@@ -96,10 +96,12 @@ def main():
     Labels=pd.read_csv("data/labels.csv")
     #selecting only 2 components
     Data=Data.iloc[:,1:3]
-    labels, uniques = pd.factorize(Labels.iloc[:, 1].tolist())
-    plt.scatter(Data.as_matrix()[:,0], Data.as_matrix()[:,1], s=4, alpha=0.3, c=labels, cmap='RdYlBu_r')
-    plt.show()
-    #split dataset in training and testing
+    #TO VISUALIZE the FEATURE SPACE, remove comments below
+    # labels, uniques = pd.factorize(Labels.iloc[:, 1].tolist())
+    # plt.scatter(Data.as_matrix()[:,0], Data.as_matrix()[:,1], s=4, alpha=0.3, c=labels, cmap='RdYlBu_r')
+    # plt.show()
+    #split dataset in tr
+    # aining and testing
     X_train, X_test, y_train, y_test = train_test_split(Data, Labels[["Class"]], random_state = 0,test_size=0.5) 
     
     #decision tree classifier
