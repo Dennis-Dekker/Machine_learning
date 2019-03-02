@@ -67,24 +67,27 @@ def plot_boundaries(svm_model, X,y):
     # plt.show()
     # Plotting decision regions
     X=X.values
-    x_min, x_max = X[:, 0].min() - 1, X[:, 0].max() + 1
-    y_min, y_max = X[:, 1].min() - 1, X[:, 1].max() + 1
-    xx, yy = np.meshgrid(np.arange(x_min, x_max, 0.1),
-                        np.arange(y_min, y_max, 0.1))
-    fig, ax = plt.subplots()
-    X0, X1 = X[:, 0], X[:, 1]
-    Z = svm_model.predict(np.c_[xx.ravel(), yy.ravel()])
-    Z = Z.reshape(xx.shape)
-    ax.contourf(xx, yy, Z, cmap=plt.cm.coolwarm, alpha=0.8)
-    # Plot also the training points
-    ax.scatter(X0, X1, c=labels, cmap=plt.cm.coolwarm, s=20, edgecolors='k')
-    ax.set_ylabel('PC2')
-    ax.set_xlabel('PC1')
-    ax.set_xticks(())
-    ax.set_yticks(())
-    ax.set_title("SVM doundaries")
-    ax.legend()
-    plt.show()
+    print(X)
+    print(labels)
+
+    # x_min, x_max = X[:, 0].min() - 1, X[:, 0].max() + 1
+    # y_min, y_max = X[:, 1].min() - 1, X[:, 1].max() + 1
+    # xx, yy = np.meshgrid(np.arange(x_min, x_max, 0.1),
+    #                     np.arange(y_min, y_max, 0.1))
+    # fig, ax = plt.subplots()
+    # X0, X1 = X[:, 0], X[:, 1]
+    # Z = svm_model.predict(np.c_[xx.ravel(), yy.ravel()])
+    # Z = Z.reshape(xx.shape)
+    # ax.contourf(xx, yy, Z, cmap=plt.cm.coolwarm, alpha=0.8)
+    # # Plot also the training points
+    # ax.scatter(X0, X1, c=labels, cmap=plt.cm.coolwarm, s=20, edgecolors='k')
+    # ax.set_ylabel('PC2')
+    # ax.set_xlabel('PC1')
+    # ax.set_xticks(())
+    # ax.set_yticks(())
+    # ax.set_title("SVM doundaries")
+    # ax.legend()
+    # plt.show()
 
 
 def main():
@@ -105,7 +108,7 @@ def main():
     cm_svm, accuracy_svm, svm_model=support_vector_machine(X_train, X_test, y_train, y_test)
     print(cm_svm)
     print(accuracy_svm)
-    #plot_boundaries(svm_model, X_train, y_train)
+    plot_boundaries(svm_model, X_train, y_train)
     #KNN
     print("KNN")
     cm_knn, accuracy_knn=k_nearest_neighbors(X_train, X_test, y_train, y_test)
