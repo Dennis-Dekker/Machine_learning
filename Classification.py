@@ -10,6 +10,7 @@ import matplotlib
 import matplotlib.pyplot as plt
 from sklearn.tree import DecisionTreeClassifier 
 from sklearn.metrics import confusion_matrix 
+from sklearn.metrics import accuracy_score 
 from sklearn.model_selection import train_test_split 
 from sklearn.svm import SVC
 from sklearn.neighbors import KNeighborsClassifier
@@ -26,7 +27,7 @@ def decision_tree(X_train, X_test, y_train, y_test):
     dtree_predictions = dtree_model.predict(X_test) 
     # creating a confusion matrix 
     cm = confusion_matrix(y_test, dtree_predictions)
-    accuracy=accuracy_score(dtree_predictions)
+    accuracy=accuracy_score(dtree_predictions,y_test)
     return cm,accuracy
 
 
@@ -37,7 +38,6 @@ def support_vector_machine(X_train, X_test, y_train, y_test):
     
     # model accuracy for X_test   
     accuracy = svm_model_linear.score(X_test, y_test) 
-    
     # creating a confusion matrix 
     cm = confusion_matrix(y_test, svm_predictions)
 
@@ -96,26 +96,33 @@ def main():
     Labels=pd.read_csv("data/labels.csv")
     #selecting only 2 components
     Data=Data.iloc[:,1:3]
+    labels, uniques = pd.factorize(Labels.iloc[:, 1].tolist())
+    plt.scatter(Data.as_matrix()[:,0], Data.as_matrix()[:,1], s=4, alpha=0.3, c=labels, cmap='RdYlBu_r')
+    plt.show()
     #split dataset in training and testing
-    X_train, X_test, y_train, y_test = train_test_split(Data, Labels[["Class"]], random_state = 0) 
+    X_train, X_test, y_train, y_test = train_test_split(Data, Labels[["Class"]], random_state = 0,test_size=0.5) 
     
     #decision tree classifier
     
-    print("Decision tree")
+    print("Decision tree\n")
     cm_dt, acc_dt=decision_tree(X_train, X_test, y_train, y_test)
     print(cm_dt)
     print(acc_dt)
+    print("\n")
     #SVM
-    print("SVM")
+    print("SVM\n")
     cm_svm, accuracy_svm, svm_model=support_vector_machine(X_train, X_test, y_train, y_test)
     print(cm_svm)
     print(accuracy_svm)
     #plot_boundaries(svm_model, X_train, y_train)
+    print("\n")
     #KNN
-    print("KNN")
+    print("KNN\n")
     cm_knn, accuracy_knn=k_nearest_neighbors(X_train, X_test, y_train, y_test)
     print(cm_knn)
     print(accuracy_knn)
+    print("\n")
+
 
 if __name__ == '__main__':
     main()
