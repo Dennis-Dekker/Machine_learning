@@ -45,7 +45,7 @@ def support_vector_machine(X_train, X_test, y_train, y_test):
     # labels, uniques = pd.factorize(y_test.iloc[:, 0].tolist())
     # plot_decision_regions(X_test.as_matrix()[:200], labels[:200], clf=linear,res=0.1)
     # plt.show()
-    
+
     return cm, accuracy, svm_model_linear
 
 def k_nearest_neighbors(X_train, X_test, y_train, y_test):
@@ -95,6 +95,12 @@ def plot_boundaries(svm_model, X,y):
     # ax.legend()
     # plt.show()
 
+def plot_accuracy(method, cm,accuracy):
+    print("Classifier: "+method+"\n")
+    print("Confusion matrix: \n")
+    print(cm)
+    print("\n Accuracy: "+str(accuracy))
+    
 
 def main():
     Data = pd.read_csv("data/PCA_transformed_data.csv", header=None)
@@ -110,25 +116,17 @@ def main():
     X_train, X_test, y_train, y_test = train_test_split(Data, Labels[["Class"]], random_state = 0,test_size=0.5) 
     
     #decision tree classifier
-    
-    print("Decision tree\n")
     cm_dt, acc_dt=decision_tree(X_train, X_test, y_train, y_test)
-    print(cm_dt)
-    print(acc_dt)
-    print("\n")
+    plot_accuracy("decision tree", cm_dt, acc_dt)
     #SVM
-    print("SVM\n")
     cm_svm, accuracy_svm, svm_model=support_vector_machine(X_train, X_test, y_train, y_test)
-    print(cm_svm)
-    print(accuracy_svm)
+    plot_accuracy("SVM", cm_svm, accuracy_svm)
+
     #plot_boundaries(svm_model, X_train, y_train)
-    print("\n")
     #KNN
-    print("KNN\n")
+   
     cm_knn, accuracy_knn=k_nearest_neighbors(X_train, X_test, y_train, y_test)
-    print(cm_knn)
-    print(accuracy_knn)
-    print("\n")
+    plot_accuracy("K-NN", cm_knn, accuracy_knn)
 
 
 if __name__ == '__main__':
