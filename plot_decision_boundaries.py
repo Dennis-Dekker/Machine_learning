@@ -78,10 +78,20 @@ def plot_contours(ax, clf, xx, yy, **params):
 
 
 # import some data to play with
-iris = datasets.load_iris()
-# Take the first two features. We could avoid this by using a two-dim dataset
-X = iris.data[:, :2]
-y = iris.target
+# iris = datasets.load_iris()
+# # Take the first two features. We could avoid this by using a two-dim dataset
+# X = iris.data[:, :2]
+# y = iris.target
+Data = pd.read_csv("data/PCA_transformed_data.csv", header=None)
+Labels=pd.read_csv("data/labels.csv")
+#selecting only 2 components
+Data=Data.iloc[:,1:3]
+#split dataset in training and testing
+X_train, X_test, y_train, y_test = train_test_split(Data, Labels[["Class"]], random_state = 0)
+labels, uniques = pd.factorize(y_train.iloc[:, 0].tolist())
+X=X_train.values
+print(X)
+print(labels)
 #print(X)
 #print(y)
 # we create an instance of SVM and fit out data. We do not scale our

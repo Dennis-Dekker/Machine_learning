@@ -108,7 +108,7 @@ def main():
     cm_svm, accuracy_svm, svm_model=support_vector_machine(X_train, X_test, y_train, y_test)
     print(cm_svm)
     print(accuracy_svm)
-    plot_boundaries(svm_model, X_train, y_train)
+    #plot_boundaries(svm_model, X_train, y_train)
     #KNN
     print("KNN")
     cm_knn, accuracy_knn=k_nearest_neighbors(X_train, X_test, y_train, y_test)
