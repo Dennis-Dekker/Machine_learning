@@ -16,24 +16,64 @@ from sklearn.svm import SVC
 from sklearn.neighbors import KNeighborsClassifier
 from mlxtend.plotting import plot_decision_regions
 from sklearn import datasets
+from sklearn.metrics import roc_curve, auc
+from sklearn.preprocessing import label_binarize
+from sklearn.multiclass import OneVsRestClassifier
 
+def roc_plot(X_test, y_test, linear, tree, knn):
+    #convert dataframe to list(numbers instead of labels)
+    labels, uniques = pd.factorize(y_test.iloc[:, 0].tolist())
+    # Binarize the output
+    y = label_binarize(labels, classes=[0, 1, 2, 3, 4])
+    n_classes = 5
+    # Learn to predict each class against the other
+    classifier = OneVsRestClassifier(svm.SVC(kernel='linear', probability=True,
+                                 random_state=random_state))
+    y_score = classifier.fit(X_train, y_train).decision_function(X_test)
+
+    ##########
+    y_linear = linear.predict_proba(X_test)
+    y_tree  = tree.predict_proba(X_test)
+    y_knn   = knn.predict_proba(X_test)
+
+    # Compute the points on the curve
+    curve_linear = sklearn.metrics.roc_curve(y_test, y_linear[:, 1])
+    curve_tree   = sklearn.metrics.roc_curve(y_test, y_tree[:, 1])
+    curve_knn    = sklearn.metrics.roc_curve(y_test, y_knn[:, 1])
+
+    auc_linear = auc(curve_linear[0], curve_linear[1])
+    auc_tree   = auc(curve_tree[0], curve_tree[1])
+    auc_knn    = auc(curve_knn[0], curve_knn[1])
+
+    plt.plot(curve_linear[0], curve_linear[1], label='linear (area = %0.2f)' % auc_linear)
+    plt.plot(curve_tree[0], curve_tree[1], label='tree (area = %0.2f)' % auc_tree)
+    plt.plot(curve_knn[0], curve_knn[1], label='knn (area = %0.2f)'% auc_knn)
+
+    plt.xlim([0.0, 1.0])
+    plt.ylim([0.0, 1.0])
+    plt.xlabel('False Positive Rate')
+    plt.ylabel('True Positive Rate')
+    plt.title('ROC curve')
+
+    plt.legend()
 
 
 
 
 
 def decision_tree(X_train, X_test, y_train, y_test):
-    dtree_model = DecisionTreeClassifier().fit(X_train, y_train) 
+    tree=DecisionTreeClassifier()
+    dtree_model = tree.fit(X_train, y_train) 
     dtree_predictions = dtree_model.predict(X_test) 
     # creating a confusion matrix 
     cm = confusion_matrix(y_test, dtree_predictions)
     accuracy=accuracy_score(dtree_predictions,y_test)
-    return cm,accuracy
+    return cm,accuracy, tree
 
 
 def support_vector_machine(X_train, X_test, y_train, y_test):
      # training a linear SVM classifier 
-    linear=SVC(kernel = 'linear', C = 1)
+    linear=SVC(kernel = 'linear', C = 1, probability=True)
     svm_model_linear = linear.fit(X_train, y_train.values.ravel()) 
     svm_predictions = svm_model_linear.predict(X_test) 
     
@@ -46,18 +86,19 @@ def support_vector_machine(X_train, X_test, y_train, y_test):
     # plot_decision_regions(X_test.as_matrix()[:200], labels[:200], clf=linear,res=0.1)
     # plt.show()
 
-    return cm, accuracy, svm_model_linear
+    return cm, accuracy, svm_model_linear, linear
 
 def k_nearest_neighbors(X_train, X_test, y_train, y_test):
     # training a KNN classifier 
-    knn = KNeighborsClassifier(n_neighbors = 7).fit(X_train, y_train.values.ravel()) 
+    knn=KNeighborsClassifier(n_neighbors = 15)
+    knn.fit(X_train, y_train.values.ravel()) 
     
     # accuracy on X_test 
     accuracy = knn.score(X_test, y_test)     
     # creating a confusion matrix 
     knn_predictions = knn.predict(X_test)  
     cm = confusion_matrix(y_test, knn_predictions)
-    return cm, accuracy
+    return cm, accuracy, knn
 
 
 def plot_boundaries(svm_model, X,y):
@@ -96,10 +137,10 @@ def plot_boundaries(svm_model, X,y):
     # plt.show()
 
 def plot_accuracy(method, cm,accuracy):
-    print("Classifier: "+method+"\n")
+    print("Classifier: "+method)
     print("Confusion matrix: \n")
     print(cm)
-    print("\n Accuracy: "+str(accuracy))
+    print("Accuracy: "+str(accuracy)+"\n")
     
 
 def main():
@@ -116,17 +157,22 @@ def main():
     X_train, X_test, y_train, y_test = train_test_split(Data, Labels[["Class"]], random_state = 0,test_size=0.5) 
     
     #decision tree classifier
-    cm_dt, acc_dt=decision_tree(X_train, X_test, y_train, y_test)
+    cm_dt, acc_dt,tree=decision_tree(X_train, X_test, y_train, y_test)
     plot_accuracy("decision tree", cm_dt, acc_dt)
     #SVM
-    cm_svm, accuracy_svm, svm_model=support_vector_machine(X_train, X_test, y_train, y_test)
+    cm_svm, accuracy_svm, svm_ft, svm_model =support_vector_machine(X_train, X_test, y_train, y_test)
     plot_accuracy("SVM", cm_svm, accuracy_svm)
 
-    #plot_boundaries(svm_model, X_train, y_train)
+    #plot_boundaries(svm_fit, X_train, y_train)
     #KNN
    
-    cm_knn, accuracy_knn=k_nearest_neighbors(X_train, X_test, y_train, y_test)
+    cm_knn, accuracy_knn, knn=k_nearest_neighbors(X_train, X_test, y_train, y_test)
     plot_accuracy("K-NN", cm_knn, accuracy_knn)
+
+    #roc plot
+    roc_plot(X_test, y_test, svm_model, tree, knn)
+
+
 
 
 if __name__ == '__main__':
