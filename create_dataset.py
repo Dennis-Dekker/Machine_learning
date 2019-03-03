@@ -56,9 +56,9 @@ def load_dataset(dataset):
                 for i in range(len(labels)):
                     data[labels[i]].append(values[i])
             if cancer_type == list(dataset.keys())[0]:
-                df = data_to_pandas(data)
+                df = data_to_pandas(data).transpose()
             else:
-                df = pd.concat([df, data_to_pandas(data)], axis = 1)
+                df = pd.concat([df, data_to_pandas(data).transpose()], axis = 1)
                 
     return df
 
@@ -85,7 +85,7 @@ def load_annotation_files(dataset):
             if cancer_type == list(dataset.keys())[0]:
                 df = data_to_pandas(data)
             else:
-                df = pd.concat([df, data_to_pandas(data)], axis = 1)
+                df = pd.concat([df, data_to_pandas(data)], axis = 0)
                 
     # filter dataframe 
     df = df.filter(items = ["#","gender","bcr_patient_uuid","patient_id","bcr_patient_barcode","age_at_initial_pathologic_diagnosis"])
@@ -103,8 +103,9 @@ def main():
     data = load_dataset(list_datasets)
     annotation = load_annotation_files(list_datasets)
     
+    print(data.shape)
     # transpose expression dataset 
-    data = data.transpose()
+    print(data.iloc[1:4,1:4])
     
     
     
