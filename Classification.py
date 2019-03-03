@@ -19,6 +19,8 @@ from sklearn import datasets
 from sklearn.metrics import roc_curve, auc
 from sklearn.preprocessing import label_binarize
 from sklearn.multiclass import OneVsRestClassifier
+from mlxtend.plotting import plot_confusion_matrix
+
 
 def roc_plot(X_train,y_train,X_test, y_test, linear, tree, knn):
     """
@@ -97,7 +99,7 @@ def support_vector_machine(X_train, X_test, y_train, y_test):
     # plot_decision_regions(X_test.as_matrix()[:200], labels[:200], clf=linear, res=0.1)
     # plt.show()
 
-    return cm, accuracy, svm_model_linear, linear
+    return cm, accuracy, linear
 
 def k_nearest_neighbors(X_train, X_test, y_train, y_test):
     # training a KNN classifier 
@@ -127,6 +129,7 @@ def plot_boundaries(svm_model, X,y):
     X=X.values
     print(X)
     print(labels)
+    plot_decision_regions(X=X, y=labels, clf=svm_model, legend=2)
 
     # x_min, x_max = X[:, 0].min() - 1, X[:, 0].max() + 1
     # y_min, y_max = X[:, 1].min() - 1, X[:, 1].max() + 1
@@ -152,6 +155,9 @@ def plot_accuracy(method, cm,accuracy):
     print("Confusion matrix: \n")
     print(cm)
     print("Accuracy: "+str(accuracy)+"\n")
+    fig, ax = plot_confusion_matrix(conf_mat=cm)
+    plt.title("Confusion matrix "+method)
+    plt.show()
     
 
 def main():
@@ -171,10 +177,11 @@ def main():
     cm_dt, acc_dt,tree=decision_tree(X_train, X_test, y_train, y_test)
     plot_accuracy("decision tree", cm_dt, acc_dt)
     #SVM
-    cm_svm, accuracy_svm, svm_ft, svm_model =support_vector_machine(X_train, X_test, y_train, y_test)
+    cm_svm, accuracy_svm, svm_model =support_vector_machine(X_train, X_test, y_train, y_test)
     plot_accuracy("SVM", cm_svm, accuracy_svm)
 
-    #plot_boundaries(svm_fit, X_train, y_train)
+    #NOT WORKING 
+    #plot_boundaries(svm_model, X_train, y_train)
     #KNN
    
     cm_knn, accuracy_knn, knn=k_nearest_neighbors(X_train, X_test, y_train, y_test)
