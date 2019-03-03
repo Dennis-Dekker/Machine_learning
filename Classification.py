@@ -36,9 +36,9 @@ def roc_plot(X_train,y_train,X_test, y_test, linear, tree, knn):
     y_train=label_binarize(labelst_train,classes=[0, 1, 2, 3, 4])
     n_classes = 5
     print("begore oVr")
+    print(y_test, y_train)
     # Learn to predict each class against the other
-    classifier = OneVsRestClassifier(SVC(kernel='linear', probability=True,
-                                random_state=0, verbose=100))
+    classifier = OneVsRestClassifier(SVC(kernel="linear",random_state=0))
     print("im here")
     print(y_train)
     y_score = classifier.fit(X_train, y_train).decision_function(X_test)
@@ -175,20 +175,20 @@ def main():
     
     #decision tree classifier
     cm_dt, acc_dt,tree=decision_tree(X_train, X_test, y_train, y_test)
-    plot_accuracy("decision tree", cm_dt, acc_dt)
+    #plot_accuracy("decision tree", cm_dt, acc_dt)
     #SVM
     cm_svm, accuracy_svm, svm_model =support_vector_machine(X_train, X_test, y_train, y_test)
-    plot_accuracy("SVM", cm_svm, accuracy_svm)
+    #plot_accuracy("SVM", cm_svm, accuracy_svm)
 
     #NOT WORKING 
     #plot_boundaries(svm_model, X_train, y_train)
     #KNN
    
     cm_knn, accuracy_knn, knn=k_nearest_neighbors(X_train, X_test, y_train, y_test)
-    plot_accuracy("K-NN", cm_knn, accuracy_knn)
+    #plot_accuracy("K-NN", cm_knn, accuracy_knn)
 
     #roc plot --> IS NOT WORKING (IDK why)
-    #roc_plot(X_train, y_train, X_test, y_test, svm_model, tree, knn)
+    roc_plot(X_train, y_train, X_test, y_test, svm_model, tree, knn)
 
 
 
