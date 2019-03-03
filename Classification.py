@@ -175,20 +175,20 @@ def main():
     
     #decision tree classifier
     cm_dt, acc_dt,tree=decision_tree(X_train, X_test, y_train, y_test)
-    #plot_accuracy("decision tree", cm_dt, acc_dt)
+    plot_accuracy("decision tree", cm_dt, acc_dt)
     #SVM
     cm_svm, accuracy_svm, svm_model =support_vector_machine(X_train, X_test, y_train, y_test)
-    #plot_accuracy("SVM", cm_svm, accuracy_svm)
+    plot_accuracy("SVM", cm_svm, accuracy_svm)
 
     #NOT WORKING 
     #plot_boundaries(svm_model, X_train, y_train)
     #KNN
    
     cm_knn, accuracy_knn, knn=k_nearest_neighbors(X_train, X_test, y_train, y_test)
-    #plot_accuracy("K-NN", cm_knn, accuracy_knn)
+    plot_accuracy("K-NN", cm_knn, accuracy_knn)
 
     #roc plot --> IS NOT WORKING (IDK why)
-    roc_plot(X_train, y_train, X_test, y_test, svm_model, tree, knn)
+    #roc_plot(X_train, y_train, X_test, y_test, svm_model, tree, knn)
 
 
 
