@@ -41,7 +41,7 @@ Keep track on what we still have to do. Please update this list with new todo's.
 - [ ] Calculate amount of PC's needed (PCA script).
 - [ ] Review PCA script (especially investigate explained variation values).
 - [ ] Download data of different cancer types from [Synapse](https://www.synapse.org/#!Synapse:syn4301332) and merge with annotations (also from Synapse).
-
+- [ ] Try different Hyperparameters in the ML algorithms (Knn, SVM, ecc) and cross validation
 ## Workflow
 - [ ] PCA: try to apply it within cancer types
 - [ ] find important features &rarr; DEG (Differentially expressed genes)
