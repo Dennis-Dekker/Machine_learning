@@ -39,8 +39,10 @@ def download_data_synapse(list_datasets):
         print(cancer_type)
         print("\tDataset ID:\t" + list_datasets[cancer_type][0])
         list_datasets[cancer_type][0] = syn.get(entity = list_datasets[cancer_type][0])
+        print("\tLocal path:\t" + str(list_datasets[cancer_type][0].path))
         print("\tAnnotation ID:\t" + list_datasets[cancer_type][1])
         list_datasets[cancer_type][1] = syn.get(entity = list_datasets[cancer_type][1])
+        print("\tLocal path:\t" + str(list_datasets[cancer_type][1].path))
         
     print("--- DONE ---\n")
     return list_datasets
