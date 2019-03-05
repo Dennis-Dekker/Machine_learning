@@ -58,8 +58,8 @@ plt.scatter(x=df_to_plot_PC1["Loadings PC1"], y= df_to_plot_PC1["Loadings PC2"],
 #Top 100 loadings PC2
 plt.scatter(x=df_to_plot_PC2["Loadings PC1"], y= df_to_plot_PC2["Loadings PC2"], marker='o',s=80, linewidths=1, facecolors="none", 
             edgecolors='g',label="Top 100 PC2")
-plt.legend(loc='lower left');
-path_PCA_figure_color = "/home/martin/Desktop/MasterVU/Machine_Learning/Project/Loading_plot.png"
+plt.legend(loc='lower left')
+path_PCA_figure_color = "/images/Loading_plot.png"
 plt.savefig(path_PCA_figure_color)
 
 print("Image saved to: " + path_PCA_figure_color)
