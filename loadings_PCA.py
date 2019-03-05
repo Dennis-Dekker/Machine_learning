@@ -22,6 +22,7 @@ df_data, df_labels=calculate_PCA.load_data()
 df_data_label = pd.concat([df_data, df_labels],axis=1,sort=True)
 x = df_data_label.drop(['Unnamed: 0','Class'], 1)  
 #Calculate PCA
+print(x)
 pca = PCA(n_components=2)
 principalComponents = pca.fit_transform(x)
 principalDf = pd.DataFrame(data = principalComponents
