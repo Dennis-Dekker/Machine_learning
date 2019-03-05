@@ -29,7 +29,6 @@ def load_data():
     
     return df_data, df_data_labels
 
-
 def process_data_frame(df_data):
     """Remove unwanted columns from dataframe.
     """
