@@ -16,7 +16,7 @@ def load_data():
     df_data_labels: dataframe with sample annotation.
     """
     #import data from .csv files
-    allFiles = glob.glob("data/data*.csv")
+    allFiles = glob.glob("data/raw_data*.csv")
     list_ = []
     for file_ in allFiles:
         df = pd.read_csv(file_,index_col=None)
@@ -25,7 +25,7 @@ def load_data():
     #expression data
     df_data = pd.concat(list_, axis = 0, ignore_index = True)
     #labels frame
-    df_data_labels = pd.read_csv("data/labels.csv")
+    df_data_labels = pd.read_csv("data/raw_labels.csv")
     
     return df_data, df_data_labels
 

@@ -59,11 +59,8 @@ def load_dataset(dataset):
             if cancer_type == list(dataset.keys())[0]:
                 df = data
             else:
+                del data["gene_id"]
                 df.update(data)
-            # if cancer_type == list(dataset.keys())[0]:
-            #     df = data_to_pandas(data).transpose()
-            # else:
-            #     df = pd.concat([df, data_to_pandas(data).transpose()], axis = 1)
     df = data_to_pandas(df).transpose()
             
     return df
@@ -71,7 +68,6 @@ def load_dataset(dataset):
 def data_to_pandas(data):
     ## load the data matrix into a pandas dataframe
     df = pd.DataFrame.from_dict(data)
-    print(df.iloc[1:3,1:3])
     
     return df
     
