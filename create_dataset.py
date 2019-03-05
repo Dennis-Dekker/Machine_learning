@@ -78,7 +78,9 @@ def load_dataset(dataset):
                 df.update(data)
                 
     # transpose data to get gene_ids as columns
+    print("\nProcessing all data...")
     df = data_to_pandas(df).transpose()
+    print("--- DONE ---\n")
             
     return df
 
@@ -115,11 +117,14 @@ def load_annotation_files(dataset):
                 print("\tCreated new annotation dataset.")
                 df = data_to_pandas(data)
             else:
-                print("Merged data to existing annotation dataset.")
+                print("\tMerged data to existing annotation dataset.")
                 df = pd.concat([df, data_to_pandas(data)], axis = 0, sort=True)
                 
     # filter dataframe 
+    print("\nFiltering annotations...")
     df = df.filter(items = ["cancer_type","#","gender","bcr_patient_uuid","patient_id","bcr_patient_barcode","age_at_initial_pathologic_diagnosis"])
+    print("--- DONE ---\n")
+    
     return df
 
 def main():
@@ -136,11 +141,20 @@ def main():
     # transpose expression dataset 
     data.columns = data.loc["gene_id"]
     data = data.drop("gene_id", axis = 0)
-    print(data.iloc[0:3,0:3])
-    print(data.shape)
-    
-    data.to_csv("data/raw_data.csv")
-    annotation.to_csv("data/raw_labels.csv")
+
+    # write data to files
+    data_file_name = "data/raw_data.csv"
+    annotation_file_name = "data/raw_labels.csv"
+    print("--- Writing dataset to file ---")
+    print("Expression data set")
+    print("\tPath:\t" + data_file_name)
+    print("\tWriting...")
+    data.to_csv(data_file_name)
+    print("Annotation data set")
+    print("\tPath:\t" + annotation_file_name)
+    print("\tWriting...")
+    annotation.to_csv(annotation_file_name)
+    print("--- DONE ---\n")
         
     
 if __name__ == '__main__':
