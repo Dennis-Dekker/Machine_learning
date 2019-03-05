@@ -49,6 +49,7 @@ def load_dataset(dataset):
         ## load the data matrix into a dataframe.
         with open(dataset[cancer_type][0].path, 'r') as f:
             labels = f.readline().strip().split('\t')
+            print(labels[0:2])
             data = {label: [] for label in labels}
             for line in f:
                 values = [line.strip().split('\t')[0]]
@@ -56,16 +57,21 @@ def load_dataset(dataset):
                 for i in range(len(labels)):
                     data[labels[i]].append(values[i])
             if cancer_type == list(dataset.keys())[0]:
-                df = data_to_pandas(data).transpose()
+                df = data
             else:
-                df = pd.concat([df, data_to_pandas(data).transpose()], axis = 1)
-                
+                df.update(data)
+            # if cancer_type == list(dataset.keys())[0]:
+            #     df = data_to_pandas(data).transpose()
+            # else:
+            #     df = pd.concat([df, data_to_pandas(data).transpose()], axis = 1)
+    df = data_to_pandas(df).transpose()
+            
     return df
 
 def data_to_pandas(data):
     ## load the data matrix into a pandas dataframe
     df = pd.DataFrame.from_dict(data)
-    print(df.shape)
+    print(df.iloc[1:3,1:3])
     
     return df
     
@@ -77,7 +83,9 @@ def load_annotation_files(dataset):
         ## load the data matrix into a dataframe.
         with open(dataset[cancer_type][1].path, 'r') as f:
             labels = f.readline().strip().split('\t')
+            print(labels[0:5])
             data = {label: [] for label in labels}
+            data["cancer_type"] = cancer_type
             for line in f:
                 values = line.split('\t')
                 for i in range(len(labels)):
@@ -88,8 +96,8 @@ def load_annotation_files(dataset):
                 df = pd.concat([df, data_to_pandas(data)], axis = 0)
                 
     # filter dataframe 
-    df = df.filter(items = ["#","gender","bcr_patient_uuid","patient_id","bcr_patient_barcode","age_at_initial_pathologic_diagnosis"])
-    
+    df = df.filter(items = ["cancer_type","#","gender","bcr_patient_uuid","patient_id","bcr_patient_barcode","age_at_initial_pathologic_diagnosis"])
+    print("shape annotation file", df.shape)
     return df
 
 def main():
@@ -100,13 +108,17 @@ def main():
     list_datasets = download_data_synapse(ID_dict)
     
     # Load datasets
-    data = load_dataset(list_datasets)
+    # data = load_dataset(list_datasets)
     annotation = load_annotation_files(list_datasets)
-    
-    print(data.shape)
-    # transpose expression dataset 
-    print(data.iloc[1:4,1:4])
-    
+    # 
+    # # transpose expression dataset 
+    # data.columns = data.loc["gene_id"]
+    # data.reindex(data.drop("gene_id"))
+    # print(data.iloc[0:3,0:3])
+    # print(data.shape)
+    # 
+    # data.to_csv("data/raw_data.csv")
+    annotation.to_csv("data/raw_labels.csv")
     
     
     
