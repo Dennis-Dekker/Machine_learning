@@ -13,11 +13,10 @@ from pandas import *
 from mlxtend.data import iris_data
 from mlxtend.preprocessing import standardize
 from mlxtend.feature_extraction import PrincipalComponentAnalysis
-
+import calculate_PCA
 
 #Load data
-df_data = pd.read_csv("data.csv")
-df_labels = pd.read_csv("labels.csv")
+df_data, df_labels=calculate_PCA.load_data()
 
 #Concatenation both DF
 df_data_label = pd.concat([df_data, df_labels],axis=1,sort=True)
