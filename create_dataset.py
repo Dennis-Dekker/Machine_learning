@@ -49,7 +49,6 @@ def load_dataset(dataset):
         ## load the data matrix into a dataframe.
         with open(dataset[cancer_type][0].path, 'r') as f:
             labels = f.readline().strip().split('\t')
-            print(labels[0:2])
             data = {label: [] for label in labels}
             for line in f:
                 values = [line.strip().split('\t')[0]]
@@ -79,7 +78,6 @@ def load_annotation_files(dataset):
         ## load the data matrix into a dataframe.
         with open(dataset[cancer_type][1].path, 'r') as f:
             labels = f.readline().strip().split('\t')
-            print(labels[0:5])
             data = {label: [] for label in labels}
             data["cancer_type"] = cancer_type
             for line in f:
@@ -89,7 +87,7 @@ def load_annotation_files(dataset):
             if cancer_type == list(dataset.keys())[0]:
                 df = data_to_pandas(data)
             else:
-                df = pd.concat([df, data_to_pandas(data)], axis = 0)
+                df = pd.concat([df, data_to_pandas(data)], axis = 0, sort=True)
                 
     # filter dataframe 
     df = df.filter(items = ["cancer_type","#","gender","bcr_patient_uuid","patient_id","bcr_patient_barcode","age_at_initial_pathologic_diagnosis"])
@@ -104,19 +102,18 @@ def main():
     list_datasets = download_data_synapse(ID_dict)
     
     # Load datasets
-    # data = load_dataset(list_datasets)
+    data = load_dataset(list_datasets)
     annotation = load_annotation_files(list_datasets)
-    # 
-    # # transpose expression dataset 
-    # data.columns = data.loc["gene_id"]
-    # data.reindex(data.drop("gene_id"))
-    # print(data.iloc[0:3,0:3])
-    # print(data.shape)
-    # 
-    # data.to_csv("data/raw_data.csv")
+    
+    # transpose expression dataset 
+    data.columns = data.loc["gene_id"]
+    data = data.drop("gene_id", axis = 0)
+    print(data.iloc[0:3,0:3])
+    print(data.shape)
+    
+    data.to_csv("data/raw_data.csv")
     annotation.to_csv("data/raw_labels.csv")
-    
-    
+        
     
 if __name__ == '__main__':
     main()
