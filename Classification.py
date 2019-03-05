@@ -36,12 +36,14 @@ def roc_plot(X_train,y_train,X_test, y_test, linear, tree, knn):
     y_train=label_binarize(labelst_train,classes=[0, 1, 2, 3, 4])
     n_classes = 5
     print("before oVr")
-    print(y_test, y_train)
+    #print(y_test, y_train)
     # Learn to predict each class against the other
-    classifier = OneVsRestClassifier(SVC(kernel="linear",probability=True, random_state=0))
+    #classifier = OneVsRestClassifier(SVC(kernel="linear",probability=True, C=1,random_state=0))
+    classifier = OneVsRestClassifier(tree)
     print("im here")
-    print(y_train)
-    y_score = classifier.fit(X_train, y_train).decision_function(X_test)
+    #print(y_train)
+    #y_score = classifier.fit(X_train, y_train).decision_function(X_test)
+    y_score = classifier.fit(X_train, y_train).predict_proba(X_test)
     print("hello")
     #compute ROC curve for each class
     fpr=dict()
@@ -55,7 +57,7 @@ def roc_plot(X_train,y_train,X_test, y_test, linear, tree, knn):
     fpr["micro"],tpr["micro"],_=roc_curve(y_test.ravel(), y_score.ravel())
     roc_auc["micro"] = auc(fpr["micro"], tpr["micro"])
     #plot class 2
-    print("hello 2")
+    #print("hello 2")
     plt.figure()
     lw = 2
     plt.plot(fpr["micro"], tpr["micro"], color='darkorange',
