@@ -82,7 +82,7 @@ def decision_tree(X_train, X_test, y_train, y_test):
 
 def support_vector_machine(X_train, X_test, y_train, y_test):
      # training a linear SVM classifier 
-    linear=SVC(kernel = 'linear', C = 1, probability=True)
+    linear=SVC(kernel = 'linear', C = 1)
     svm_model_linear = linear.fit(X_train, y_train.values.ravel()) 
     svm_predictions = svm_model_linear.predict(X_test) 
     
@@ -181,7 +181,7 @@ def main():
     plot_accuracy("SVM", cm_svm, accuracy_svm)
 
     #NOT WORKING 
-    #plot_boundaries(svm_model, X_train, y_train)
+    plot_boundaries(svm_model, X_train, y_train)
     #KNN
    
     cm_knn, accuracy_knn, knn=k_nearest_neighbors(X_train, X_test, y_train, y_test)
