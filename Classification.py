@@ -1,32 +1,30 @@
-import numpy as np
-import pandas as pd
 import glob
-import sklearn
-import seaborn as sns
-from sklearn.preprocessing import StandardScaler
-from sklearn.feature_selection import SelectKBest
-from sklearn.decomposition import PCA
+from itertools import cycle
+
 import matplotlib
 import matplotlib.pyplot as plt
-from sklearn.tree import DecisionTreeClassifier 
-from sklearn.metrics import confusion_matrix 
-from sklearn.metrics import accuracy_score 
-from sklearn.model_selection import train_test_split 
-from sklearn.svm import SVC
-from sklearn.neighbors import KNeighborsClassifier
-from mlxtend.plotting import plot_decision_regions
+import numpy as np
+import pandas as pd
+import seaborn as sns
+import sklearn
+from mlxtend.plotting import plot_confusion_matrix, plot_decision_regions
 from sklearn import datasets
-from sklearn.metrics import roc_curve, auc
-from sklearn.preprocessing import label_binarize
+from sklearn.decomposition import PCA
+from sklearn.feature_selection import SelectKBest
+from sklearn.metrics import accuracy_score, auc, confusion_matrix, roc_curve
+from sklearn.model_selection import train_test_split
 from sklearn.multiclass import OneVsRestClassifier
-from mlxtend.plotting import plot_confusion_matrix
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.preprocessing import StandardScaler, label_binarize
+from sklearn.svm import SVC
+from sklearn.tree import DecisionTreeClassifier
 
 
 def roc_plot(X_train,y_train,X_test, y_test, linear, tree, knn):
     """
     This function should calculate the roc plot for every class of SVM classifier
     using every class ALl-against-all. Then make the average for the different classes
-    and plot.  NOT WORKING: stucked at classifier.fit
+    and plot.   WORKING: for svm
     """
     #convert dataframe to list(numbers instead of labels)
     labels_test, uniques = pd.factorize(y_test.iloc[:, 0].tolist())
@@ -37,13 +35,13 @@ def roc_plot(X_train,y_train,X_test, y_test, linear, tree, knn):
     n_classes = 5
     #print(y_test, y_train)
     # Learn to predict each class against the other
-    #classifier = OneVsRestClassifier(SVC(kernel="linear",probability=True, C=1,random_state=0))
-    classifier = OneVsRestClassifier(knn)
+    classifier = OneVsRestClassifier(SVC(kernel="linear",probability=True, C=1,random_state=0))
+    #classifier = OneVsRestClassifier(knn)
     print(classifier)
     #print(y_train)
-    #y_score = classifier.fit(X_train, y_train).decision_function(X_test)
-    y_score = classifier.fit(X_train, y_train).predict_proba(X_test)
-    print(y_score[:,0])
+    y_score = classifier.fit(X_train, y_train).decision_function(X_test)
+    #y_score = classifier.fit(X_train, y_train).predict_proba(X_test)
+    # print(y_score[:,0])
     #compute ROC curve for each class
     fpr=dict()
     tpr=dict()
@@ -60,9 +58,22 @@ def roc_plot(X_train,y_train,X_test, y_test, linear, tree, knn):
     #print("hello 2")
     plt.figure()
     lw = 2
-    index=4
-    plt.plot(fpr[index], tpr[index], color='darkorange',
-            lw=lw, label='ROC curve (area = %0.2f)' % roc_auc[index])
+    plt.figure()
+    plt.plot(fpr["micro"], tpr["micro"],
+         label='micro-average ROC curve (area = {0:0.2f})'
+               ''.format(roc_auc["micro"]),
+         color='deeppink', linestyle=':', linewidth=4)
+    
+    colors = cycle(['aqua', 'darkorange', 'cornflowerblue','yellow','black'])
+    for i, color in zip(range(n_classes), colors):
+        plt.plot(fpr[i], tpr[i], color=color, lw=lw,
+                label='ROC curve of class {0} (area = {1:0.2f})'
+                ''.format(i, roc_auc[i]))
+        
+    
+    
+    # plt.plot(fpr[index], tpr[index], color='darkorange',
+    #         lw=lw, label='ROC curve (area = %0.2f)' % roc_auc[index])
     plt.plot([0, 1], [0, 1], color='navy', lw=lw, linestyle='--')
     plt.xlim([0.0, 1.0])
     plt.ylim([0.0, 1.05])
