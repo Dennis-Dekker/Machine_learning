@@ -35,10 +35,10 @@ def roc_plot(X_train,y_train,X_test, y_test, linear, tree, knn):
     y_test = label_binarize(labels_test, classes=[0, 1, 2, 3, 4])
     y_train=label_binarize(labelst_train,classes=[0, 1, 2, 3, 4])
     n_classes = 5
-    print("begore oVr")
+    print("before oVr")
     print(y_test, y_train)
     # Learn to predict each class against the other
-    classifier = OneVsRestClassifier(SVC(kernel="linear",random_state=0))
+    classifier = OneVsRestClassifier(SVC(kernel="linear",probability=True, random_state=0))
     print("im here")
     print(y_train)
     y_score = classifier.fit(X_train, y_train).decision_function(X_test)
@@ -58,8 +58,8 @@ def roc_plot(X_train,y_train,X_test, y_test, linear, tree, knn):
     print("hello 2")
     plt.figure()
     lw = 2
-    plt.plot(fpr[2], tpr[2], color='darkorange',
-            lw=lw, label='ROC curve (area = %0.2f)' % roc_auc[2])
+    plt.plot(fpr["micro"], tpr["micro"], color='darkorange',
+            lw=lw, label='ROC curve (area = %0.2f)' % roc_auc["micro"])
     plt.plot([0, 1], [0, 1], color='navy', lw=lw, linestyle='--')
     plt.xlim([0.0, 1.0])
     plt.ylim([0.0, 1.05])
@@ -181,14 +181,14 @@ def main():
     plot_accuracy("SVM", cm_svm, accuracy_svm)
 
     #NOT WORKING 
-    plot_boundaries(svm_model, X_train, y_train)
+    #plot_boundaries(svm_model, X_train, y_train)
     #KNN
    
     cm_knn, accuracy_knn, knn=k_nearest_neighbors(X_train, X_test, y_train, y_test)
     plot_accuracy("K-NN", cm_knn, accuracy_knn)
 
     #roc plot --> IS NOT WORKING (IDK why)
-    #roc_plot(X_train, y_train, X_test, y_test, svm_model, tree, knn)
+    roc_plot(X_train, y_train, X_test, y_test, svm_model, tree, knn)
 
 
 
