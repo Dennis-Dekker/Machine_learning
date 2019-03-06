@@ -146,7 +146,7 @@ def main():
     data = data.drop("gene_id", axis = 0)
 
     # write data to files
-    data_file_name = "data/raw_data.csv"
+    data_file_name = "data/raw_total_data.csv"
     annotation_file_name = "data/raw_labels.csv"
     print("--- Writing dataset to file ---")
     print("Expression data set")
