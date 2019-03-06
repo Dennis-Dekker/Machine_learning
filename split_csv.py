@@ -12,5 +12,5 @@ filename = "data/raw_data.csv"
 chunksize = 400
 i = 1
 for chunk in pd.read_csv(filename, chunksize=chunksize, low_memory=False):
-        chunk.to_csv(filename.split(".")[0] + str(i) + ".csv")
+        chunk.to_csv(filename.split(".")[0] + str(i) + ".csv", index_col=0)
         i += 1
