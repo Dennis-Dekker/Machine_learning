@@ -17,7 +17,8 @@ print("Primary goal is to make big .csv files uploadable to Github\n")
 print("Input file:\t" + filename)
 print("Chunk size:\t" + str(chunksize))
 print("\nWriting to file:")
-for chunk in pd.read_csv(filename, chunksize=chunksize, low_memory=False):
+for chunk in pd.read_csv(filename, chunksize=chunksize, low_memory=False, index_col = 0):
+    print(chunk.iloc[0:3,0:3])
     print("\t" + filename.split(".")[0] + str(i) + ".csv")
     chunk.to_csv(filename.split(".")[0] + str(i) + ".csv")
     i += 1

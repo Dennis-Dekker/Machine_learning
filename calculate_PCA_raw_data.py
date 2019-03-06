@@ -18,10 +18,13 @@ def load_data():
     #import data from .csv files
     allFiles = glob.glob("data/raw_data*.csv")
     list_ = []
+    print("loading files:")
     for file_ in allFiles:
-        df = pd.read_csv(file_,index_col=None)
+        print(file_)
+        df = pd.read_csv(file_,index_col=0)
         list_.append(df)
 
+    print(df.iloc[0:3,0:3])
     #expression data
     df_data = pd.concat(list_, axis = 0, ignore_index = True)
     #labels frame
@@ -106,16 +109,16 @@ def main():
     df_data, df_data_labels = load_data()
     
     #process dataframe 
-    x, y = process_data_frame(df_data)
+    # x, y = process_data_frame(df_data)
     
     #determine amount of PC's for analysis
     #TODO 
     #n = calculate_amount_PCs(x)
     
     #calculate PCA 
-    pca, finalDf, all_compon = calculate_PCA(x, y, df_data_labels)
+    # pca, finalDf, all_compon = calculate_PCA(x, y, df_data_labels)
     
-    store_pca_result(all_compon)
+    # store_pca_result(all_compon)
     #plot PCA 
     #plot_PCA(finalDf, pca)
 
