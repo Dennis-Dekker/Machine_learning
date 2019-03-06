@@ -28,6 +28,7 @@ def download_data_synapse(list_datasets):
     """Download data from Synapse 
     """
     
+    
     # Connect to Synapse server
     print("Connecting to Synapse database...\n")
     syn = synapseclient.Synapse()
