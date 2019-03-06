@@ -7,9 +7,10 @@ Size of data: 196 MB
 Split into 3 files with a maximum of 80.9 MB 
 """
 
-filename = "data.csv"
+filename = "data/raw_data.csv"
+# amount of lines
 chunksize = 400
 i = 1
-for chunk in pd.read_csv(filename, chunksize=chunksize):
-        chuck.to_csv(filename.split(".")[0] + str(i) + ".csv" )
+for chunk in pd.read_csv(filename, chunksize=chunksize, low_memory=False):
+        chunk.to_csv(filename.split(".")[0] + str(i) + ".csv")
         i += 1
