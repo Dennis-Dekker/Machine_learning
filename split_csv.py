@@ -11,6 +11,14 @@ filename = "data/raw_data.csv"
 # amount of lines
 chunksize = 400
 i = 1
+print("\n--- .csv file splitter ---\n")
+print("Splits .csv file into smaller .csv files")
+print("Primary goal is to make big .csv files uploadable to Github\n")
+print("Input file:\t" + filename)
+print("Chunk size:\t" + str(chunksize))
+print("\nWriting to file:")
 for chunk in pd.read_csv(filename, chunksize=chunksize, low_memory=False):
-        chunk.to_csv(filename.split(".")[0] + str(i) + ".csv", index_col=0)
-        i += 1
+    print("\t" + filename.split(".")[0] + str(i) + ".csv")
+    chunk.to_csv(filename.split(".")[0] + str(i) + ".csv")
+    i += 1
+print("--- DONE ---\n")
