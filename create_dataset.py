@@ -60,7 +60,7 @@ def load_dataset(dataset):
         with open(dataset[cancer_type][0].path, 'r') as f:
             # first line as dictionary key. (first line is samples IDs)
             labels = f.readline().strip().split('\t')
-            data = {label: [] for label in labels}
+            data = {"-".join(label.split("-")[0:2]): [] for label in labels}
             print("\tAmount of samples:\t" + str(len(labels)-1))
             
             # Read lines of file (each line gene with expression value per sample)
@@ -144,18 +144,17 @@ def main():
     # data.columns = data.loc["gene_id"]
     # data = data.drop("gene_id", axis = 0)
     
-    print(annotation.loc["#"])
-    annotation.columns = annotation.loc["#"]
-    annotation = annotation.drop("#", axis = 1)
+    annotation = annotation.set_index("#")
+    print(annotation.iloc[0:3,0:3])
 
     # write data to files
     print("--- Writing dataset to file ---")
     
-    # data_file_name = "data/raw_total_data.csv"
-    # print("Expression data set")
-    # print("\tPath:\t" + data_file_name)
-    # print("\tWriting...")
-    # data.to_csv(data_file_name)
+    data_file_name = "data/raw_total_data.csv"
+    print("Expression data set")
+    print("\tPath:\t" + data_file_name)
+    print("\tWriting...")
+    data.to_csv(data_file_name)
     
     annotation_file_name = "data/raw_labels.csv"
     print("Annotation data set")

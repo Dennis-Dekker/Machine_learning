@@ -24,11 +24,10 @@ def load_data():
         df = pd.read_csv(file_,index_col=0)
         list_.append(df)
 
-    print(df.iloc[0:3,0:3])
     #expression data
     df_data = pd.concat(list_, axis = 0, ignore_index = True)
     #labels frame
-    df_data_labels = pd.read_csv("data/raw_labels.csv")
+    df_data_labels = pd.read_csv("data/raw_labels.csv", index_col=0)
     
     return df_data, df_data_labels
 
@@ -36,11 +35,11 @@ def process_data_frame(df_data):
     """Remove unwanted columns from dataframe.
     """
     
-    finalDf = pd.concat([df_data[['Unnamed: 0']]], axis = 1)
+    #finalDf = pd.concat([df_data[['Unnamed: 0']]], axis = 1)
     #remove Unnamed columns from the dataset
-    x = df_data.drop(['Unnamed: 0','Unnamed: 0.1'], 1)
+    x = df_data
     #remove Unnamed column from the labels
-    y = df_data['Unnamed: 0']
+    y = df_data.index
     
     return x, y
 
@@ -56,7 +55,7 @@ def calculate_PCA(x, y, df_data_labels):
                   , columns = ['principal component 1', 'principal component 2'])
 
     #add class information to the output of PCA
-    finalDf = pd.concat([principalDf, df_data_labels[["Class"]]],axis=1)
+    finalDf = pd.concat([principalDf, df_data_labels[["cancer_type"]]],axis=1)
     
     # 10 components
     pca = PCA(n_components=10)
@@ -109,18 +108,18 @@ def main():
     df_data, df_data_labels = load_data()
     
     #process dataframe 
-    # x, y = process_data_frame(df_data)
+    x, y = process_data_frame(df_data)
     
     #determine amount of PC's for analysis
     #TODO 
     #n = calculate_amount_PCs(x)
     
     #calculate PCA 
-    # pca, finalDf, all_compon = calculate_PCA(x, y, df_data_labels)
+    pca, finalDf, all_compon = calculate_PCA(x, y, df_data_labels)
     
     # store_pca_result(all_compon)
     #plot PCA 
-    #plot_PCA(finalDf, pca)
+    plot_PCA(finalDf, pca)
 
 if __name__ == '__main__':
     main()
