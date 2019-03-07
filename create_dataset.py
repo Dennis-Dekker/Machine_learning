@@ -131,32 +131,38 @@ def load_annotation_files(dataset):
     return df
 
 def main():
-    
     # Get cancer_type IDs from Synapse. First value dict is expression data, 
     ## second is annotation file.
     ID_dict = load_dataset_ids()
     list_datasets = download_data_synapse(ID_dict)
     
     # Load datasets
-    data = load_dataset(list_datasets)
+    #data = load_dataset(list_datasets)
     annotation = load_annotation_files(list_datasets)
     
-    # transpose expression dataset 
-    data.columns = data.loc["gene_id"]
-    data = data.drop("gene_id", axis = 0)
+    # set column names 
+    # data.columns = data.loc["gene_id"]
+    # data = data.drop("gene_id", axis = 0)
+    
+    print(annotation.loc["#"])
+    annotation.columns = annotation.loc["#"]
+    annotation = annotation.drop("#", axis = 1)
 
     # write data to files
-    data_file_name = "data/raw_total_data.csv"
-    annotation_file_name = "data/raw_labels.csv"
     print("--- Writing dataset to file ---")
-    print("Expression data set")
-    print("\tPath:\t" + data_file_name)
-    print("\tWriting...")
-    data.to_csv(data_file_name)
+    
+    # data_file_name = "data/raw_total_data.csv"
+    # print("Expression data set")
+    # print("\tPath:\t" + data_file_name)
+    # print("\tWriting...")
+    # data.to_csv(data_file_name)
+    
+    annotation_file_name = "data/raw_labels.csv"
     print("Annotation data set")
     print("\tPath:\t" + annotation_file_name)
     print("\tWriting...")
     annotation.to_csv(annotation_file_name)
+    
     print("--- DONE ---\n")
         
     
