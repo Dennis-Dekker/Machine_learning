@@ -8,6 +8,7 @@ from sklearn.feature_selection import SelectKBest
 from sklearn.decomposition import PCA
 import matplotlib
 import matplotlib.pyplot as plt
+from mpl_toolkits.mplot3d import axes3d, Axes3D 
 
 def load_data():
     """Load data from .csv files.
@@ -25,11 +26,13 @@ def load_data():
         list_.append(df)
 
     #expression data
-    df_data = pd.concat(list_, axis = 0, ignore_index = True)
+    df_data = pd.concat(list_, axis = 0, ignore_index = False)
     #labels frame
     df_data_labels = pd.read_csv("data/raw_labels.csv", index_col=0)
     
-    return df_data, df_data_labels
+    df_data = pd.concat([df_data_labels,df_data], axis = 1, join = "inner")
+    
+    return df_data
 
 def process_data_frame(df_data):
     """Remove unwanted columns from dataframe.
@@ -37,25 +40,28 @@ def process_data_frame(df_data):
     
     #finalDf = pd.concat([df_data[['Unnamed: 0']]], axis = 1)
     #remove Unnamed columns from the dataset
-    x = df_data
+    x = df_data.drop(["cancer_type", "gender", "bcr_patient_uuid", "bcr_patient_barcode", "patient_id", "age_at_initial_pathologic_diagnosis"], axis = 1)
     #remove Unnamed column from the labels
-    y = df_data.index
+    # y = df_data.index
+    x += 1
+    x = x.applymap(np.log2)
     
-    return x, y
+    return x
 
-def calculate_PCA(x, y, df_data_labels):
+def calculate_PCA(x, df_data):
     """Calculate n principal components
     
     finalDf: dataframe of pca with labels.
     """
     #PCA selecting the first two components.
-    pca = PCA(n_components=2)
+    pca = PCA(n_components=3)
     principalComponents = pca.fit_transform(x)
     principalDf = pd.DataFrame(data = principalComponents
-                  , columns = ['principal component 1', 'principal component 2'])
+                  , columns = ['principal component 1', 'principal component 2', 'principal component 3'])
+    principalDf = principalDf.set_index(df_data.index.values)
 
     #add class information to the output of PCA
-    finalDf = pd.concat([principalDf, df_data_labels[["cancer_type"]]],axis=1)
+    finalDf = pd.concat([principalDf, df_data[["cancer_type"]]],ignore_index=False, axis = 1)
     
     # 10 components
     pca = PCA(n_components=10)
@@ -105,18 +111,28 @@ def main():
     """Main function.
     """
     #load data
-    df_data, df_data_labels = load_data()
+    df_data = load_data()    
     
+    # print(df_data.describe())
     #process dataframe 
-    x, y = process_data_frame(df_data)
+    x = process_data_frame(df_data)
     
     #determine amount of PC's for analysis
     #TODO 
     #n = calculate_amount_PCs(x)
     
     #calculate PCA 
-    pca, finalDf, all_compon = calculate_PCA(x, y, df_data_labels)
+    pca, finalDf, all_compon = calculate_PCA(x, df_data)
     
+    outliers = []
+    for i in finalDf.index.values:
+        if finalDf.loc[i,"principal component 1"] > 200:
+            outliers.extend([i])
+    
+    x = x.drop(outliers,axis = 0)
+    df_data = df_data.drop(outliers,axis = 0)
+    
+    pca, finalDf, all_compon = calculate_PCA(x, df_data)
     # store_pca_result(all_compon)
     #plot PCA 
     plot_PCA(finalDf, pca)
