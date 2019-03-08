@@ -32,18 +32,18 @@ Use different classification methods (Supervised learning):
 ## TODO
 Keep track on what we still have to do. Please update this list with new todo's. 
 
-- [ ] Update README.
+- [x] Update README.
 - [ ] Investigate preprocessing that is applied to the data.
 - [ ] Write about preprocessing steps in report.
 - [ ] Keep track on references in the report.
 - [ ] Reorganize repository (give logical filenames, restructure folders, etc.).
 - [x] Rewrite PCA scripts structure.
-- [ ] Calculate amount of PC's needed (PCA script).
-- [ ] Review PCA script (especially investigate explained variation values).
+- [x] Calculate amount of PC's needed (PCA script).
+- [x] Review PCA script (especially investigate explained variation values).
 - [X] Download data of different cancer types from [Synapse](https://www.synapse.org/#!Synapse:syn4301332) and merge with annotations (also from Synapse).
 - [ ] Try different Hyperparameters in the ML algorithms (Knn, SVM, ecc) and cross validation
-## Workflow
-- [ ] PCA: try to apply it within cancer types
+- [x] PCA: try to apply it within cancer types
 - [ ] find important features &rarr; DEG (Differentially expressed genes)
 - [ ] KEGG analysis (Pathways) 
+- [ ] check for class imbalances (bar plot)
 
