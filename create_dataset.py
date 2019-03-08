@@ -60,7 +60,8 @@ def load_dataset(dataset):
         with open(dataset[cancer_type][0].path, 'r') as f:
             # first line as dictionary key. (first line is samples IDs)
             labels = f.readline().strip().split('\t')
-            data = {"-".join(label.split("-")[0:2]): [] for label in labels}
+            data = {"-".join(label.split("-")[0:3]): [] for label in labels[1:]}
+            data[labels[0]] = []
             print("\tAmount of samples:\t" + str(len(labels)-1))
             
             # Read lines of file (each line gene with expression value per sample)
@@ -69,8 +70,11 @@ def load_dataset(dataset):
                 values = [line.strip().split('\t')[0]]
                 values.extend([float(x) for x in line.strip().split('\t')[1:]])
                 for i in range(len(labels)):
-                    data[labels[i]].append(values[i])
-                    
+                    if i == 0:
+                        data[labels[i]].append(values[i])
+                    elif len(data["-".join(labels[i].split("-")[0:3])]) < 20531:
+                            data["-".join(labels[i].split("-")[0:3])].append(values[i])
+               
             # merge datasets if more than one.
             if cancer_type == list(dataset.keys())[0]:
                 print("\tCreated new expression dataset.")
@@ -79,7 +83,7 @@ def load_dataset(dataset):
                 print("\tMerged data to existing expression dataset.")
                 del data["gene_id"]
                 df.update(data)
-                
+            
     # transpose data to get gene_ids as columns
     print("\nProcessing all data...")
     df = data_to_pandas(df).transpose()
@@ -137,16 +141,15 @@ def main():
     list_datasets = download_data_synapse(ID_dict)
     
     # Load datasets
-    #data = load_dataset(list_datasets)
+    data = load_dataset(list_datasets)
     annotation = load_annotation_files(list_datasets)
     
     # set column names 
-    # data.columns = data.loc["gene_id"]
-    # data = data.drop("gene_id", axis = 0)
+    data.columns = data.loc["gene_id"]
+    data = data.drop("gene_id", axis = 0)
     
     annotation = annotation.set_index("#")
-    print(annotation.iloc[0:3,0:3])
-
+    
     # write data to files
     print("--- Writing dataset to file ---")
     
