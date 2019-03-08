@@ -238,7 +238,7 @@ def main():
 
     #plot_boundaries(svm_model,tree,knn, X_test, y_test)
 
-    #roc plot --> takes a lot for svm
+    #roc plot --> takes a lot for svm, then is commented
     roc_plot(X_train, y_train, X_test, y_test, svm_model, tree, knn)
 
 
