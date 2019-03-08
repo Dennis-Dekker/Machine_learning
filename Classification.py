@@ -128,12 +128,15 @@ def k_nearest_neighbors(X_train, X_test, y_train, y_test):
     return cm, accuracy, knn
 
 
-def plot_boundaries(svm_model, X,y):
+def plot_boundaries(svm_model,tree, knn, X,y):
     # Plot Decision Region using mlxtend's  plotting function
-    # convert from string to integer the labels
-    #labels, uniques = pd.factorize(y.iloc[:, 0].tolist())
     # Plotting decision regions
     plot_decision_regions(X=X, y=y, clf=svm_model, legend=2)
+    plt.show()
+    plot_decision_regions(X=X, y=y, clf=knn, legend=2)
+    plt.show()
+    plot_decision_regions(X=X, y=y, clf=tree, legend=2)
+    plt.show()
 
 def plot_accuracy(method, cm,accuracy):
     print("Classifier: "+method)
@@ -172,12 +175,12 @@ def main():
     cm_svm, accuracy_svm, svm_model =support_vector_machine(X_train, X_test, y_train, y_test)
     plot_accuracy("SVM", cm_svm, accuracy_svm)
 
-    
-    plot_boundaries(svm_model, X_test, y_test)
     #KNN
    
     cm_knn, accuracy_knn, knn=k_nearest_neighbors(X_train, X_test, y_train, y_test)
     plot_accuracy("K-NN", cm_knn, accuracy_knn)
+
+    plot_boundaries(svm_model,tree,knn, X_test, y_test)
 
     #roc plot --> takes a lot for svm
     #roc_plot(X_train, y_train, X_test, y_test, svm_model, tree, knn)
