@@ -93,6 +93,13 @@ def plot_PCA(finalDf, pca):
     pca_color.set(ylabel = "PC2 (" + str(round(pca.explained_variance_ratio_[1]*100, 1)) + "%)")
     pca_color.savefig(path_PCA_figure_color)
     print("Image saved to: " + path_PCA_figure_color)
+    
+    fig = plt.figure(1, figsize=(4, 3))
+    plt.clf()
+    ax = Axes3D(fig, rect=[0, 0, .95, 1], elev=48, azim=134)
+    y = pd.get_dummies(np.array(finalDf.loc[:,"cancer_type"])).values.argmax(1)
+    ax.scatter(finalDf.iloc[:, 0], finalDf.iloc[:, 1], finalDf.iloc[:, 2],c=y, cmap='RdYlBu_r',edgecolor='k')
+    plt.show()
 
 def calculate_amount_PCs(x):
     pca_trafo = PCA().fit(x)
