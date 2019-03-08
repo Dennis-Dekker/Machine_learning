@@ -15,7 +15,7 @@ Preprocessing (Unsupervised learning):
 
 - Principal Component Analysis(PCA)
 
-- Clustering 
+- tSNE
 
 Use different classification methods (Supervised learning):
 
