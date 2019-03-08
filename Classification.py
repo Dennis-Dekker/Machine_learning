@@ -1,6 +1,6 @@
 import glob
 from itertools import cycle
-
+import sys
 import matplotlib
 import matplotlib.pyplot as plt
 import numpy as np
@@ -97,7 +97,7 @@ def decision_tree(X_train, X_test, y_train, y_test):
 def support_vector_machine(X_train, X_test, y_train, y_test):
      # training a linear SVM classifier 
     linear=SVC(kernel = 'linear', C = 1)
-    svm_model_linear = linear.fit(X_train, y_train.values.ravel()) 
+    svm_model_linear = linear.fit(X_train, y_train) 
     svm_predictions = svm_model_linear.predict(X_test) 
     
     # model accuracy for X_test   
@@ -105,20 +105,20 @@ def support_vector_machine(X_train, X_test, y_train, y_test):
     # creating a confusion matrix 
     cm = confusion_matrix(y_test, svm_predictions)
 
-    labels, uniques = pd.factorize(y_test.iloc[:, 0].tolist())
+    #labels, uniques = pd.factorize(y_test.iloc[:, 0].tolist())
     # labels=labels.astype('U')
     # labels = np.array(labels, dtype=data.astype('U'))
     # print(labels.dtype)
     # print(X_test.as_matrix().dtype)
-    # plot_decision_regions(X_test.as_matrix()[:200], labels[:200], clf=linear, res=0.1)
-    # plt.show()
+    plot_decision_regions(X_test[:200], y_test[:200], clf=linear, res=0.1)
+    plt.show()
 
     return cm, accuracy, linear
 
 def k_nearest_neighbors(X_train, X_test, y_train, y_test):
     # training a KNN classifier 
     knn=KNeighborsClassifier(n_neighbors = 15)
-    knn.fit(X_train, y_train.values.ravel()) 
+    knn.fit(X_train, y_train)
     
     # accuracy on X_test 
     accuracy = knn.score(X_test, y_test)     
@@ -149,21 +149,27 @@ def plot_accuracy(method, cm,accuracy):
     
 
 def main():
-    Data = pd.read_csv("data/PCA_transformed_data.csv", header=None)
-    Labels=pd.read_csv("data/labels.csv")
+    Data = np.loadtxt("data/PCA_transformed_data.csv", delimiter=",")
+    Labels=pd.read_csv("data/labels.csv",index_col=0)
+    print(Labels)
+    #convert labels from string to numbers
+    Labels, uniques = pd.factorize(Labels.iloc[:, 0].tolist())
     #selecting only 2 components
-    Data=Data.iloc[:,1:3]
+    Data=Data[:,1:3]
+    print(Data)
+    print(Labels)
+    
     #TO VISUALIZE the FEATURE SPACE, remove comments below
     # labels, uniques = pd.factorize(Labels.iloc[:, 1].tolist())
     # plt.scatter(Data.as_matrix()[:,0], Data.as_matrix()[:,1], s=4, alpha=0.3, c=labels, cmap='RdYlBu_r')
     # plt.show()
     #split dataset in tr
     # aining and testing
-    X_train, X_test, y_train, y_test = train_test_split(Data, Labels[["Class"]], random_state = 0,test_size=0.5) 
-    
+    X_train, X_test, y_train, y_test = train_test_split(Data, Labels, random_state = 0,test_size=0.5) 
     #decision tree classifier
     cm_dt, acc_dt,tree=decision_tree(X_train, X_test, y_train, y_test)
-    plot_accuracy("decision tree", cm_dt, acc_dt)
+    plot_accuracy("decision tree", cm_dt, acc_dt)   
+
     #SVM
     cm_svm, accuracy_svm, svm_model =support_vector_machine(X_train, X_test, y_train, y_test)
     plot_accuracy("SVM", cm_svm, accuracy_svm)
@@ -176,7 +182,7 @@ def main():
     plot_accuracy("K-NN", cm_knn, accuracy_knn)
 
     #roc plot --> takes a lot for svm
-    roc_plot(X_train, y_train, X_test, y_test, svm_model, tree, knn)
+    #roc_plot(X_train, y_train, X_test, y_test, svm_model, tree, knn)
 
 
 
