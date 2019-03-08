@@ -110,8 +110,8 @@ def support_vector_machine(X_train, X_test, y_train, y_test):
     # labels = np.array(labels, dtype=data.astype('U'))
     # print(labels.dtype)
     # print(X_test.as_matrix().dtype)
-    plot_decision_regions(X_test[:200], y_test[:200], clf=linear, res=0.1)
-    plt.show()
+    #plot_decision_regions(X_test, y_test, clf=linear, res=0.1)
+    #plt.show()
 
     return cm, accuracy, linear
 
@@ -131,12 +131,9 @@ def k_nearest_neighbors(X_train, X_test, y_train, y_test):
 def plot_boundaries(svm_model, X,y):
     # Plot Decision Region using mlxtend's  plotting function
     # convert from string to integer the labels
-    labels, uniques = pd.factorize(y.iloc[:, 0].tolist())
+    #labels, uniques = pd.factorize(y.iloc[:, 0].tolist())
     # Plotting decision regions
-    X=X.values
-    print(X)
-    print(labels)
-    plot_decision_regions(X=X, y=labels, clf=svm_model, legend=2)
+    plot_decision_regions(X=X, y=y, clf=svm_model, legend=2)
 
 def plot_accuracy(method, cm,accuracy):
     print("Classifier: "+method)
@@ -166,6 +163,7 @@ def main():
     #split dataset in tr
     # aining and testing
     X_train, X_test, y_train, y_test = train_test_split(Data, Labels, random_state = 0,test_size=0.5) 
+    
     #decision tree classifier
     cm_dt, acc_dt,tree=decision_tree(X_train, X_test, y_train, y_test)
     plot_accuracy("decision tree", cm_dt, acc_dt)   
@@ -174,8 +172,8 @@ def main():
     cm_svm, accuracy_svm, svm_model =support_vector_machine(X_train, X_test, y_train, y_test)
     plot_accuracy("SVM", cm_svm, accuracy_svm)
 
-    #NOT WORKING 
-    #plot_boundaries(svm_model, X_train, y_train)
+    
+    plot_boundaries(svm_model, X_test, y_test)
     #KNN
    
     cm_knn, accuracy_knn, knn=k_nearest_neighbors(X_train, X_test, y_train, y_test)
