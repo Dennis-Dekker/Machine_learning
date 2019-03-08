@@ -81,7 +81,7 @@ def plot_PCA(finalDf, pca):
     print("Image saved to: " + path_PCA_figure)
 
     #plot by class
-    pca_color=sns.pairplot(x_vars=["principal component 1"], y_vars=["principal component 2"], data=finalDf, hue="Class", height=5)
+    pca_color=sns.pairplot(x_vars=["principal component 1"], y_vars=["principal component 2"], data=finalDf, hue="cancer_type", height=5)
     path_PCA_figure_color = "images/PCA_color.png"
     pca_color.set(xlabel = "PC1 (" + str(round(pca.explained_variance_ratio_[0]*100, 1)) + "%)")
     pca_color.set(ylabel = "PC2 (" + str(round(pca.explained_variance_ratio_[1]*100, 1)) + "%)")
