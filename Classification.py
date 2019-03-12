@@ -152,7 +152,20 @@ def decision_tree(X_train, X_test, y_train, y_test):
     return cm,accuracy, tree
 
 
+def find_best_param_SVM(X_train,y_train):
+    #define the possible hyperparameters
+    tuned_parameters = [{'kernel': ['rbf'], 'gamma': [1e-3, 1e-4], 'C': [1, 10, 100, 1000]}, {'kernel': ['linear'], 'C': [1, 10, 100, 1000]}]              
+    clf = GridSearchCV(estimator=SVC(), tuned_parameters)
+    clf.fit(X_train, y_train)
+    # Show the best value for C
+    print(clf.best_params_)
+    print(cross_val_score(clf, X_train, y_train))
+    sys.exit("doei")
+
+
 def support_vector_machine(X_train, X_test, y_train, y_test):
+
+
      # training a linear SVM classifier 
     linear=SVC(kernel = 'linear', C = 1)
     svm_model_linear = linear.fit(X_train, y_train) 
