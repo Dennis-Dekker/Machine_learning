@@ -223,10 +223,7 @@ def main():
     # plt.show()
     #split dataset in tr
     # taining and testing
-    X_train, X_test, y_train, y_test = train_test_split(Data, Labels, random_state = 1,test_size=0.2) 
-    #split the training in training and validation
-    X_train, X_val, y_train, y_val  = train_test_split(X_train, y_train, random_state = 1,test_size=0.2) 
-    
+    X_train, X_test, y_train, y_test = train_test_split(Data, Labels, random_state = 1,test_size=0.2)     
     
     #decision tree classifier
     cm_dt, acc_dt,tree=decision_tree(X_train, X_test, y_train, y_test)
