@@ -18,6 +18,8 @@ from sklearn.neighbors import KNeighborsClassifier
 from sklearn.preprocessing import StandardScaler, label_binarize
 from sklearn.svm import SVC
 from sklearn.tree import DecisionTreeClassifier
+from sklearn.cross_validation import cross_val_score
+
 
 
 def roc_plot(X_train,y_train,X_test, y_test, linear, tree, knn):
@@ -220,8 +222,11 @@ def main():
     # plt.scatter(Data.as_matrix()[:,0], Data.as_matrix()[:,1], s=4, alpha=0.3, c=labels, cmap='RdYlBu_r')
     # plt.show()
     #split dataset in tr
-    # aining and testing
-    X_train, X_test, y_train, y_test = train_test_split(Data, Labels, random_state = 0,test_size=0.5) 
+    # taining and testing
+    X_train, X_test, y_train, y_test = train_test_split(Data, Labels, random_state = 1,test_size=0.2) 
+    #split the training in training and validation
+    X_train, X_val, y_train, y_val  = train_test_split(X_train, y_train, random_state = 1,test_size=0.2) 
+    
     
     #decision tree classifier
     cm_dt, acc_dt,tree=decision_tree(X_train, X_test, y_train, y_test)
@@ -239,7 +244,7 @@ def main():
     #plot_boundaries(svm_model,tree,knn, X_test, y_test)
 
     #roc plot --> takes a lot for svm, then is commented
-    roc_plot(X_train, y_train, X_test, y_test, svm_model, tree, knn)
+    #roc_plot(X_train, y_train, X_test, y_test, svm_model, tree, knn)
 
 
 
