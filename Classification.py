@@ -19,7 +19,7 @@ from sklearn.preprocessing import StandardScaler, label_binarize
 from sklearn.svm import SVC
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.cross_validation import cross_val_score
-
+from sklearn.model_selection import GridSearchCV
 
 
 def roc_plot(X_train,y_train,X_test, y_test, linear, tree, knn):
@@ -154,16 +154,17 @@ def decision_tree(X_train, X_test, y_train, y_test):
 
 def find_best_param_SVM(X_train,y_train):
     #define the possible hyperparameters
-    tuned_parameters = [{'kernel': ['rbf'], 'gamma': [1e-3, 1e-4], 'C': [1, 10, 100, 1000]}, {'kernel': ['linear'], 'C': [1, 10, 100, 1000]}]              
-    clf = GridSearchCV(estimator=SVC(), tuned_parameters)
+    tuned_parameters = [{'kernel': ['rbf'], 'gamma': [1e-3, 1e-4], 'C': [1, 10, 100]}, {'kernel': ['linear'], 'C': [1, 10, 100]}]              
+    clf = GridSearchCV(estimator=SVC(), param_grid=tuned_parameters)
     clf.fit(X_train, y_train)
     # Show the best value for C
-    print(clf.best_params_)
-    print(cross_val_score(clf, X_train, y_train))
-    sys.exit("doei")
+    #print(clf.best_params_)
+    #print(cross_val_score(clf, X_train, y_train))
+    #sys.exit("doei")
+    return clf.best_params_
 
 
-def support_vector_machine(X_train, X_test, y_train, y_test):
+def support_vector_machine(X_train, X_test, y_train, y_test, param):
 
 
      # training a linear SVM classifier 
@@ -237,9 +238,9 @@ def main():
     #split dataset in tr
     # taining and testing
     X_train, X_test, y_train, y_test = train_test_split(Data, Labels, random_state = 1,test_size=0.2)     
-    
+    svm_best_param=find_best_param_SVM(X_train,y_train)
     #decision tree classifier
-    cm_dt, acc_dt,tree=decision_tree(X_train, X_test, y_train, y_test)
+    cm_dt, acc_dt,tree=decision_tree(X_train, X_test, y_train, y_test, svm_best_param)
     plot_accuracy("decision tree", cm_dt, acc_dt)   
 
     #SVM
