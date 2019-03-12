@@ -34,9 +34,11 @@ def main():
     
     y_pos = np.arange(len(class_counts.index))
 
+    savefig = "images/Class_imbalance.png"
     plt.bar(y_pos,height = list(class_counts), color=['black', 'red', 'green', 'blue', 'cyan'])
     plt.xticks(y_pos, list(class_counts.index))
-    plt.savefig("images/Class_imbalance.png")
+    plt.savefig(savefig)
+    print("Figure save in: " + savefig)
 
 if __name__ == '__main__':
     main()
