@@ -115,6 +115,7 @@ def calculate_amount_PCs(x):
 
 def export_PCA_scores(pca):
     np.savetxt("data/PCA_transformed_raw_data.csv", pca, delimiter=",")
+    return
 
 def main():
     """Main function.
