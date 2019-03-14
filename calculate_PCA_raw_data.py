@@ -113,8 +113,8 @@ def calculate_amount_PCs(x):
     plt.savefig("images/test_explained_variance.png")
     return 2
 
-def store_pca_result(all_component):
-    np.savetxt("data/PCA_transformed_data.csv", all_component, delimiter=",")
+def export_PCA_scores(pca):
+    np.savetxt("data/PCA_transformed_raw_data.csv", pca, delimiter=",")
 
 def main():
     """Main function.
@@ -145,6 +145,8 @@ def main():
     # store_pca_result(all_compon)
     #plot PCA 
     plot_PCA(finalDf, pca)
+    
+    export_PCA_scores(all_compon)
 
 if __name__ == '__main__':
     main()
