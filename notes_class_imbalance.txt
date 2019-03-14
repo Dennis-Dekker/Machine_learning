@@ -1,0 +1,49 @@
+#Class imbalance
+#Different approaches! 
+
+#1-Create the weights using sklearn, has to be a dictionary, Im not sure how its works "class_weight.compute_class_weight"
+
+from sklearn.utils import class_weight
+class_weights = class_weight.compute_class_weight('balanced',np.unique(y_train),y_train)
+
+#2-Other way:
+#Table with our classes
+		NofS	Prop
+BRCA	934	5.188889
+LUAD	542	3.011111
+KIRC	502	2.788889
+COAD	423	2.350000
+PRAD	180	1.000000
+NofS= Number of type of class
+Prop= NofS/min(NofS). For BRCA->Prop=934/180=5.188etc
+#We make the weights based in thos proportions
+class_weights={0:1.,1:2.,2:2.,3:3.,4:5.}
+
+#we pass the class_weight to .fit()
+#Example for knn
+
+knn.fit(X_train, y_train,class_weight=class_weight)#Doesnt work!, I have to check this.
+
+
+
+#3-SMOTE
+from imblearn.over_sampling import SMOTE
+smote = SMOTE("minority")
+#Replace X_train by X_sm_train and y_train by y_sm_train in Class_imbalance.py
+X_sm_train, y_sm_train = smote.fit_sample(X_train,y_train)
+
+#We pass X_sm_train, y_sm_train to for example KNN
+cm_knn, accuracy_knn, knn=k_nearest_neighbors(X_sm_train, X_test, y_sm_train, y_test)
+
+#This worked but Its changing the accuracy a super mega super tiny fraction. Also I dont think its a good approach for our dataset,
+this method Correct imbalance by adding more sintetic samples of underrepresent classes.In our case SMOTE have to oversample a lot of PRAD 
+samples to reach BRCA.
+# By default SMOTE balance the minority classes, In this case will create  samples for the 4 classes underrepresented
+
+#Another approach can be undersample BRCA, but we dont want to loose information I guess..
+
+
+
+
+
+
