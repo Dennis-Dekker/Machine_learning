@@ -68,10 +68,14 @@ def calculate_PCA(x, df_data):
     # 10 components
     pca = PCA(n_components=10)
     principalComponents = pca.fit_transform(x)
+    principalDf = pd.DataFrame(data = principalComponents
+                  , columns = ['PC1', 'PC2', 'PC3','PC4', 'PC5', 'PC6','PC7', 'PC8', 'PC9','PC10'])
+    principalDf = principalDf.set_index(df_data.index.values)
     #uncomment next line for debugging
     #print(pca.explained_variance_)
-    
-    return pca, finalDf, principalComponents
+    finalDf_10 = pd.concat([principalDf, df_data[["cancer_type"]]],ignore_index=False, axis = 1)
+
+    return pca, finalDf, finalDf_10
     
 def plot_PCA(finalDf, pca):
     """Plot PCA's
@@ -150,8 +154,8 @@ def main():
     # store_pca_result(all_compon)
     #plot PCA 
     #plot_PCA(finalDf, pca)
-    
-    export_PCA_scores(finalDf)
+    print(all_compon)
+    export_PCA_scores(all_compon)
 
 if __name__ == '__main__':
     main()

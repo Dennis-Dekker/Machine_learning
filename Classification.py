@@ -101,16 +101,27 @@ def plot_accuracy(method, cm,accuracy):
     
 
 def main():
-    Data = np.loadtxt("data/PCA_transformed_raw_data.csv", delimiter=",")
-    Labels=pd.read_csv("data/raw_labels.csv",index_col=0)
-    print(Labels)
+    #Data = np.loadtxt("data/PCA_transformed_raw_data.csv", delimiter=",")
+    #Labels=pd.read_csv("data/raw_labels.csv",index_col=0)
+    Data=pd.read_csv("data/PCA_transformed_raw_data.csv")
+    Data=Data.values #convert from pandas to numpy
+    Labels=Data[:,10]
+    Data=Data[:,0:9]
+    #print(Data)
+    #print(Data)
+    #print(Labels)
     #convert labels from string to numbers
-    Labels, uniques = pd.factorize(Labels.iloc[:, 0].tolist())
+    #Labels, uniques = pd.factorize(Labels.iloc[:, 0].tolist())
+    Labels, uniques = pd.factorize(Labels)
     #selecting only 2 components
-    Data=Data[:,1:3]
-    print(Data.shape)
-    print(Labels)
-    
+    #Data=Data[:,1:3]
+    #print(Data.shape)
+    #print(Labels)
+
+    #pca_save_file = "data/PCA_transformed_raw_data_withl.csv"
+    #np.savetxt(pca_save_file, Data, delimiter=",")
+    #sys.exit("doei")
+
     #TO VISUALIZE the FEATURE SPACE, remove comments below
     # labels, uniques = pd.factorize(Labels.iloc[:, 1].tolist())
     # plt.scatter(Data.as_matrix()[:,0], Data.as_matrix()[:,1], s=4, alpha=0.3, c=labels, cmap='RdYlBu_r')
