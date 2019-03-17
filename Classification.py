@@ -106,7 +106,7 @@ def main():
     Data=pd.read_csv("data/PCA_transformed_raw_data.csv")
     Data=Data.values #convert from pandas to numpy
     Labels=Data[:,10]
-    Data=Data[:,0:9]
+    Data=Data[:,0:5]
     #print(Data)
     #print(Data)
     #print(Labels)
