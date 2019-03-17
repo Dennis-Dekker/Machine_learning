@@ -81,7 +81,6 @@ def random_forest(X_train, X_test, y_train, y_test):
     rf_gs=GridSearchCV(RandomForestClassifier(), param_grid=grid_param)
     rf_gs.fit(X_train,y_train)
     print(rf_gs.best_params_)
-    print("Training model.")
     #train model
     #model.fit(X_train, y_train)
     predicted_labels = rf_gs.predict(X_test)
@@ -137,7 +136,7 @@ def main():
     # plt.show()
     #split dataset in tr
     # taining and testing
-    X_train, X_test, y_train, y_test = train_test_split(Data, Labels, random_state = 1,test_size=0.2)     
+    X_train, X_test, y_train, y_test = train_test_split(Data, Labels, random_state = 1,test_size=0.4)     
     svm_best_param=find_best_param_SVM(X_train,y_train)
     #decision tree classifier
     cm_dt, acc_dt,tree=decision_tree(X_train, X_test, y_train, y_test)
