@@ -20,6 +20,7 @@ from sklearn.svm import SVC
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.cross_validation import cross_val_score
 from sklearn.model_selection import GridSearchCV
+from sklearn.ensemble import RandomForestClassifier
 
 
 def decision_tree(X_train, X_test, y_train, y_test):
@@ -38,7 +39,7 @@ def find_best_param_SVM(X_train,y_train):
     clf = GridSearchCV(estimator=SVC(), param_grid=tuned_parameters)
     clf.fit(X_train, y_train)
     # Show the best value for C
-    #print(clf.best_params_)
+    print(clf.best_params_)
     #print(cross_val_score(clf, X_train, y_train))
     #sys.exit("doei")
     return clf.best_params_
@@ -79,6 +80,14 @@ def k_nearest_neighbors(X_train, X_test, y_train, y_test):
     cm = confusion_matrix(y_test, knn_predictions)
     return cm, accuracy, knn
 
+def random_forest(X_train, X_test, y_train, y_test):
+    model = RandomForestClassifier()
+    print("Training model.")
+    #train model
+    model.fit(X_train, y_train)
+    predicted_labels = model.predict(X_test)
+    print ("FINISHED classifying. accuracy score : ")
+    print(accuracy_score(y_test, predicted_labels))
 
 def plot_boundaries(svm_model,tree, knn, X,y):
     # Plot Decision Region using mlxtend's  plotting function
@@ -106,7 +115,7 @@ def main():
     Data=pd.read_csv("data/PCA_transformed_raw_data.csv")
     Data=Data.values #convert from pandas to numpy
     Labels=Data[:,10]
-    Data=Data[:,0:5]
+    Data=Data[:,0:3]
     #print(Data)
     #print(Data)
     #print(Labels)
@@ -143,6 +152,8 @@ def main():
     cm_knn, accuracy_knn, knn=k_nearest_neighbors(X_train, X_test, y_train, y_test)
     plot_accuracy("K-NN", cm_knn, accuracy_knn)
 
+    #random forest
+    random_forest(X_train, X_test, y_train, y_test)
     #plot_boundaries(svm_model,tree,knn, X_test, y_test)
 
     #roc plot --> takes a lot for svm, then is commented
