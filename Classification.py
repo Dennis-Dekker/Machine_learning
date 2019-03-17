@@ -49,7 +49,7 @@ def support_vector_machine(X_train, X_test, y_train, y_test, param):
 
 
      # training a linear SVM classifier 
-    linear=SVC(kernel = 'linear', C = 1)
+    linear=SVC(kernel = param["kernel"], C = param["C"], gamma=param["gamma"])
     svm_model_linear = linear.fit(X_train, y_train) 
     svm_predictions = svm_model_linear.predict(X_test) 
     
@@ -57,15 +57,6 @@ def support_vector_machine(X_train, X_test, y_train, y_test, param):
     accuracy = svm_model_linear.score(X_test, y_test) 
     # creating a confusion matrix 
     cm = confusion_matrix(y_test, svm_predictions)
-
-    #labels, uniques = pd.factorize(y_test.iloc[:, 0].tolist())
-    # labels=labels.astype('U')
-    # labels = np.array(labels, dtype=data.astype('U'))
-    # print(labels.dtype)
-    # print(X_test.as_matrix().dtype)
-    #plot_decision_regions(X_test, y_test, clf=linear, res=0.1)
-    #plt.show()
-
     return cm, accuracy, linear
 
 def k_nearest_neighbors(X_train, X_test, y_train, y_test):
