@@ -101,14 +101,14 @@ def plot_accuracy(method, cm,accuracy):
     
 
 def main():
-    Data = np.loadtxt("data/PCA_transformed_data.csv", delimiter=",")
-    Labels=pd.read_csv("data/labels.csv",index_col=0)
+    Data = np.loadtxt("data/PCA_transformed_raw_data.csv", delimiter=",")
+    Labels=pd.read_csv("data/raw_labels.csv",index_col=0)
     print(Labels)
     #convert labels from string to numbers
     Labels, uniques = pd.factorize(Labels.iloc[:, 0].tolist())
     #selecting only 2 components
     Data=Data[:,1:3]
-    print(Data)
+    print(Data.shape)
     print(Labels)
     
     #TO VISUALIZE the FEATURE SPACE, remove comments below

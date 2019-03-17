@@ -115,8 +115,8 @@ def calculate_amount_PCs(x):
 
 def export_PCA_scores(pca):
     pca_save_file = "data/PCA_transformed_raw_data.csv"
-    np.savetxt(pca_save_file, pca, delimiter=",")
-    
+    #np.savetxt(pca_save_file, pca, delimiter=",")
+    pca.to_csv(pca_save_file, index=False)
     print("First 10 PCs saved in:\t" + pca_save_file)
     return
 
@@ -146,11 +146,12 @@ def main():
     df_data = df_data.drop(outliers,axis = 0)
     
     pca, finalDf, all_compon = calculate_PCA(x, df_data)
+    #print(finalDf)
     # store_pca_result(all_compon)
     #plot PCA 
-    plot_PCA(finalDf, pca)
+    #plot_PCA(finalDf, pca)
     
-    export_PCA_scores(all_compon)
+    export_PCA_scores(finalDf)
 
 if __name__ == '__main__':
     main()
