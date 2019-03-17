@@ -11,7 +11,7 @@ from mlxtend.plotting import plot_confusion_matrix, plot_decision_regions
 from sklearn import datasets
 from sklearn.decomposition import PCA
 from sklearn.feature_selection import SelectKBest
-from sklearn.metrics import accuracy_score, auc, confusion_matrix, cohen_kappa_score
+from sklearn.metrics import accuracy_score, auc, confusion_matrix, cohen_kappa_score, f1_score
 from sklearn.model_selection import train_test_split
 from sklearn.multiclass import OneVsRestClassifier
 from sklearn.neighbors import KNeighborsClassifier
@@ -21,7 +21,6 @@ from sklearn.tree import DecisionTreeClassifier
 from sklearn.cross_validation import cross_val_score
 from sklearn.model_selection import GridSearchCV
 from sklearn.ensemble import RandomForestClassifier
-from sklearn.metrics import balanced_accuracy_score
 
 
 def decision_tree(X_train, X_test, y_train, y_test):
@@ -31,7 +30,10 @@ def decision_tree(X_train, X_test, y_train, y_test):
     # creating a confusion matrix 
     cm = confusion_matrix(y_test, dtree_predictions)
     accuracy=accuracy_score(dtree_predictions,y_test)
+    print("cohen-kappa: \n")
     print(cohen_kappa_score(y_test,dtree_predictions))
+    print("F1 score: \n")
+    print(f1_score(y_test, dtree_predictions, average='weighted'))
     return cm,accuracy, tree
 
 
@@ -59,7 +61,10 @@ def support_vector_machine(X_train, X_test, y_train, y_test, param):
     accuracy = svm_model_linear.score(X_test, y_test) 
     # creating a confusion matrix 
     cm = confusion_matrix(y_test, svm_predictions)
+    print("cohen-kappa: \n")
     print(cohen_kappa_score(y_test,svm_predictions))
+    print("F1 score: \n")
+    print(f1_score(y_test, svm_predictions, average='weighted'))
     return cm, accuracy, linear
 
 def k_nearest_neighbors(X_train, X_test, y_train, y_test):
@@ -72,7 +77,10 @@ def k_nearest_neighbors(X_train, X_test, y_train, y_test):
     # creating a confusion matrix 
     knn_predictions = knn.predict(X_test)  
     cm = confusion_matrix(y_test, knn_predictions)
+    print("cohen-kappa: \n")
     print(cohen_kappa_score(y_test,knn_predictions))
+    print("F1 score: \n")
+    print(f1_score(y_test, knn_predictions, average='weighted'))
     return cm, accuracy, knn
 
 def random_forest(X_train, X_test, y_train, y_test):
@@ -88,9 +96,11 @@ def random_forest(X_train, X_test, y_train, y_test):
     #train model
     #model.fit(X_train, y_train)
     predicted_labels = rf_gs.predict(X_test)
-    cm=confusion_matrix(y_test, predicted_labels)
+    cm=confusion_matrix(y_test, predicted_labels) 
+    print("cohen-kappa: \n")
     print(cohen_kappa_score(y_test,predicted_labels))
-    #print ("FINISHED classifying. accuracy score : ")
+    print("F1 score: \n")
+    print(f1_score(y_test, predicted_labels, average='weighted'))
     return cm, accuracy_score(y_test, predicted_labels), rf_gs
 
 def plot_boundaries(svm_model,tree, knn, X,y):
@@ -112,7 +122,6 @@ def plot_accuracy(method, cm,accuracy):
     plt.title("Confusion matrix "+method)
     plt.show()
     
-
 def main():
     #Data = np.loadtxt("data/PCA_transformed_raw_data.csv", delimiter=",")
     #Labels=pd.read_csv("data/raw_labels.csv",index_col=0)
