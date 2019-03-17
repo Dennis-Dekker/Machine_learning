@@ -81,13 +81,22 @@ def k_nearest_neighbors(X_train, X_test, y_train, y_test):
     return cm, accuracy, knn
 
 def random_forest(X_train, X_test, y_train, y_test):
-    model = RandomForestClassifier()
+
+    grid_param = {  
+    'n_estimators': [100, 250, 500, 750, 1000],
+    'criterion': ['gini', 'entropy'],
+    'bootstrap': [True, False]
+    }
+    rf_gs=GridSearchCV(RandomForestClassifier(), param_grid=grid_param)
+    rf_gs.fit(X_train,y_train)
+    print(rf_gs.best_params_)
     print("Training model.")
     #train model
-    model.fit(X_train, y_train)
-    predicted_labels = model.predict(X_test)
-    print ("FINISHED classifying. accuracy score : ")
-    print(accuracy_score(y_test, predicted_labels))
+    #model.fit(X_train, y_train)
+    predicted_labels = rf_gs.predict(X_test)
+    cm=confusion_matrix(y_test, predicted_labels)
+    #print ("FINISHED classifying. accuracy score : ")
+    return cm, accuracy_score(y_test, predicted_labels), rf_gs
 
 def plot_boundaries(svm_model,tree, knn, X,y):
     # Plot Decision Region using mlxtend's  plotting function
@@ -153,7 +162,8 @@ def main():
     plot_accuracy("K-NN", cm_knn, accuracy_knn)
 
     #random forest
-    random_forest(X_train, X_test, y_train, y_test)
+    cm_rf,accuracy_rf, rf= random_forest(X_train, X_test, y_train, y_test)
+    plot_accuracy("Random forest", cm_rf, accuracy_rf)
     #plot_boundaries(svm_model,tree,knn, X_test, y_test)
 
     #roc plot --> takes a lot for svm, then is commented
