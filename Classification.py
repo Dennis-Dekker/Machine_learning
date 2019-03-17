@@ -120,11 +120,11 @@ def main():
     X_train, X_test, y_train, y_test = train_test_split(Data, Labels, random_state = 1,test_size=0.2)     
     svm_best_param=find_best_param_SVM(X_train,y_train)
     #decision tree classifier
-    cm_dt, acc_dt,tree=decision_tree(X_train, X_test, y_train, y_test, svm_best_param)
+    cm_dt, acc_dt,tree=decision_tree(X_train, X_test, y_train, y_test)
     plot_accuracy("decision tree", cm_dt, acc_dt)   
 
     #SVM
-    cm_svm, accuracy_svm, svm_model =support_vector_machine(X_train, X_test, y_train, y_test)
+    cm_svm, accuracy_svm, svm_model =support_vector_machine(X_train, X_test, y_train, y_test,svm_best_param)
     plot_accuracy("SVM", cm_svm, accuracy_svm)
 
     #KNN
