@@ -153,7 +153,7 @@ def plot_accuracy(method, cm,accuracy):
     plt.title("Confusion matrix "+method)
     plt.show()
 
-def main():
+def organize_data():
     #Data = np.loadtxt("data/PCA_transformed_raw_data.csv", delimiter=",")
     #Labels=pd.read_csv("data/raw_labels.csv",index_col=0)
     Data=pd.read_csv("data/PCA_transformed_raw_data.csv")
@@ -170,9 +170,11 @@ def main():
     # plt.show()
 
     #split dataset in training and testing
-    X_train, X_test, y_train, y_test = train_test_split(Data, Labels, random_state = 1,test_size=0.2)
+    X_train, X_test, y_train, y_test = train_test_split(Data, Labels, random_state = 1,test_size=0.25)
     #plot before oversampling
     
+    np.savetxt("data/Test_pca_t_raw.csv", X_test, delimiter=",")
+    np.savetxt("data/Label_test_pca_t_raw.csv", y_test, delimiter=",")
     # plt.scatter(X_train[:,0], X_train[:,1], s=4, alpha=1, c=y_train)
     # plt.show()
     #oversampling of the training set
@@ -191,7 +193,16 @@ def main():
     #update the training set with oversampled one
     X_train=X_sm_train
     y_train=y_sm_train
+    np.savetxt("data/Train_pca_t_raw.csv", X_train, delimiter=",")
+    np.savetxt("data/Label_train_pca_t_raw.csv", y_train, delimiter=",")
+    return X_train, X_test, y_train,y_test
 
+def main():
+    
+    #call "organize_data" to modify the train/test split
+    #X_train, X_test, y_train,y_test=organize_data()
+    
+    
     #decision tree classifier
     cm_dt, acc_dt,tree=decision_tree(X_train, X_test, y_train, y_test)
     plot_accuracy("decision tree", cm_dt, acc_dt)
@@ -208,6 +219,11 @@ def main():
     plot_accuracy("K-NN", cm_knn, accuracy_knn)
 
     #random forest
+    grid_param = {
+    'n_estimators': [100, 250, 500, 750, 1000],
+    'criterion': ['gini', 'entropy'],
+    'bootstrap': [True, False]
+    }
     #cm_rf,accuracy_rf, rf= random_forest(X_train, X_test, y_train, y_test)
     #plot_accuracy("Random forest", cm_rf, accuracy_rf)
     #plot_boundaries(svm_model,tree,knn, X_test, y_test)
