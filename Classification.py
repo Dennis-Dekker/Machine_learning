@@ -52,7 +52,7 @@ def nested_CV(X_train,y_train, estimator, param):
     state=1
     out_scores=[]
     in_winner_param=[]
-    out_cv = KFold(n_splits=10, shuffle=True, random_state=state)
+    out_cv = KFold(n_splits=7, shuffle=True, random_state=state)
     for i, (index_train_out, index_test_out) in enumerate(out_cv.split(X_train)):
         X_train_out, X_test_out = X_train[index_train_out], X_train[index_test_out]
         y_train_out, y_test_out = y_train[index_train_out], y_train[index_test_out]
@@ -205,8 +205,8 @@ def load_train_test():
     y_test=pd.read_csv("data/Label_test_pca_t_raw.csv",header=None)
     X_train=X_train.values
     X_test=X_test.values
-    y_train=y_train.values
-    y_test=y_test.values
+    y_train=y_train.values.ravel()
+    y_test=y_test.values.ravel()
     return X_train, X_test, y_train,y_test
     
 
@@ -240,7 +240,8 @@ def main():
     'criterion': ['gini', 'entropy'],
     'bootstrap': [True, False]
     }
-    rf_dist=nested_CV(X_train, y_train, RandomForestClassifier(), grid_param )
+    rf_dist=nested_CV(X_train, y_train, RandomForestClassifier(), grid_param)
+    sys.exit("done")
     cm_rf,accuracy_rf, rf= random_forest(X_train, X_test, y_train, y_test)
     plot_accuracy("Random forest", cm_rf, accuracy_rf)
 
