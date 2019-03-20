@@ -27,6 +27,7 @@ def load_data():
     
     return df_data
 
+
 def main():
     df = load_data()
     
