@@ -18,7 +18,7 @@ from sklearn.neighbors import KNeighborsClassifier
 from sklearn.preprocessing import StandardScaler, label_binarize
 from sklearn.svm import SVC
 from sklearn.tree import DecisionTreeClassifier
-from sklearn.model_selection import GridSearchCV,cross_val_score
+from sklearn.model_selection import GridSearchCV,cross_val_score,KFold
 from sklearn.ensemble import RandomForestClassifier
 from imblearn.over_sampling import SMOTE
 from sklearn.naive_bayes import GaussianNB
@@ -38,18 +38,40 @@ def decision_tree(X_train, X_test, y_train, y_test):
     return cm,accuracy, tree
 
 
-def find_best_param_SVM(X_train,y_train):
-    #define the possible hyperparameters
-    tuned_parameters = [{'kernel': ['rbf'], 'gamma': [1e-3, 1e-4], 'C': [1, 10, 100]}, {'kernel': ['linear'], 'C': [1, 10, 100]}]
-    clf = GridSearchCV(estimator=SVC(), param_grid=tuned_parameters)
-    clf.fit(X_train, y_train)
-    # Show the best value for C
-    print(clf.best_params_)
-    #print(cross_val_score(clf, X_train, y_train))
-    #sys.exit("doei")
-    return clf.best_params_
+# def find_best_method(X_train,y_train, param ):
+#     #define the possible hyperparameters
+#     clf = GridSearchCV(estimator=SVC(), param_grid=param)
+#     clf.fit(X_train, y_train)
+#     # Show the best value for C
+#     print(clf.best_params_)
+#     #print(cross_val_score(clf, X_train, y_train))
+#     #sys.exit("doei")
+#     return clf.best_params_
 
-#def nested_CV()
+def nested_CV(X_train,y_train, estimator, param):
+    state=1
+    out_scores=[]
+    in_winner_param=[]
+    out_cv = KFold(n_splits=10, shuffle=True, random_state=state)
+    for i, (index_train_out, index_test_out) in enumerate(out_cv):
+        X_train_out, X_test_out = X_train[index_train_out], X_train[index_test_out]
+        y_train_out, y_test_out = y_train[index_train_out], y_train[index_test_out]
+
+        in_cv =KFold(n_splits=3, shuffle=True, random_state=state)
+        #inner loop for hyperparameters tuning
+        GSCV=GridSearchCV(estimator=estimator, param_grid=param, cv=in_cv)
+        #train a model with each set of parameters
+        GSCV.fit(X_train_out, y_train_out)
+        #predict using the best set of hyperparameters
+        prediction=GSCV.predict(X_test_out)
+        in_winner_param.append(GSCV.best_params_)
+        out_scores.append(accuracy_score(prediction, y_test_out))
+
+    for i in zip(in_winner_param, out_scores):
+        print(i)
+    print("Mean of outer loop: "+str(np.mean(out_scores))+" std: "+str(np.std(out_scores)))
+    return out_scores
+
 
 def support_vector_machine(X_train, X_test, y_train, y_test, param):
 
@@ -155,23 +177,25 @@ def main():
 
     smote = SMOTE("not majority")
     
-   #Replace X_train by X_sm_train and y_train by y_sm_train in Class_imbalance.py
+    #Replace X_train by X_sm_train and y_train by y_sm_train in Class_imbalance.py
     X_sm_train, y_sm_train = smote.fit_sample(X_train,y_train)
     plt.scatter(X_sm_train[:,0], X_sm_train[:,1], s=4, alpha=1, c=y_sm_train)
     plt.show()
     uniques, counts=np.unique(y_sm_train, return_counts=True)
     print(dict(zip(uniques,counts)))
-
+    #update the training set with oversampled one
     X_train=X_sm_train
     y_train=y_sm_train
-    svm_best_param=find_best_param_SVM(X_train,y_train)
+
     #decision tree classifier
     cm_dt, acc_dt,tree=decision_tree(X_train, X_test, y_train, y_test)
     plot_accuracy("decision tree", cm_dt, acc_dt)
 
     #SVM
-    cm_svm, accuracy_svm, svm_model =support_vector_machine(X_train, X_test, y_train, y_test,svm_best_param)
-    plot_accuracy("SVM", cm_svm, accuracy_svm)
+    tuned_parameters = [{'kernel': ['rbf'], 'gamma': [1e-3, 1e-4], 'C': [1, 10, 100]}, {'kernel': ['linear'], 'C': [1, 10, 100]}]
+    svm_dist=nested_CV(X_train,y_train, "SVC", tuned_parameters)
+    #cm_svm, accuracy_svm, svm_model =support_vector_machine(X_train, X_test, y_train, y_test,svm_best_param)
+    #plot_accuracy("SVM", cm_svm, accuracy_svm)
 
     #KNN
 
