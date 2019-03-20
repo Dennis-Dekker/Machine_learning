@@ -53,7 +53,7 @@ def nested_CV(X_train,y_train, estimator, param):
     out_scores=[]
     in_winner_param=[]
     out_cv = KFold(n_splits=10, shuffle=True, random_state=state)
-    for i, (index_train_out, index_test_out) in enumerate(out_cv):
+    for i, (index_train_out, index_test_out) in enumerate(out_cv.split(X_train)):
         X_train_out, X_test_out = X_train[index_train_out], X_train[index_test_out]
         y_train_out, y_test_out = y_train[index_train_out], y_train[index_test_out]
 
@@ -66,6 +66,7 @@ def nested_CV(X_train,y_train, estimator, param):
         prediction=GSCV.predict(X_test_out)
         in_winner_param.append(GSCV.best_params_)
         out_scores.append(accuracy_score(prediction, y_test_out))
+        print("Best accuracy of fold "+str(i+1)+": "+str(GSCV.best_score_))
 
     for i in zip(in_winner_param, out_scores):
         print(i)
@@ -163,26 +164,30 @@ def main():
     #Labels, uniques = pd.factorize(Labels.iloc[:, 0].tolist())
     Labels, uniques = pd.factorize(Labels)
 
-    #TO VISUALIZE the FEATURE SPACE, remove comments below
+    #TO VISUALIZE the whole FEATURE SPACE, remove comments below
     # labels, uniques = pd.factorize(Labels.iloc[:, 1].tolist())
     # plt.scatter(Data.as_matrix()[:,0], Data.as_matrix()[:,1], s=4, alpha=0.3, c=labels, cmap='RdYlBu_r')
     # plt.show()
+
     #split dataset in training and testing
     X_train, X_test, y_train, y_test = train_test_split(Data, Labels, random_state = 1,test_size=0.2)
-    plt.scatter(X_train[:,0], X_train[:,1], s=4, alpha=1, c=y_train)
-    plt.show()
+    #plot before oversampling
+    
+    # plt.scatter(X_train[:,0], X_train[:,1], s=4, alpha=1, c=y_train)
+    # plt.show()
     #oversampling of the training set
-    uniques, counts=np.unique(y_train, return_counts=True)
-    print(dict(zip(uniques,counts)))
+    #uniques, counts=np.unique(y_train, return_counts=True)
+    #print(dict(zip(uniques,counts)))
 
     smote = SMOTE("not majority")
     
     #Replace X_train by X_sm_train and y_train by y_sm_train in Class_imbalance.py
     X_sm_train, y_sm_train = smote.fit_sample(X_train,y_train)
-    plt.scatter(X_sm_train[:,0], X_sm_train[:,1], s=4, alpha=1, c=y_sm_train)
-    plt.show()
-    uniques, counts=np.unique(y_sm_train, return_counts=True)
-    print(dict(zip(uniques,counts)))
+    #plot after oversampling
+    # plt.scatter(X_sm_train[:,0], X_sm_train[:,1], s=4, alpha=1, c=y_sm_train)
+    # plt.show()
+    #uniques, counts=np.unique(y_sm_train, return_counts=True)
+    #print(dict(zip(uniques,counts)))
     #update the training set with oversampled one
     X_train=X_sm_train
     y_train=y_sm_train
@@ -193,10 +198,10 @@ def main():
 
     #SVM
     tuned_parameters = [{'kernel': ['rbf'], 'gamma': [1e-3, 1e-4], 'C': [1, 10, 100]}, {'kernel': ['linear'], 'C': [1, 10, 100]}]
-    svm_dist=nested_CV(X_train,y_train, "SVC", tuned_parameters)
+    svm_dist=nested_CV(X_train,y_train, SVC(), tuned_parameters)
     #cm_svm, accuracy_svm, svm_model =support_vector_machine(X_train, X_test, y_train, y_test,svm_best_param)
     #plot_accuracy("SVM", cm_svm, accuracy_svm)
-
+    sys.exit("err")
     #KNN
 
     cm_knn, accuracy_knn, knn=k_nearest_neighbors(X_train, X_test, y_train, y_test)
