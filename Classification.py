@@ -18,6 +18,7 @@ from sklearn.neighbors import KNeighborsClassifier
 from sklearn.preprocessing import StandardScaler, label_binarize
 from sklearn.svm import SVC
 from sklearn.tree import DecisionTreeClassifier
+from sklearn.naive_bayes import GaussianNB
 
 
 def roc_plot(X_train,y_train,X_test, y_test, linear, tree, knn):
@@ -183,6 +184,9 @@ def k_nearest_neighbors(X_train, X_test, y_train, y_test):
     cm = confusion_matrix(y_test, knn_predictions)
     return cm, accuracy, knn
 
+def naive_bayes(X_train, X_test, y_train, y_test):
+    gnb = GaussianNB()
+    y_pred = gnb.fit(X_train, y_train).predict(X_train)
 
 def plot_boundaries(svm_model,tree, knn, X,y):
     # Plot Decision Region using mlxtend's  plotting function
@@ -202,7 +206,6 @@ def plot_accuracy(method, cm,accuracy):
     fig, ax = plot_confusion_matrix(conf_mat=cm)
     plt.title("Confusion matrix "+method)
     plt.show()
-
 
 def main():
     Data = np.loadtxt("data/PCA_transformed_data.csv", delimiter=",")
@@ -241,8 +244,8 @@ def main():
     #roc plot --> takes a lot for svm, then is commented
     roc_plot(X_train, y_train, X_test, y_test, svm_model, tree, knn)
 
-
-
+    #Naives bayes #CHECK (X_TRAIN.SHAPE?)
+    print("Number of mislabeled points out of a total %d points : %d" % (X_train.shape[0],(y_train != y_pred).sum()))
 
 if __name__ == '__main__':
     main()
