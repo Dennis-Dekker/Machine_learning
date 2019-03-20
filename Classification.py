@@ -147,6 +147,9 @@ def main():
     # plt.show()
     #split dataset in training and testing
     X_train, X_test, y_train, y_test = train_test_split(Data, Labels, random_state = 1,test_size=0.2)
+    plt.scatter(X_train[:,0], X_train[:,1], s=4, alpha=1, c=y_train)
+    plt.show()
+    #oversampling of the training set
     uniques, counts=np.unique(y_train, return_counts=True)
     print(dict(zip(uniques,counts)))
 
@@ -154,7 +157,7 @@ def main():
     
    #Replace X_train by X_sm_train and y_train by y_sm_train in Class_imbalance.py
     X_sm_train, y_sm_train = smote.fit_sample(X_train,y_train)
-    plt.scatter(X_sm_train[:,0], X_sm_train[:,1], s=4, alpha=0.3, c=y_sm_train, cmap='RdYlBu_r')
+    plt.scatter(X_sm_train[:,0], X_sm_train[:,1], s=4, alpha=1, c=y_sm_train)
     plt.show()
     uniques, counts=np.unique(y_sm_train, return_counts=True)
     print(dict(zip(uniques,counts)))
