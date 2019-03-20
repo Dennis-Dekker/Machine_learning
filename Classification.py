@@ -21,6 +21,8 @@ from sklearn.tree import DecisionTreeClassifier
 from sklearn.cross_validation import cross_val_score
 from sklearn.model_selection import GridSearchCV
 from sklearn.ensemble import RandomForestClassifier
+from imblearn.over_sampling import SMOTE
+
 
 
 def decision_tree(X_train, X_test, y_train, y_test):
@@ -138,7 +140,11 @@ def main():
     # plt.scatter(Data.as_matrix()[:,0], Data.as_matrix()[:,1], s=4, alpha=0.3, c=labels, cmap='RdYlBu_r')
     # plt.show()
     #split dataset in training and testing
-    X_train, X_test, y_train, y_test = train_test_split(Data, Labels, random_state = 1,test_size=0.4)     
+    X_train, X_test, y_train, y_test = train_test_split(Data, Labels, random_state = 1,test_size=0.2)     
+    smote = SMOTE("minority")
+   #Replace X_train by X_sm_train and y_train by y_sm_train in Class_imbalance.py
+    X_sm_train, y_sm_train = smote.fit_sample(X_train,y_train)
+    
     svm_best_param=find_best_param_SVM(X_train,y_train)
     #decision tree classifier
     cm_dt, acc_dt,tree=decision_tree(X_train, X_test, y_train, y_test)
