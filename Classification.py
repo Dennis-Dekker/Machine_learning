@@ -267,10 +267,11 @@ def main():
 
     #MLP classifier (NN)
     grid_param = {
-    'activation ': ['logistic', 'relu','tanh'],
-    'alpha':[10.0 ** -np.arange(1, 7)],
+    'activation': ['logistic', 'relu','tanh'],
+    'alpha':[0.01,0.001,0.0001,0.00001,0.000001],
     'learning_rate': ["constant", "invscaling", "adaptive"],
-    'hidden_layer_sizes': [(3,3,1),(3,2,1),(3,1,1)]
+    'hidden_layer_sizes': [(3,3,1),(3,2,1),(3,1,1)],
+    'max_iter':[1000]
     }
     NN_dist=nested_CV(X_train, y_train, MLPClassifier(), grid_param)
 
