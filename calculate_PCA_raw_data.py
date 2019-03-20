@@ -68,10 +68,14 @@ def calculate_PCA(x, df_data):
     # 10 components
     pca = PCA(n_components=10)
     principalComponents = pca.fit_transform(x)
+    principalDf = pd.DataFrame(data = principalComponents
+                  , columns = ['PC1', 'PC2', 'PC3','PC4', 'PC5', 'PC6','PC7', 'PC8', 'PC9','PC10'])
+    principalDf = principalDf.set_index(df_data.index.values)
     #uncomment next line for debugging
     #print(pca.explained_variance_)
-    
-    return pca, finalDf, principalComponents
+    finalDf_10 = pd.concat([principalDf, df_data[["cancer_type"]]],ignore_index=False, axis = 1)
+
+    return pca, finalDf, finalDf_10
     
 def plot_PCA(finalDf, pca):
     """Plot PCA's
@@ -115,8 +119,8 @@ def calculate_amount_PCs(x):
 
 def export_PCA_scores(pca):
     pca_save_file = "data/PCA_transformed_raw_data.csv"
-    np.savetxt(pca_save_file, pca, delimiter=",")
-    
+    #np.savetxt(pca_save_file, pca, delimiter=",")
+    pca.to_csv(pca_save_file, index=False)
     print("First 10 PCs saved in:\t" + pca_save_file)
     return
 
@@ -146,10 +150,11 @@ def main():
     df_data = df_data.drop(outliers,axis = 0)
     
     pca, finalDf, all_compon = calculate_PCA(x, df_data)
+    #print(finalDf)
     # store_pca_result(all_compon)
     #plot PCA 
-    plot_PCA(finalDf, pca)
-    
+    #plot_PCA(finalDf, pca)
+    print(all_compon)
     export_PCA_scores(all_compon)
 
 if __name__ == '__main__':

@@ -2,6 +2,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import glob
 import numpy as np
+from imblearn.over_sampling import SMOTE
 
 def load_data():
     """Load data from .csv files.
@@ -23,8 +24,7 @@ def load_data():
     #labels frame
     df_data_labels = pd.read_csv("data/raw_labels.csv", index_col=0)
     
-    df_data = pd.concat([df_data_labels,df_data], axis = 1, join = "inner")
-    
+
     return df_data
 
 
@@ -35,11 +35,9 @@ def main():
     
     y_pos = np.arange(len(class_counts.index))
 
-    savefig = "images/Class_imbalance.png"
     plt.bar(y_pos,height = list(class_counts), color=['black', 'red', 'green', 'blue', 'cyan'])
     plt.xticks(y_pos, list(class_counts.index))
-    plt.savefig(savefig)
-    print("Figure save in: " + savefig)
+    plt.savefig("images/Class_imbalance.png")
 
 if __name__ == '__main__':
     main()

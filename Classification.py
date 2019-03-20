@@ -11,7 +11,7 @@ from mlxtend.plotting import plot_confusion_matrix, plot_decision_regions
 from sklearn import datasets
 from sklearn.decomposition import PCA
 from sklearn.feature_selection import SelectKBest
-from sklearn.metrics import accuracy_score, auc, confusion_matrix, roc_curve
+from sklearn.metrics import accuracy_score, auc, confusion_matrix, cohen_kappa_score, f1_score
 from sklearn.model_selection import train_test_split
 from sklearn.multiclass import OneVsRestClassifier
 from sklearn.neighbors import KNeighborsClassifier
@@ -20,126 +20,9 @@ from sklearn.svm import SVC
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.cross_validation import cross_val_score
 from sklearn.model_selection import GridSearchCV
+from sklearn.ensemble import RandomForestClassifier
+from imblearn.over_sampling import SMOTE
 
-
-def roc_plot(X_train,y_train,X_test, y_test, linear, tree, knn):
-    """
-    This function should calculate the roc plot for every class of SVM classifier
-    using every class ALl-against-all. Then make the average for the different classes
-    and plot.   WORKING: for svm
-    """
-    # Binarize the output
-    y_test = label_binarize(y_test, classes=[0, 1, 2, 3, 4])
-    y_train=label_binarize(y_train,classes=[0, 1, 2, 3, 4])
-    n_classes = 5
-    # Learn to predict each class against the other
-    classifier_svm = OneVsRestClassifier(SVC(kernel="linear",probability=True, C=1,random_state=0))
-    classifier_knn = OneVsRestClassifier(knn)
-    classifier_dt=OneVsRestClassifier(tree)
-
-    #KNN roc plot
-    y_score_knn = classifier_knn.fit(X_train, y_train).predict_proba(X_test)
-    #compute ROC curve for each class
-    fpr=dict()
-    tpr=dict()
-    roc_auc=dict()
-    for i in range(n_classes):
-        fpr[i],tpr[i], _ = roc_curve(y_test[:,i],y_score_knn[:,i])
-        roc_auc[i]=auc(fpr[i],tpr[i])
-    
-    #compute micro-average ROC
-    fpr["micro"],tpr["micro"],_=roc_curve(y_test.ravel(), y_score_knn.ravel())
-    roc_auc["micro"] = auc(fpr["micro"], tpr["micro"])
-    plt.figure()
-    lw = 2
-    plt.figure()
-    plt.plot(fpr["micro"], tpr["micro"],
-         label='micro-average ROC curve (area = {0:0.2f})'
-               ''.format(roc_auc["micro"]),
-         color='deeppink', linestyle=':', linewidth=4)
-    
-    colors = cycle(['aqua', 'darkorange', 'cornflowerblue','yellow','black'])
-    for i, color in zip(range(n_classes), colors):
-        plt.plot(fpr[i], tpr[i], color=color, lw=lw,
-                label='ROC curve of class {0} (area = {1:0.2f})'
-                ''.format(i, roc_auc[i]))   
-    plt.plot([0, 1], [0, 1], color='navy', lw=lw, linestyle='--')
-    plt.xlim([0.0, 1.0])
-    plt.ylim([0.0, 1.05])
-    plt.xlabel('False Positive Rate')
-    plt.ylabel('True Positive Rate')
-    plt.title('Receiver operating characteristic knn')
-    plt.legend(loc="lower right")
-    plt.show()
-    # #SVM roc plot
-    # y_score_svm = classifier_svm.fit(X_train, y_train).decision_function(X_test)
-    # #compute ROC curve for each class
-    # fpr=dict()
-    # tpr=dict()
-    # roc_auc=dict()
-    # for i in range(n_classes):
-    #     fpr[i],tpr[i], _ = roc_curve(y_test[:,i],y_score_svm[:,i])
-    #     roc_auc[i]=auc(fpr[i],tpr[i])
-    
-    # #compute micro-average ROC
-    # fpr["micro"],tpr["micro"],_=roc_curve(y_test.ravel(), y_score_svm.ravel())
-    # roc_auc["micro"] = auc(fpr["micro"], tpr["micro"])
-    # plt.figure()
-    # lw = 2
-    # plt.figure()
-    # plt.plot(fpr["micro"], tpr["micro"],
-    #      label='micro-average ROC curve (area = {0:0.2f})'
-    #            ''.format(roc_auc["micro"]),
-    #      color='deeppink', linestyle=':', linewidth=4)
-    
-    # colors = cycle(['aqua', 'darkorange', 'cornflowerblue','yellow','black'])
-    # for i, color in zip(range(n_classes), colors):
-    #     plt.plot(fpr[i], tpr[i], color=color, lw=lw,
-    #             label='ROC curve of class {0} (area = {1:0.2f})'
-    #             ''.format(i, roc_auc[i]))
-    # plt.plot([0, 1], [0, 1], color='navy', lw=lw, linestyle='--')
-    # plt.xlim([0.0, 1.0])
-    # plt.ylim([0.0, 1.05])
-    # plt.xlabel('False Positive Rate')
-    # plt.ylabel('True Positive Rate')
-    # plt.title('Receiver operating characteristic svm')
-    # plt.legend(loc="lower right")
-    # plt.show()
-
-    #decision tree roc plot
-    y_score_dt = classifier_dt.fit(X_train, y_train).predict_proba(X_test)
-    #compute ROC curve for each class
-    fpr=dict()
-    tpr=dict()
-    roc_auc=dict()
-    for i in range(n_classes):
-        fpr[i],tpr[i], _ = roc_curve(y_test[:,i],y_score_dt[:,i])
-        roc_auc[i]=auc(fpr[i],tpr[i])
-    
-    #compute micro-average ROC
-    fpr["micro"],tpr["micro"],_=roc_curve(y_test.ravel(), y_score_dt.ravel())
-    roc_auc["micro"] = auc(fpr["micro"], tpr["micro"])
-    plt.figure()
-    lw = 2
-    plt.figure()
-    plt.plot(fpr["micro"], tpr["micro"],
-         label='micro-average ROC curve (area = {0:0.2f})'
-               ''.format(roc_auc["micro"]),
-         color='deeppink', linestyle=':', linewidth=4)
-    
-    colors = cycle(['aqua', 'darkorange', 'cornflowerblue','yellow','black'])
-    for i, color in zip(range(n_classes), colors):
-        plt.plot(fpr[i], tpr[i], color=color, lw=lw,
-                label='ROC curve of class {0} (area = {1:0.2f})'
-                ''.format(i, roc_auc[i]))   
-    plt.plot([0, 1], [0, 1], color='navy', lw=lw, linestyle='--')
-    plt.xlim([0.0, 1.0])
-    plt.ylim([0.0, 1.05])
-    plt.xlabel('False Positive Rate')
-    plt.ylabel('True Positive Rate')
-    plt.title('Receiver operating characteristic knn')
-    plt.legend(loc="lower right")
-    plt.show()
 
 
 def decision_tree(X_train, X_test, y_train, y_test):
@@ -149,6 +32,10 @@ def decision_tree(X_train, X_test, y_train, y_test):
     # creating a confusion matrix 
     cm = confusion_matrix(y_test, dtree_predictions)
     accuracy=accuracy_score(dtree_predictions,y_test)
+    print("cohen-kappa: \n")
+    print(cohen_kappa_score(y_test,dtree_predictions))
+    print("F1 score: \n")
+    print(f1_score(y_test, dtree_predictions, average='weighted'))
     return cm,accuracy, tree
 
 
@@ -158,7 +45,7 @@ def find_best_param_SVM(X_train,y_train):
     clf = GridSearchCV(estimator=SVC(), param_grid=tuned_parameters)
     clf.fit(X_train, y_train)
     # Show the best value for C
-    #print(clf.best_params_)
+    print(clf.best_params_)
     #print(cross_val_score(clf, X_train, y_train))
     #sys.exit("doei")
     return clf.best_params_
@@ -168,7 +55,7 @@ def support_vector_machine(X_train, X_test, y_train, y_test, param):
 
 
      # training a linear SVM classifier 
-    linear=SVC(kernel = 'linear', C = 1)
+    linear=SVC(kernel = param["kernel"], C = param["C"], gamma=param["gamma"])
     svm_model_linear = linear.fit(X_train, y_train) 
     svm_predictions = svm_model_linear.predict(X_test) 
     
@@ -176,15 +63,10 @@ def support_vector_machine(X_train, X_test, y_train, y_test, param):
     accuracy = svm_model_linear.score(X_test, y_test) 
     # creating a confusion matrix 
     cm = confusion_matrix(y_test, svm_predictions)
-
-    #labels, uniques = pd.factorize(y_test.iloc[:, 0].tolist())
-    # labels=labels.astype('U')
-    # labels = np.array(labels, dtype=data.astype('U'))
-    # print(labels.dtype)
-    # print(X_test.as_matrix().dtype)
-    #plot_decision_regions(X_test, y_test, clf=linear, res=0.1)
-    #plt.show()
-
+    print("cohen-kappa: \n")
+    print(cohen_kappa_score(y_test,svm_predictions))
+    print("F1 score: \n")
+    print(f1_score(y_test, svm_predictions, average='weighted'))
     return cm, accuracy, linear
 
 def k_nearest_neighbors(X_train, X_test, y_train, y_test):
@@ -197,8 +79,31 @@ def k_nearest_neighbors(X_train, X_test, y_train, y_test):
     # creating a confusion matrix 
     knn_predictions = knn.predict(X_test)  
     cm = confusion_matrix(y_test, knn_predictions)
+    print("cohen-kappa: \n")
+    print(cohen_kappa_score(y_test,knn_predictions))
+    print("F1 score: \n")
+    print(f1_score(y_test, knn_predictions, average='weighted'))
     return cm, accuracy, knn
 
+def random_forest(X_train, X_test, y_train, y_test):
+
+    grid_param = {  
+    'n_estimators': [100, 250, 500, 750, 1000],
+    'criterion': ['gini', 'entropy'],
+    'bootstrap': [True, False]
+    }
+    rf_gs=GridSearchCV(RandomForestClassifier(), param_grid=grid_param)
+    rf_gs.fit(X_train,y_train)
+    print(rf_gs.best_params_)
+    #train model
+    #model.fit(X_train, y_train)
+    predicted_labels = rf_gs.predict(X_test)
+    cm=confusion_matrix(y_test, predicted_labels) 
+    print("cohen-kappa: \n")
+    print(cohen_kappa_score(y_test,predicted_labels))
+    print("F1 score: \n")
+    print(f1_score(y_test, predicted_labels, average='weighted'))
+    return cm, accuracy_score(y_test, predicted_labels), rf_gs
 
 def plot_boundaries(svm_model,tree, knn, X,y):
     # Plot Decision Region using mlxtend's  plotting function
@@ -219,32 +124,34 @@ def plot_accuracy(method, cm,accuracy):
     plt.title("Confusion matrix "+method)
     plt.show()
     
-
 def main():
-    Data = np.loadtxt("data/PCA_transformed_data.csv", delimiter=",")
-    Labels=pd.read_csv("data/labels.csv",index_col=0)
-    print(Labels)
+    #Data = np.loadtxt("data/PCA_transformed_raw_data.csv", delimiter=",")
+    #Labels=pd.read_csv("data/raw_labels.csv",index_col=0)
+    Data=pd.read_csv("data/PCA_transformed_raw_data.csv")
+    Data=Data.values #convert from pandas to numpy
+    Labels=Data[:,10]
+    Data=Data[:,0:3]
     #convert labels from string to numbers
-    Labels, uniques = pd.factorize(Labels.iloc[:, 0].tolist())
-    #selecting only 2 components
-    Data=Data[:,1:3]
-    print(Data)
-    print(Labels)
-    
+    #Labels, uniques = pd.factorize(Labels.iloc[:, 0].tolist())
+    Labels, uniques = pd.factorize(Labels)
+
     #TO VISUALIZE the FEATURE SPACE, remove comments below
     # labels, uniques = pd.factorize(Labels.iloc[:, 1].tolist())
     # plt.scatter(Data.as_matrix()[:,0], Data.as_matrix()[:,1], s=4, alpha=0.3, c=labels, cmap='RdYlBu_r')
     # plt.show()
-    #split dataset in tr
-    # taining and testing
+    #split dataset in training and testing
     X_train, X_test, y_train, y_test = train_test_split(Data, Labels, random_state = 1,test_size=0.2)     
+    smote = SMOTE("minority")
+   #Replace X_train by X_sm_train and y_train by y_sm_train in Class_imbalance.py
+    X_sm_train, y_sm_train = smote.fit_sample(X_train,y_train)
+    
     svm_best_param=find_best_param_SVM(X_train,y_train)
     #decision tree classifier
-    cm_dt, acc_dt,tree=decision_tree(X_train, X_test, y_train, y_test, svm_best_param)
+    cm_dt, acc_dt,tree=decision_tree(X_train, X_test, y_train, y_test)
     plot_accuracy("decision tree", cm_dt, acc_dt)   
 
     #SVM
-    cm_svm, accuracy_svm, svm_model =support_vector_machine(X_train, X_test, y_train, y_test)
+    cm_svm, accuracy_svm, svm_model =support_vector_machine(X_train, X_test, y_train, y_test,svm_best_param)
     plot_accuracy("SVM", cm_svm, accuracy_svm)
 
     #KNN
@@ -252,6 +159,9 @@ def main():
     cm_knn, accuracy_knn, knn=k_nearest_neighbors(X_train, X_test, y_train, y_test)
     plot_accuracy("K-NN", cm_knn, accuracy_knn)
 
+    #random forest
+    cm_rf,accuracy_rf, rf= random_forest(X_train, X_test, y_train, y_test)
+    plot_accuracy("Random forest", cm_rf, accuracy_rf)
     #plot_boundaries(svm_model,tree,knn, X_test, y_test)
 
     #roc plot --> takes a lot for svm, then is commented
