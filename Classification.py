@@ -18,8 +18,7 @@ from sklearn.neighbors import KNeighborsClassifier
 from sklearn.preprocessing import StandardScaler, label_binarize
 from sklearn.svm import SVC
 from sklearn.tree import DecisionTreeClassifier
-from sklearn.cross_validation import cross_val_score
-from sklearn.model_selection import GridSearchCV
+from sklearn.model_selection import GridSearchCV,cross_val_score
 from sklearn.ensemble import RandomForestClassifier
 from imblearn.over_sampling import SMOTE
 
@@ -50,6 +49,7 @@ def find_best_param_SVM(X_train,y_train):
     #sys.exit("doei")
     return clf.best_params_
 
+def nested_CV()
 
 def support_vector_machine(X_train, X_test, y_train, y_test, param):
 
