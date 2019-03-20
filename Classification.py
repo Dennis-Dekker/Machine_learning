@@ -22,6 +22,7 @@ from sklearn.model_selection import GridSearchCV,cross_val_score,KFold
 from sklearn.ensemble import RandomForestClassifier
 from imblearn.over_sampling import SMOTE
 from sklearn.naive_bayes import GaussianNB
+from sklearn.neural_network import MLPClassifier
 
 
 def decision_tree(X_train, X_test, y_train, y_test):
@@ -224,12 +225,19 @@ def main():
 
     #SVM
 
-    #tuned_parameters = [{'kernel': ['rbf'], 'gamma': [1e-3, 1e-4], 'C': [1, 10, 100]}, {'kernel': ['linear'], 'C': [1, 10, 100]}]
+    tuned_parameters = [{'kernel': ['rbf'], 'gamma': [1e-3, 1e-4], 'C': [1, 10, 100]}, {'kernel': ['linear'], 'C': [1, 10, 100]}]
     #svm_dist=nested_CV(X_train,y_train, SVC(), tuned_parameters)
+    
     #cm_svm, accuracy_svm, svm_model =support_vector_machine(X_train, X_test, y_train, y_test,svm_best_param)
     #plot_accuracy("SVM", cm_svm, accuracy_svm)
     
     #KNN
+
+    grid_param = {
+    'n_neighbors': [5, 11, 17, 25],
+    'weights':['uniform','distance']
+    }
+    #knn_dist=nested_CV(X_train, y_train, KNeighborsClassifier(),grid_param)
 
     # cm_knn, accuracy_knn, knn=k_nearest_neighbors(X_train, X_test, y_train, y_test)
     # plot_accuracy("K-NN", cm_knn, accuracy_knn)
@@ -240,16 +248,31 @@ def main():
     'criterion': ['gini', 'entropy'],
     'bootstrap': [True, False]
     }
-    rf_dist=nested_CV(X_train, y_train, RandomForestClassifier(), grid_param)
-    sys.exit("done")
-    cm_rf,accuracy_rf, rf= random_forest(X_train, X_test, y_train, y_test)
-    plot_accuracy("Random forest", cm_rf, accuracy_rf)
+    
+    #rf_dist=nested_CV(X_train, y_train, RandomForestClassifier(), grid_param)
+    #cm_rf,accuracy_rf, rf= random_forest(X_train, X_test, y_train, y_test)
+    #plot_accuracy("Random forest", cm_rf, accuracy_rf)
 
 
     # plot_boundaries(svm_model,tree,knn, X_test, y_test)
 
-    cm_nb,accuracy_nb, nb= naive_bayes(X_train, X_test, y_train, y_test)
-    plot_accuracy("Naive bayes", cm_nb, accuracy_nb)
+    # NAIVE Bayes
+    grid_param = {
+    'var_smoothing': [1e-9, 1e-10,1e-7],
+    }
+    
+    # nb_dist=nested_CV(X_train, y_train, GaussianNB(), grid_param)
+    # cm_nb,accuracy_nb, nb= naive_bayes(X_train, X_test, y_train, y_test)
+    # plot_accuracy("Naive bayes", cm_nb, accuracy_nb)
+
+    #MLP classifier (NN)
+    grid_param = {
+    'activation ': ['logistic', 'relu','tanh'],
+    'alpha':[10.0 ** -np.arange(1, 7)],
+    'learning_rate': ["constant", "invscaling", "adaptive"],
+    'hidden_layer_sizes': [(3,3,1),(3,2,1),(3,1,1)]
+    }
+    NN_dist=nested_CV(X_train, y_train, MLPClassifier(), grid_param)
 
 
 if __name__ == '__main__':
