@@ -174,7 +174,7 @@ def organize_data():
     #plot before oversampling
     
     np.savetxt("data/Test_pca_t_raw.csv", X_test, delimiter=",")
-    np.savetxt("data/Label_test_pca_t_raw.csv", y_test, delimiter=",")
+    np.savetxt("data/Label_test_pca_t_raw.csv", y_test.astype(int), delimiter=",")
     # plt.scatter(X_train[:,0], X_train[:,1], s=4, alpha=1, c=y_train)
     # plt.show()
     #oversampling of the training set
@@ -193,47 +193,62 @@ def organize_data():
     #update the training set with oversampled one
     X_train=X_sm_train
     y_train=y_sm_train
+    #save 
     np.savetxt("data/Train_pca_t_raw.csv", X_train, delimiter=",")
-    np.savetxt("data/Label_train_pca_t_raw.csv", y_train, delimiter=",")
+    np.savetxt("data/Label_train_pca_t_raw.csv", y_train.astype(int), delimiter=",")
     return X_train, X_test, y_train,y_test
+
+def load_train_test():
+    X_train=pd.read_csv("data/Train_pca_t_raw.csv", header=None)
+    X_test=pd.read_csv("data/Test_pca_t_raw.csv",header=None)
+    y_train=pd.read_csv("data/Label_train_pca_t_raw.csv",header=None)
+    y_test=pd.read_csv("data/Label_test_pca_t_raw.csv",header=None)
+    X_train=X_train.values
+    X_test=X_test.values
+    y_train=y_train.values
+    y_test=y_test.values
+    return X_train, X_test, y_train,y_test
+    
 
 def main():
     
     #call "organize_data" to modify the train/test split
     #X_train, X_test, y_train,y_test=organize_data()
-    
-    
-    #decision tree classifier
-    cm_dt, acc_dt,tree=decision_tree(X_train, X_test, y_train, y_test)
-    plot_accuracy("decision tree", cm_dt, acc_dt)
+
+    X_train, X_test, y_train,y_test = load_train_test()
+
+    # #decision tree classifier
+
+    # cm_dt, acc_dt,tree=decision_tree(X_train, X_test, y_train, y_test)
+    # plot_accuracy("decision tree", cm_dt, acc_dt)
 
     #SVM
-    tuned_parameters = [{'kernel': ['rbf'], 'gamma': [1e-3, 1e-4], 'C': [1, 10, 100]}, {'kernel': ['linear'], 'C': [1, 10, 100]}]
-    svm_dist=nested_CV(X_train,y_train, SVC(), tuned_parameters)
+
+    #tuned_parameters = [{'kernel': ['rbf'], 'gamma': [1e-3, 1e-4], 'C': [1, 10, 100]}, {'kernel': ['linear'], 'C': [1, 10, 100]}]
+    #svm_dist=nested_CV(X_train,y_train, SVC(), tuned_parameters)
     #cm_svm, accuracy_svm, svm_model =support_vector_machine(X_train, X_test, y_train, y_test,svm_best_param)
     #plot_accuracy("SVM", cm_svm, accuracy_svm)
-    sys.exit("err")
+    
     #KNN
 
-    cm_knn, accuracy_knn, knn=k_nearest_neighbors(X_train, X_test, y_train, y_test)
-    plot_accuracy("K-NN", cm_knn, accuracy_knn)
+    # cm_knn, accuracy_knn, knn=k_nearest_neighbors(X_train, X_test, y_train, y_test)
+    # plot_accuracy("K-NN", cm_knn, accuracy_knn)
 
-    #random forest
+    #RF - random forest
     grid_param = {
     'n_estimators': [100, 250, 500, 750, 1000],
     'criterion': ['gini', 'entropy'],
     'bootstrap': [True, False]
     }
-    #cm_rf,accuracy_rf, rf= random_forest(X_train, X_test, y_train, y_test)
-    #plot_accuracy("Random forest", cm_rf, accuracy_rf)
-    #plot_boundaries(svm_model,tree,knn, X_test, y_test)
+    rf_dist=nested_CV(X_train, y_train, RandomForestClassifier(), grid_param )
+    cm_rf,accuracy_rf, rf= random_forest(X_train, X_test, y_train, y_test)
+    plot_accuracy("Random forest", cm_rf, accuracy_rf)
+
+
+    # plot_boundaries(svm_model,tree,knn, X_test, y_test)
 
     cm_nb,accuracy_nb, nb= naive_bayes(X_train, X_test, y_train, y_test)
     plot_accuracy("Naive bayes", cm_nb, accuracy_nb)
-    #roc plot --> takes a lot for svm, then is commented
-    #roc_plot(X_train, y_train, X_test, y_test, svm_model, tree, knn)
-
-
 
 
 if __name__ == '__main__':
