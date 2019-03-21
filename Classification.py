@@ -67,7 +67,7 @@ def nested_CV(X_train,y_train, estimator, param):
         prediction=GSCV.predict(X_test_out)
         in_winner_param.append(GSCV.best_params_)
         out_scores.append(accuracy_score(prediction, y_test_out))
-        print("Best accuracy of fold "+str(i+1)+": "+str(GSCV.best_score_))
+        print("\n Best accuracy of fold "+str(i+1)+": "+str(GSCV.best_score_)+"\n")
 
     for i in zip(in_winner_param, out_scores):
         print(i)
@@ -268,10 +268,10 @@ def main():
     #MLP classifier (NN)
     grid_param = {
     'activation': ['logistic', 'relu','tanh'],
-    'alpha':[0.01,0.001,0.0001,0.00001,0.000001],
-    'learning_rate': ["constant", "invscaling", "adaptive"],
-    'hidden_layer_sizes': [(3,3,1),(3,2,1),(3,1,1)],
-    'max_iter':[1000]
+    'alpha':[0.001,0.0001,0.00001],
+    # 'learning_rate': ["constant", "invscaling", "adaptive"],
+    'hidden_layer_sizes': [(3,3,1),(3,2,1)],
+    'max_iter':[700]
     }
     NN_dist=nested_CV(X_train, y_train, MLPClassifier(), grid_param)
 
