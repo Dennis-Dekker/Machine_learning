@@ -67,7 +67,7 @@ def nested_CV(X_train,y_train, estimator, param):
         prediction=GSCV.predict(X_test_out)
         in_winner_param.append(GSCV.best_params_)
         out_scores.append(accuracy_score(prediction, y_test_out))
-        print("\n Best accuracy of fold "+str(i+1)+": "+str(GSCV.best_score_)+"\n")
+        print("\nBest accuracy of fold "+str(i+1)+": "+str(GSCV.best_score_)+"\n")
 
     for i in zip(in_winner_param, out_scores):
         print(i)
@@ -157,7 +157,7 @@ def plot_accuracy(method, cm,accuracy):
 def organize_data():
     #Data = np.loadtxt("data/PCA_transformed_raw_data.csv", delimiter=",")
     #Labels=pd.read_csv("data/raw_labels.csv",index_col=0)
-    Data=pd.read_csv("data/PCA_transformed_raw_data.csv")
+    Data=pd.read_csv("data/PCA_transformed_raw_data_7.csv")
     Data=Data.values #convert from pandas to numpy
     Labels=Data[:,10]
     Data=Data[:,0:3]
@@ -182,18 +182,18 @@ def organize_data():
     #uniques, counts=np.unique(y_train, return_counts=True)
     #print(dict(zip(uniques,counts)))
 
-    smote = SMOTE("not majority")
+    # smote = SMOTE("not majority")
     
-    #Replace X_train by X_sm_train and y_train by y_sm_train in Class_imbalance.py
-    X_sm_train, y_sm_train = smote.fit_sample(X_train,y_train)
+    # #Replace X_train by X_sm_train and y_train by y_sm_train in Class_imbalance.py
+    # X_sm_train, y_sm_train = smote.fit_sample(X_train,y_train)
     #plot after oversampling
     # plt.scatter(X_sm_train[:,0], X_sm_train[:,1], s=4, alpha=1, c=y_sm_train)
     # plt.show()
     #uniques, counts=np.unique(y_sm_train, return_counts=True)
     #print(dict(zip(uniques,counts)))
     #update the training set with oversampled one
-    X_train=X_sm_train
-    y_train=y_sm_train
+    # X_train=X_sm_train
+    # y_train=y_sm_train
     #save 
     np.savetxt("data/Train_pca_t_raw.csv", X_train, delimiter=",")
     np.savetxt("data/Label_train_pca_t_raw.csv", y_train.astype(int), delimiter=",")
@@ -214,9 +214,9 @@ def load_train_test():
 def main():
     
     #call "organize_data" to modify the train/test split
-    #X_train, X_test, y_train,y_test=organize_data()
+    X_train, X_test, y_train,y_test=organize_data()
 
-    X_train, X_test, y_train,y_test = load_train_test()
+    #X_train, X_test, y_train,y_test = load_train_test()
 
     # #decision tree classifier
 
@@ -225,8 +225,10 @@ def main():
 
     #SVM
 
-    tuned_parameters = [{'kernel': ['rbf'], 'gamma': [1e-3, 1e-4], 'C': [1, 10, 100]}, {'kernel': ['linear'], 'C': [1, 10, 100]}]
-    #svm_dist=nested_CV(X_train,y_train, SVC(), tuned_parameters)
+    # tuned_parameters = [{'kernel': ['rbf'], 'gamma': [1e-3, 1e-4], 'C': [1, 10, 100]},
+    # {'kernel': ['linear'], 'C': [1, 10, 100]}
+    # ]
+    # svm_dist=nested_CV(X_train,y_train, SVC(), tuned_parameters)
     
     #cm_svm, accuracy_svm, svm_model =support_vector_machine(X_train, X_test, y_train, y_test,svm_best_param)
     #plot_accuracy("SVM", cm_svm, accuracy_svm)
@@ -234,10 +236,10 @@ def main():
     #KNN
 
     grid_param = {
-    'n_neighbors': [5, 11, 17, 25],
+    'n_neighbors': [15 , 17, 25],
     'weights':['uniform','distance']
     }
-    #knn_dist=nested_CV(X_train, y_train, KNeighborsClassifier(),grid_param)
+    knn_dist=nested_CV(X_train, y_train, KNeighborsClassifier(),grid_param)
 
     # cm_knn, accuracy_knn, knn=k_nearest_neighbors(X_train, X_test, y_train, y_test)
     # plot_accuracy("K-NN", cm_knn, accuracy_knn)
@@ -266,14 +268,14 @@ def main():
     # plot_accuracy("Naive bayes", cm_nb, accuracy_nb)
 
     #MLP classifier (NN)
-    grid_param = {
-    'activation': ['logistic', 'relu','tanh'],
-    'alpha':[0.001,0.0001,0.00001],
-    # 'learning_rate': ["constant", "invscaling", "adaptive"],
-    'hidden_layer_sizes': [(3,3,1),(3,2,1)],
-    'max_iter':[700]
-    }
-    NN_dist=nested_CV(X_train, y_train, MLPClassifier(), grid_param)
+    # grid_param = {
+    # 'activation': ['logistic', 'relu','tanh'],
+    # 'alpha':[0.001,0.0001,0.00001],
+    # # 'learning_rate': ["constant", "invscaling", "adaptive"],
+    # 'hidden_layer_sizes': [(3,3,1),(3,2,1)],
+    # 'max_iter':[700]
+    # }
+    # NN_dist=nested_CV(X_train, y_train, MLPClassifier(), grid_param)
 
 
 if __name__ == '__main__':
