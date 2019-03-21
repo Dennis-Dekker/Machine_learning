@@ -151,10 +151,9 @@ def main():
     
     pca, finalDf, all_compon = calculate_PCA(x, df_data)
     #print(finalDf)
-    # store_pca_result(all_compon)
+
     #plot PCA 
-    #plot_PCA(finalDf, pca)
-    print(all_compon)
+    plot_PCA(finalDf, pca)
     export_PCA_scores(all_compon)
 
 if __name__ == '__main__':
