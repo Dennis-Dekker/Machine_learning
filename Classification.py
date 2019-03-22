@@ -157,10 +157,10 @@ def plot_accuracy(method, cm,accuracy):
 def organize_data():
     #Data = np.loadtxt("data/PCA_transformed_raw_data.csv", delimiter=",")
     #Labels=pd.read_csv("data/raw_labels.csv",index_col=0)
-    Data=pd.read_csv("data/PCA_transformed_raw_data_7.csv")
+    Data=pd.read_csv("data/PCA_transformed_raw_data.csv")
     Data=Data.values #convert from pandas to numpy
     Labels=Data[:,10]
-    Data=Data[:,0:3]
+    Data=Data[:,0:4]
     #convert labels from string to numbers
     #Labels, uniques = pd.factorize(Labels.iloc[:, 0].tolist())
     Labels, uniques = pd.factorize(Labels)
@@ -225,10 +225,10 @@ def main():
 
     #SVM
 
-    # tuned_parameters = [{'kernel': ['rbf'], 'gamma': [1e-3, 1e-4], 'C': [1, 10, 100]},
-    # {'kernel': ['linear'], 'C': [1, 10, 100]}
-    # ]
-    # svm_dist=nested_CV(X_train,y_train, SVC(), tuned_parameters)
+    tuned_parameters = [{'kernel': ['rbf'], 'gamma': [1e-3, 1e-4], 'C': [1, 10, 100]},
+    {'kernel': ['linear'], 'C': [1, 10, 100]}
+    ]
+    svm_dist=nested_CV(X_train,y_train, SVC(), tuned_parameters)
     
     #cm_svm, accuracy_svm, svm_model =support_vector_machine(X_train, X_test, y_train, y_test,svm_best_param)
     #plot_accuracy("SVM", cm_svm, accuracy_svm)
