@@ -158,6 +158,10 @@ def organize_data():
     #Data = np.loadtxt("data/PCA_transformed_raw_data.csv", delimiter=",")
     #Labels=pd.read_csv("data/raw_labels.csv",index_col=0)
     Data=pd.read_csv("data/PCA_transformed_raw_data.csv")
+    pca_color=sns.pairplot(x_vars=["PC1"], y_vars=["PC2"], data=Data, hue="cancer_type", height=5)
+    path_PCA_figure_color = "images/PCA_color.png"
+    pca_color.savefig(path_PCA_figure_color)
+    print("Image saved to: " + path_PCA_figure_color)
     Data=Data.values #convert from pandas to numpy
     Labels=Data[:,10]
     Data=Data[:,0:4]
@@ -214,9 +218,9 @@ def load_train_test():
 def main():
     
     #call "organize_data" to modify the train/test split
-    #X_train, X_test, y_train,y_test=organize_data()
+    X_train, X_test, y_train,y_test=organize_data()
 
-    X_train, X_test, y_train,y_test = load_train_test()
+    #X_train, X_test, y_train,y_test = load_train_test()
 
     # #decision tree classifier
 
@@ -230,8 +234,8 @@ def main():
     ]
     #svm_dist=nested_CV(X_train,y_train, SVC(), tuned_parameters)
     
-    cm_svm, accuracy_svm, svm_model =support_vector_machine(X_train, X_test, y_train, y_test)
-    plot_accuracy("SVM", cm_svm, accuracy_svm)
+    #cm_svm, accuracy_svm, svm_model =support_vector_machine(X_train, X_test, y_train, y_test)
+    #plot_accuracy("SVM", cm_svm, accuracy_svm)
     
     #KNN
 
@@ -239,10 +243,10 @@ def main():
     'n_neighbors': [7,9 ,15 , 17, 25],
     'weights':['uniform','distance']
     }
-    knn_dist=nested_CV(X_train, y_train, KNeighborsClassifier(),grid_param)
+    #knn_dist=nested_CV(X_train, y_train, KNeighborsClassifier(),grid_param)
 
-    cm_knn, accuracy_knn, knn=k_nearest_neighbors(X_train, X_test, y_train, y_test)
-    plot_accuracy("K-NN", cm_knn, accuracy_knn)
+    #cm_knn, accuracy_knn, knn=k_nearest_neighbors(X_train, X_test, y_train, y_test)
+    #plot_accuracy("K-NN", cm_knn, accuracy_knn)
 
     #RF - random forest
     grid_param = {
