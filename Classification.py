@@ -75,11 +75,11 @@ def nested_CV(X_train,y_train, estimator, param):
     return out_scores
 
 
-def support_vector_machine(X_train, X_test, y_train, y_test, param):
+def support_vector_machine(X_train, X_test, y_train, y_test):
 
 
      # training a linear SVM classifier
-    linear=SVC(kernel = param["kernel"], C = param["C"], gamma=param["gamma"])
+    linear=SVC(kernel = "rbf", C = 1, gamma=0.001)
     svm_model_linear = linear.fit(X_train, y_train)
     svm_predictions = svm_model_linear.predict(X_test)
 
@@ -214,9 +214,9 @@ def load_train_test():
 def main():
     
     #call "organize_data" to modify the train/test split
-    X_train, X_test, y_train,y_test=organize_data()
+    #X_train, X_test, y_train,y_test=organize_data()
 
-    #X_train, X_test, y_train,y_test = load_train_test()
+    X_train, X_test, y_train,y_test = load_train_test()
 
     # #decision tree classifier
 
@@ -228,21 +228,21 @@ def main():
     tuned_parameters = [{'kernel': ['rbf'], 'gamma': [1e-3, 1e-4], 'C': [1, 10, 100]},
     {'kernel': ['linear'], 'C': [1, 10, 100]}
     ]
-    svm_dist=nested_CV(X_train,y_train, SVC(), tuned_parameters)
+    #svm_dist=nested_CV(X_train,y_train, SVC(), tuned_parameters)
     
-    #cm_svm, accuracy_svm, svm_model =support_vector_machine(X_train, X_test, y_train, y_test,svm_best_param)
-    #plot_accuracy("SVM", cm_svm, accuracy_svm)
+    cm_svm, accuracy_svm, svm_model =support_vector_machine(X_train, X_test, y_train, y_test)
+    plot_accuracy("SVM", cm_svm, accuracy_svm)
     
     #KNN
 
     grid_param = {
-    'n_neighbors': [15 , 17, 25],
+    'n_neighbors': [7,9 ,15 , 17, 25],
     'weights':['uniform','distance']
     }
     knn_dist=nested_CV(X_train, y_train, KNeighborsClassifier(),grid_param)
 
-    # cm_knn, accuracy_knn, knn=k_nearest_neighbors(X_train, X_test, y_train, y_test)
-    # plot_accuracy("K-NN", cm_knn, accuracy_knn)
+    cm_knn, accuracy_knn, knn=k_nearest_neighbors(X_train, X_test, y_train, y_test)
+    plot_accuracy("K-NN", cm_knn, accuracy_knn)
 
     #RF - random forest
     grid_param = {
