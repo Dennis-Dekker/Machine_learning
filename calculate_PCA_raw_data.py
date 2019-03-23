@@ -21,18 +21,22 @@ def load_data():
     #import data from .csv files
     allFiles = glob.glob("data/raw_data*.csv")
     list_ = []
-    print("loading files:")
+    print("--- Loading datasets ---")
+    print("Found " + str(len(allFiles)) + " files.")
+    print("Loading files:")
     for file_ in allFiles:
-        print(file_)
+        print("\t" + file_)
         df = pd.read_csv(file_,index_col=0)
         list_.append(df)
 
     #expression data
     df_data = pd.concat(list_, axis = 0, ignore_index = False)
+    print("Amount of loaded samples:\t\t\t" + str(df_data.shape[0]))
     #labels frame
     df_data_labels = pd.read_csv("data/raw_labels.csv", index_col=0)
     
     df_data = pd.concat([df_data_labels,df_data], axis = 1, join = "inner")
+    print("Amount of samples left after annotating:\t" + str(df_data.shape[0]))
     
     return df_data
 
@@ -40,7 +44,7 @@ def process_data_frame(df_data):
     """Remove unwanted columns from dataframe.
     """
     
-    #finalDf = pd.concat([df_data[['Unnamed: 0']]], axis = 1)
+    print("Applying log2 transformation...")
     #remove Unnamed columns from the dataset
     x = df_data.drop(["cancer_type", "gender", "bcr_patient_uuid", "bcr_patient_barcode", "patient_id", "age_at_initial_pathologic_diagnosis"], axis = 1)
     #remove Unnamed column from the labels
@@ -55,6 +59,8 @@ def calculate_PCA(x, df_data):
     
     finalDf: dataframe of pca with labels.
     """
+    
+    print("Calculating principal components.")
     #PCA selecting the first two components.
     pca = PCA(n_components=3)
     principalComponents = pca.fit_transform(x)
@@ -155,6 +161,7 @@ def main():
     #plot PCA 
     plot_PCA(finalDf, pca)
     export_PCA_scores(all_compon)
+    print("--- DONE ---\n")
 
 if __name__ == '__main__':
     main()
