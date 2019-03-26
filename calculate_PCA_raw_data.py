@@ -140,10 +140,6 @@ def main():
     #process dataframe 
     x = process_data_frame(df_data)
     
-    #determine amount of PC's for analysis
-    #TODO 
-    calculate_amount_PCs(x)
-    
     #calculate PCA 
     pca, finalDf, all_compon = calculate_PCA(x, df_data)
     
@@ -154,6 +150,10 @@ def main():
     
     x = x.drop(outliers,axis = 0)
     df_data = df_data.drop(outliers,axis = 0)
+    
+    #determine amount of PC's for analysis
+    #TODO 
+    calculate_amount_PCs(x)
     
     pca, finalDf, all_compon = calculate_PCA(x, df_data)
     #print(finalDf)
