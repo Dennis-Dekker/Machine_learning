@@ -121,7 +121,7 @@ def calculate_amount_PCs(x):
     plt.ylabel('Explained variance ratio')
     plt.xlabel('Principal components')
     plt.savefig("images/test_explained_variance.png")
-    return 2
+    return
 
 def export_PCA_scores(pca):
     pca_save_file = "data/PCA_transformed_raw_data.csv"
@@ -142,7 +142,7 @@ def main():
     
     #determine amount of PC's for analysis
     #TODO 
-    #n = calculate_amount_PCs(x)
+    calculate_amount_PCs(x)
     
     #calculate PCA 
     pca, finalDf, all_compon = calculate_PCA(x, df_data)
