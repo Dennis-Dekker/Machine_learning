@@ -178,7 +178,7 @@ def organize_data():
     #convert labels from string to numbers
     #Labels, uniques = pd.factorize(Labels.iloc[:, 0].tolist())
     Labels, uniques = pd.factorize(Labels)
-
+    plt.clf()
     #TO VISUALIZE the whole FEATURE SPACE, remove comments below
     # labels, uniques = pd.factorize(Labels.iloc[:, 1].tolist())
     # plt.scatter(Data.as_matrix()[:,0], Data.as_matrix()[:,1], s=4, alpha=0.3, c=labels, cmap='RdYlBu_r')
@@ -201,7 +201,7 @@ def organize_data():
     # #Replace X_train by X_sm_train and y_train by y_sm_train in Class_imbalance.py
     X_sm_train, y_sm_train = smote.fit_sample(X_train,y_train)
     #plot after oversampling
-    plt.scatter(X_sm_train[:,0], X_sm_train[:,1], s=4, alpha=1, c=y_sm_train)
+    plt.scatter(X_sm_train[:,0], X_sm_train[:,1], s=4, alpha=1, c=y_sm_train,  cmap='RdYlBu_r')
     plt.show()
     #uniques, counts=np.unique(y_sm_train, return_counts=True)
     #print(dict(zip(uniques,counts)))
@@ -209,8 +209,8 @@ def organize_data():
     # X_train=X_sm_train
     # y_train=y_sm_train
     #save smote training set
-    np.savetxt("data/Train_pca_t_raw.csv", X_sm_train, delimiter=",")
-    np.savetxt("data/Label_train_pca_t_raw.csv", y_sm_train.astype(int), delimiter=",")
+    np.savetxt("data/Train_pca_t_raw_smote.csv", X_sm_train, delimiter=",")
+    np.savetxt("data/Label_train_pca_t_raw_smote.csv", y_sm_train.astype(int), delimiter=",")
     #save normal training set
     np.savetxt("data/Train_pca_t_raw.csv", X_train, delimiter=",")
     np.savetxt("data/Label_train_pca_t_raw.csv", y_train.astype(int), delimiter=",")
@@ -231,9 +231,9 @@ def load_train_test():
 def main():
     
     #call "organize_data" to modify the train/test split
-    #X_train, X_test, y_train,y_test=organize_data()
-
-    X_train, X_test, y_train,y_test = load_train_test()
+    X_train, X_test, y_train,y_test=organize_data()
+    sys.exit("doei")
+    #X_train, X_test, y_train,y_test = load_train_test()
 
     # #decision tree classifier
 
