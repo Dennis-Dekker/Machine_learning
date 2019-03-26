@@ -220,23 +220,26 @@ def organize_data():
     return X_train, X_test, y_train,y_test
 
 def load_train_test():
-    X_train=pd.read_csv("data/Train_pca_t_raw.csv", header=None)
-    X_test=pd.read_csv("data/Test_pca_t_raw.csv",header=None)
-    y_train=pd.read_csv("data/Label_train_pca_t_raw.csv",header=None)
-    y_test=pd.read_csv("data/Label_test_pca_t_raw.csv",header=None)
+    X_train=pd.read_csv("data/Train_pca_raw.csv", header=None)
+    X_test=pd.read_csv("data/Test_pca_raw.csv",header=None)
+    y_train=pd.read_csv("data/Label_train_pca_raw.csv",header=None)
+    y_test=pd.read_csv("data/Label_test_pca_raw.csv",header=None)
+    X_train_smote=pd.read_csv("data/Train_pca_raw_smote.csv",header=None)
+    y_train_smote=pd.read_csv("data/Label_train_pca_raw_smote.csv",header=None)
     X_train=X_train.values
     X_test=X_test.values
     y_train=y_train.values.ravel()
     y_test=y_test.values.ravel()
-    return X_train, X_test, y_train,y_test
+    X_train_smote=X_train_smote.values
+    y_train_smote=y_train_smote.values.ravel()
+    return X_train, X_test, y_train,y_test,X_train_smote, y_train_smote
     
 
 def main():
     
     #call "organize_data" to modify the train/test split
-    X_train, X_test, y_train,y_test=organize_data()
-    sys.exit("doei")
-    #X_train, X_test, y_train,y_test = load_train_test()
+    #X_train, X_test, y_train,y_test=organize_data()
+    X_train, X_test, y_train,y_test,X_train_smote, y_train_smote = load_train_test()
 
     # #decision tree classifier
 
