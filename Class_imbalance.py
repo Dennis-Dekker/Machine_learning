@@ -37,7 +37,10 @@ def main():
     
     y_pos = np.arange(len(class_counts.index))
 
-    plt.bar(y_pos,height = list(class_counts), color = sns.color_palette("bright", len(y_pos)))
+    plt.bar(y_pos,height = list(class_counts), 
+        color = sns.color_palette("bright", len(y_pos)))
+    plt.xlabel("Cancer Type")
+    plt.ylabel("Number of samples")
     plt.xticks(y_pos, list(class_counts.index))
     plt.savefig("images/Class_imbalance.png")
 
