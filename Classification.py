@@ -233,19 +233,39 @@ def load_train_test():
     X_train_smote=X_train_smote.values
     y_train_smote=y_train_smote.values.ravel()
     return X_train, X_test, y_train,y_test,X_train_smote, y_train_smote
-    
+
+def dummy_classification(X_train, X_test, y_train,y_test):
+    print(X_train.shape,y_train.shape )
+    dummy = DummyClassifier(strategy='stratified').fit(X_train, y_train)
+    dummy_pred = dummy.predict(X_test)
+    print("Dummy_accuracy:", accuracy_score(y_test, dummy_pred))    
 
 def main():
     
     #call "organize_data" to modify the train/test split
     #X_train, X_test, y_train,y_test=organize_data()
     X_train, X_test, y_train,y_test,X_train_smote, y_train_smote = load_train_test()
+    
+    #SMALL dataset
+    # Data = np.loadtxt("data/PCA_transformed_data.csv", delimiter=",")
+    # Labels=pd.read_csv("data/labels.csv",index_col=0)
+    # Labels=Labels["Class"].values.ravel()
+    # Labels, uniques = pd.factorize(Labels)
 
+    # print(Data)
+    # print(Labels)
+    # plt.scatter(Data[:,0], Data[:,1], s=4, alpha=1, c=Labels)
+    # plt.xlabel("PC1")
+    # plt.ylabel("PC2")
+    # plt.legend()
+    # plt.show()
+    # plt.clf()
+    # sys.exit("doei")
     # #decision tree classifier
-
+    dummy_classification(X_train, X_test, y_train,y_test)
+    dummy_classification(X_train_smote, X_test, y_train_smote, y_test)
     # cm_dt, acc_dt,tree=decision_tree(X_train, X_test, y_train, y_test)
     # plot_accuracy("decision tree", cm_dt, acc_dt)
-
     #SVM
 
     tuned_parameters = [{'kernel': ['rbf'], 'gamma': [1e-3, 1e-4], 'C': [1, 10, 100]},
