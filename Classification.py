@@ -23,6 +23,8 @@ from sklearn.ensemble import RandomForestClassifier
 from imblearn.over_sampling import SMOTE
 from sklearn.naive_bayes import GaussianNB
 from sklearn.neural_network import MLPClassifier
+from sklearn.dummy import DummyClassifier
+
 
 
 def decision_tree(X_train, X_test, y_train, y_test):
@@ -153,8 +155,8 @@ def plot_accuracy(method, cm,accuracy):
     fig, ax = plot_confusion_matrix(conf_mat=cm, show_absolute=False,colorbar=True, show_normed=True)
     plt.title("Confusion matrix "+method)
     s=["life"]
-    x = ["LUAD", "BRCA" ,"KIRC", "COAD" ,"OV" ,"LUSC", "GBM" ,"UCEC", "HNSC" ,"READ"]
-    y= ["LUAD", "BRCA" ,"KIRC", "COAD" ,"OV" ,"LUSC", "GBM" ,"UCEC", "HNSC" ,"READ"]
+    x = ["LUAD", "BRCA" ,"KIRC", "COAD" ,"OV" ,"READ","LUSC", "GBM" ,"UCEC", "HNSC"]
+    y= ["LUAD", "BRCA" ,"KIRC", "COAD" ,"OV" ,"READ","LUSC", "GBM" ,"UCEC", "HNSC" ]
     lx=list(range(10))
     ly=list(range(10))
     ax.set_xticks(lx)
@@ -249,7 +251,7 @@ def main():
     #KNN
 
     grid_param = {
-    'n_neighbors': [7,9 ,15 , 17, 25],
+    'n_neighbors': [7, 9 , 15 , 17, 25],
     'weights':['uniform','distance']
     }
     #knn_dist=nested_CV(X_train, y_train, KNeighborsClassifier(),grid_param)
