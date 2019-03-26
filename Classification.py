@@ -188,8 +188,8 @@ def organize_data():
     X_train, X_test, y_train, y_test = train_test_split(Data, Labels, random_state = 1,test_size=0.25)
     #plot before oversampling
     
-    np.savetxt("data/Test_pca_t_raw.csv", X_test, delimiter=",")
-    np.savetxt("data/Label_test_pca_t_raw.csv", y_test.astype(int), delimiter=",")
+    np.savetxt("data/Test_pca_raw.csv", X_test, delimiter=",")
+    np.savetxt("data/Label_test_pca_raw.csv", y_test.astype(int), delimiter=",")
     # plt.scatter(X_train[:,0], X_train[:,1], s=4, alpha=1, c=y_train)
     # plt.show()
     #oversampling of the training set
@@ -203,17 +203,20 @@ def organize_data():
     #plot after oversampling
     plt.scatter(X_sm_train[:,0], X_sm_train[:,1], s=4, alpha=1, c=y_sm_train,  cmap='RdYlBu_r')
     plt.show()
+    plt.clf()
+    plt.scatter(X_train[:,0], X_train[:,1], s=4, alpha=1, c=y_train,  cmap='RdYlBu_r')
+    plt.show()
     #uniques, counts=np.unique(y_sm_train, return_counts=True)
     #print(dict(zip(uniques,counts)))
     #update the training set with oversampled one
     # X_train=X_sm_train
     # y_train=y_sm_train
     #save smote training set
-    np.savetxt("data/Train_pca_t_raw_smote.csv", X_sm_train, delimiter=",")
-    np.savetxt("data/Label_train_pca_t_raw_smote.csv", y_sm_train.astype(int), delimiter=",")
+    np.savetxt("data/Train_pca_raw_smote.csv", X_sm_train, delimiter=",")
+    np.savetxt("data/Label_train_pca_raw_smote.csv", y_sm_train.astype(int), delimiter=",")
     #save normal training set
-    np.savetxt("data/Train_pca_t_raw.csv", X_train, delimiter=",")
-    np.savetxt("data/Label_train_pca_t_raw.csv", y_train.astype(int), delimiter=",")
+    np.savetxt("data/Train_pca_raw.csv", X_train, delimiter=",")
+    np.savetxt("data/Label_train_pca_raw.csv", y_train.astype(int), delimiter=",")
     return X_train, X_test, y_train,y_test
 
 def load_train_test():
