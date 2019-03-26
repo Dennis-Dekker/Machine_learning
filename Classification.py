@@ -154,7 +154,6 @@ def plot_accuracy(method, cm,accuracy):
     print("Accuracy: "+str(accuracy)+"\n")
     fig, ax = plot_confusion_matrix(conf_mat=cm, show_absolute=False,colorbar=True, show_normed=True)
     plt.title("Confusion matrix "+method)
-    s=["life"]
     x = ["LUAD", "BRCA" ,"KIRC", "COAD" ,"OV" ,"READ","LUSC", "GBM" ,"UCEC", "HNSC"]
     y= ["LUAD", "BRCA" ,"KIRC", "COAD" ,"OV" ,"READ","LUSC", "GBM" ,"UCEC", "HNSC" ]
     lx=list(range(10))
@@ -197,19 +196,22 @@ def organize_data():
     #uniques, counts=np.unique(y_train, return_counts=True)
     #print(dict(zip(uniques,counts)))
 
-    # smote = SMOTE("not majority")
+    smote = SMOTE("not majority")
     
     # #Replace X_train by X_sm_train and y_train by y_sm_train in Class_imbalance.py
-    # X_sm_train, y_sm_train = smote.fit_sample(X_train,y_train)
+    X_sm_train, y_sm_train = smote.fit_sample(X_train,y_train)
     #plot after oversampling
-    # plt.scatter(X_sm_train[:,0], X_sm_train[:,1], s=4, alpha=1, c=y_sm_train)
-    # plt.show()
+    plt.scatter(X_sm_train[:,0], X_sm_train[:,1], s=4, alpha=1, c=y_sm_train)
+    plt.show()
     #uniques, counts=np.unique(y_sm_train, return_counts=True)
     #print(dict(zip(uniques,counts)))
     #update the training set with oversampled one
     # X_train=X_sm_train
     # y_train=y_sm_train
-    #save 
+    #save smote training set
+    np.savetxt("data/Train_pca_t_raw.csv", X_sm_train, delimiter=",")
+    np.savetxt("data/Label_train_pca_t_raw.csv", y_sm_train.astype(int), delimiter=",")
+    #save normal training set
     np.savetxt("data/Train_pca_t_raw.csv", X_train, delimiter=",")
     np.savetxt("data/Label_train_pca_t_raw.csv", y_train.astype(int), delimiter=",")
     return X_train, X_test, y_train,y_test
