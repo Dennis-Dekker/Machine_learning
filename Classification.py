@@ -271,11 +271,13 @@ def main():
     tuned_parameters = [{'kernel': ['rbf'], 'gamma': [1e-3, 1e-4], 'C': [1, 10, 100]},
     {'kernel': ['linear'], 'C': [1, 10, 100]}
     ]
-    #svm_dist=nested_CV(X_train,y_train, SVC(), tuned_parameters)
-    
-    cm_svm, accuracy_svm, svm_model =support_vector_machine(X_train, X_test, y_train, y_test)
-    plot_accuracy("SVM", cm_svm, accuracy_svm)
-    
+    svm_dist=nested_CV(X_train,y_train, SVC(), tuned_parameters)
+    print("DONE without SMOTE")
+    svm_dist=nested_CV(X_train_smote,y_train_smote, SVC(), tuned_parameters)
+    print("DONE with SMOTE")
+    #cm_svm, accuracy_svm, svm_model =support_vector_machine(X_train, X_test, y_train, y_test)
+    #plot_accuracy("SVM", cm_svm, accuracy_svm)
+    sys.exit("doei")
     #KNN
 
     grid_param = {
