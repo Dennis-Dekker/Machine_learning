@@ -69,7 +69,7 @@ def nested_CV(X_train,y_train, estimator, param):
         prediction=GSCV.predict(X_test_out)
         in_winner_param.append(GSCV.best_params_)
         out_scores.append(accuracy_score(prediction, y_test_out))
-        print("\nBest accuracy of fold "+str(i+1)+": "+str(GSCV.best_score_)+"\n")
+        print("\nBest inner accuracy of fold "+str(i+1)+": "+str(GSCV.best_score_)+"\n")
 
     for i in zip(in_winner_param, out_scores):
         print(i)
@@ -262,7 +262,9 @@ def main():
     # plt.clf()
     # sys.exit("doei")
     # #decision tree classifier
+    print("Dummy classifier without SMOTE: ")
     dummy_classification(X_train, X_test, y_train,y_test)
+    print("Dummy classifier with SMOTE: ")
     dummy_classification(X_train_smote, X_test, y_train_smote, y_test)
     # cm_dt, acc_dt,tree=decision_tree(X_train, X_test, y_train, y_test)
     # plot_accuracy("decision tree", cm_dt, acc_dt)
