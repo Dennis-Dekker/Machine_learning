@@ -81,7 +81,7 @@ def support_vector_machine(X_train, X_test, y_train, y_test):
 
 
      # training a linear SVM classifier
-    linear=SVC(kernel = "rbf", C = 10, gamma=0.0001)
+    linear=SVC(kernel = "rbf", C = 100, gamma=0.001)
     svm_model_linear = linear.fit(X_train, y_train)
     svm_predictions = svm_model_linear.predict(X_test)
 
@@ -97,7 +97,7 @@ def support_vector_machine(X_train, X_test, y_train, y_test):
 
 def k_nearest_neighbors(X_train, X_test, y_train, y_test):
     # training a KNN classifier
-    knn=KNeighborsClassifier(n_neighbors = 25, weights="distance")
+    knn=KNeighborsClassifier(n_neighbors = 7, weights="distance")
     knn.fit(X_train, y_train)
 
     # accuracy on X_test
@@ -113,14 +113,15 @@ def k_nearest_neighbors(X_train, X_test, y_train, y_test):
 
 def random_forest(X_train, X_test, y_train, y_test):
 
-    grid_param = {
-    'n_estimators': [100, 250, 500, 750, 1000],
-    'criterion': ['gini', 'entropy'],
-    'bootstrap': [True, False]
-    }
-    rf_gs=GridSearchCV(RandomForestClassifier(), param_grid=grid_param)
+    # grid_param = {
+    # 'n_estimators': [100, 250, 500, 750, 1000],
+    # 'criterion': ['gini', 'entropy'],
+    # 'bootstrap': [True, False]
+    # }
+    # rf_gs=GridSearchCV(RandomForestClassifier(), param_grid=grid_param)
+    rf_gs=RandomForestClassifier(n_estimators=750, criterion="entropy", bootstrap=False)
     rf_gs.fit(X_train,y_train)
-    print(rf_gs.best_params_)
+    #print(rf_gs.best_params_)
     #train model
     #model.fit(X_train, y_train)
     predicted_labels = rf_gs.predict(X_test)
@@ -266,10 +267,10 @@ def main():
     # plt.clf()
     # sys.exit("doei")
     # #decision tree classifier
-    print("Dummy classifier without SMOTE: ")
-    dummy_classification(X_train, X_test, y_train,y_test)
-    print("Dummy classifier with SMOTE: ")
-    dummy_classification(X_train_smote, X_test, y_train_smote, y_test)
+    # print("Dummy classifier without SMOTE: ")
+    # dummy_classification(X_train, X_test, y_train,y_test)
+    # print("Dummy classifier with SMOTE: ")
+    # dummy_classification(X_train_smote, X_test, y_train_smote, y_test)
     # cm_dt, acc_dt,tree=decision_tree(X_train, X_test, y_train, y_test)
     # plot_accuracy("decision tree", cm_dt, acc_dt)
     #SVM
@@ -281,12 +282,12 @@ def main():
     #print("DONE without SMOTE")
     #svm_dist=nested_CV(X_train_smote,y_train_smote, SVC(), tuned_parameters)
     #print("DONE with SMOTE")
-    print("without SMOTE: ")
-    cm_svm, accuracy_svm, svm_model =support_vector_machine(X_train, X_test, y_train, y_test)
-    plot_accuracy("SVM", cm_svm, accuracy_svm)
-    print("with SMOTE: ")
-    cm_svm, accuracy_svm, svm_model =support_vector_machine(X_train_smote, X_test, y_train_smote, y_test)
-    plot_accuracy("SVM", cm_svm, accuracy_svm)
+    # print("without SMOTE: ")
+    # cm_svm, accuracy_svm, svm_model =support_vector_machine(X_train, X_test, y_train, y_test)
+    # plot_accuracy("SVM", cm_svm, accuracy_svm)
+    # print("with SMOTE: ")
+    # cm_svm, accuracy_svm, svm_model =support_vector_machine(X_train_smote, X_test, y_train_smote, y_test)
+    # plot_accuracy("SVM", cm_svm, accuracy_svm)
     #KNN
 
     grid_param = {
@@ -298,9 +299,12 @@ def main():
     #knn_dist=nested_CV(X_train_smote, y_train_smote, KNeighborsClassifier(),grid_param)
     #print("DONE with SMOTE")
     #sys.exit("doei")
-
-    #cm_knn, accuracy_knn, knn=k_nearest_neighbors(X_train, X_test, y_train, y_test)
-    #plot_accuracy("K-NN", cm_knn, accuracy_knn)
+    # print("without SMOTE: ")
+    # cm_knn, accuracy_knn, knn=k_nearest_neighbors(X_train, X_test, y_train, y_test)
+    # plot_accuracy("K-NN", cm_knn, accuracy_knn)
+    # print("with SMOTE: ")
+    # cm_knn, accuracy_knn, knn=k_nearest_neighbors(X_train_smote, X_test, y_train_smote, y_test)
+    # plot_accuracy("K-NN", cm_knn, accuracy_knn)
 
     #RF - random forest
     grid_param = {
@@ -312,10 +316,12 @@ def main():
     #print("after without SMOTE")
     #rf_dist=nested_CV(X_train_smote, y_train_smote, RandomForestClassifier(), grid_param)
     #print("after with SMOTE")
-
-    #cm_rf,accuracy_rf, rf= random_forest(X_train, X_test, y_train, y_test)
-    #plot_accuracy("Random forest", cm_rf, accuracy_rf)
-
+    # print("without smote")
+    # cm_rf,accuracy_rf, rf= random_forest(X_train, X_test, y_train, y_test)
+    # plot_accuracy("Random forest", cm_rf, accuracy_rf)
+    print("with smote")
+    cm_rf,accuracy_rf, rf= random_forest(X_train_smote, X_test, y_train_smote, y_test)
+    plot_accuracy("Random forest", cm_rf, accuracy_rf)
     # plot_boundaries(svm_model,tree,knn, X_test, y_test)
 
     # NAIVE Bayes
