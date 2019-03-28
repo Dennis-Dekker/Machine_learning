@@ -62,7 +62,7 @@ def nested_CV(X_train,y_train, estimator, param):
 
         in_cv =KFold(n_splits=3, shuffle=True, random_state=state)
         #inner loop for hyperparameters tuning
-        GSCV=GridSearchCV(estimator=estimator, param_grid=param, cv=in_cv)
+        GSCV=GridSearchCV(estimator=estimator, param_grid=param, cv=in_cv, verbose=2,n_jobs=-1)
         #train a model with each set of parameters
         GSCV.fit(X_train_out, y_train_out)
         #predict using the best set of hyperparameters
@@ -168,13 +168,13 @@ def organize_data():
     #Data = np.loadtxt("data/PCA_transformed_raw_data.csv", delimiter=",")
     #Labels=pd.read_csv("data/raw_labels.csv",index_col=0)
     Data=pd.read_csv("data/PCA_transformed_raw_data.csv")
-    pca_color=sns.pairplot(x_vars=["PC3"], y_vars=["PC4"], data=Data, hue="cancer_type", height=5)
-    path_PCA_figure_color = "images/PCA_color_pc3vs4.png"
+    pca_color=sns.pairplot(x_vars=["PC2"], y_vars=["PC3"], data=Data, hue="cancer_type", height=5)
+    path_PCA_figure_color = "images/PCA_color_pc2vs3.png"
     pca_color.savefig(path_PCA_figure_color)
     print("Image saved to: " + path_PCA_figure_color)
     Data=Data.values #convert from pandas to numpy
     Labels=Data[:,10]
-    Data=Data[:,0:5]
+    Data=Data[:,0:4]
     #convert labels from string to numbers
     #Labels, uniques = pd.factorize(Labels.iloc[:, 0].tolist())
     Labels, uniques = pd.factorize(Labels)
@@ -202,9 +202,13 @@ def organize_data():
     X_sm_train, y_sm_train = smote.fit_sample(X_train,y_train)
     #plot after oversampling
     plt.scatter(X_sm_train[:,0], X_sm_train[:,1], s=4, alpha=1, c=y_sm_train,  cmap='RdYlBu_r')
+    plt.xlabel("PC 1")
+    plt.ylabel("PC 2")
     plt.show()
     plt.clf()
     plt.scatter(X_train[:,0], X_train[:,1], s=4, alpha=1, c=y_train,  cmap='RdYlBu_r')
+    plt.xlabel("PC 1")
+    plt.ylabel("PC 2")
     plt.show()
     #uniques, counts=np.unique(y_sm_train, return_counts=True)
     #print(dict(zip(uniques,counts)))
@@ -271,7 +275,7 @@ def main():
     #SVM
 
     tuned_parameters = [{'kernel': ['rbf'], 'gamma': [1e-3, 1e-4], 'C': [1, 10, 100]},
-    {'kernel': ['linear'], 'C': [1, 10, 100]}
+    {'kernel': ['linear'], 'C': [1, 5]}
     ]
     #svm_dist=nested_CV(X_train,y_train, SVC(), tuned_parameters)
     #print("DONE without SMOTE")
