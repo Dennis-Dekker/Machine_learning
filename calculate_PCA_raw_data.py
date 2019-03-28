@@ -151,6 +151,7 @@ def main():
     plt.ylabel("PC2 (" + str(round(pca.explained_variance_ratio_[1]*100, 1)) + "%)")
     fig_PCA.figure.savefig(path_PCA_figure)
     print("Image saved to: " + path_PCA_figure)
+    plt.show()
     
     outliers = []
     for i in finalDf.index.values:
