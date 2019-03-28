@@ -279,11 +279,10 @@ def main():
     ]
     #svm_dist=nested_CV(X_train,y_train, SVC(), tuned_parameters)
     #print("DONE without SMOTE")
-    svm_dist=nested_CV(X_train_smote,y_train_smote, SVC(), tuned_parameters)
-    print("DONE with SMOTE")
+    #svm_dist=nested_CV(X_train_smote,y_train_smote, SVC(), tuned_parameters)
+    #print("DONE with SMOTE")
     #cm_svm, accuracy_svm, svm_model =support_vector_machine(X_train, X_test, y_train, y_test)
     #plot_accuracy("SVM", cm_svm, accuracy_svm)
-    sys.exit("doei")
     #KNN
 
     grid_param = {
@@ -291,9 +290,13 @@ def main():
     'weights':['uniform','distance']
     }
     #knn_dist=nested_CV(X_train, y_train, KNeighborsClassifier(),grid_param)
+    #print("DONE without SMOTE")
+    #knn_dist=nested_CV(X_train_smote, y_train_smote, KNeighborsClassifier(),grid_param)
+    #print("DONE with SMOTE")
+    #sys.exit("doei")
 
-    cm_knn, accuracy_knn, knn=k_nearest_neighbors(X_train, X_test, y_train, y_test)
-    plot_accuracy("K-NN", cm_knn, accuracy_knn)
+    #cm_knn, accuracy_knn, knn=k_nearest_neighbors(X_train, X_test, y_train, y_test)
+    #plot_accuracy("K-NN", cm_knn, accuracy_knn)
 
     #RF - random forest
     grid_param = {
@@ -301,12 +304,15 @@ def main():
     'criterion': ['gini', 'entropy'],
     'bootstrap': [True, False]
     }
-    
-    #rf_dist=nested_CV(X_train, y_train, RandomForestClassifier(), grid_param)
+    rf_dist=nested_CV(X_train, y_train, RandomForestClassifier(), grid_param)
+    print("after without SMOTE")
+    rf_dist=nested_CV(X_train_smote, y_train_smote, RandomForestClassifier(), grid_param)
+    print("after with SMOTE")
+
     #cm_rf,accuracy_rf, rf= random_forest(X_train, X_test, y_train, y_test)
     #plot_accuracy("Random forest", cm_rf, accuracy_rf)
 
-
+    sys.exit("doei")
     # plot_boundaries(svm_model,tree,knn, X_test, y_test)
 
     # NAIVE Bayes
