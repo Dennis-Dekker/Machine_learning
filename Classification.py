@@ -133,9 +133,13 @@ def random_forest(X_train, X_test, y_train, y_test):
     return cm, accuracy_score(y_test, predicted_labels), rf_gs
 
 def naive_bayes(X_train, X_test, y_train, y_test):
-    gnb = GaussianNB()
+    gnb = GaussianNB(var_smoothing=1e-9)
     y_pred = gnb.fit(X_train, y_train).predict(X_test)
     cm=confusion_matrix(y_test, y_pred)
+    print("cohen-kappa: \n")
+    print(cohen_kappa_score(y_test,y_pred))
+    print("F1 score: \n")
+    print(f1_score(y_test, y_pred, average='weighted'))
     return cm, accuracy_score(y_test,y_pred), gnb
 
 def plot_boundaries(svm_model,tree, knn, X,y):
@@ -319,9 +323,9 @@ def main():
     # print("without smote")
     # cm_rf,accuracy_rf, rf= random_forest(X_train, X_test, y_train, y_test)
     # plot_accuracy("Random forest", cm_rf, accuracy_rf)
-    print("with smote")
-    cm_rf,accuracy_rf, rf= random_forest(X_train_smote, X_test, y_train_smote, y_test)
-    plot_accuracy("Random forest", cm_rf, accuracy_rf)
+    # print("with smote")
+    # cm_rf,accuracy_rf, rf= random_forest(X_train_smote, X_test, y_train_smote, y_test)
+    # plot_accuracy("Random forest", cm_rf, accuracy_rf)
     # plot_boundaries(svm_model,tree,knn, X_test, y_test)
 
     # NAIVE Bayes
@@ -332,9 +336,13 @@ def main():
     #nb_dist=nested_CV(X_train, y_train, GaussianNB(), grid_param)
     #print("after without SMOTE")
     #nb_dist=nested_CV(X_train_smote, y_train_smote, GaussianNB(), grid_param)
-    #print("after with SMOTE")
-    # cm_nb,accuracy_nb, nb= naive_bayes(X_train, X_test, y_train, y_test)
-    # plot_accuracy("Naive bayes", cm_nb, accuracy_nb)
+    
+    print("no  SMOTE")
+    cm_nb,accuracy_nb, nb= naive_bayes(X_train, X_test, y_train, y_test)
+    plot_accuracy("Naive bayes", cm_nb, accuracy_nb)
+    print("yes  SMOTE")
+    cm_nb,accuracy_nb, nb= naive_bayes(X_train_smote, X_test, y_train_smote, y_test)
+    plot_accuracy("Naive bayes", cm_nb, accuracy_nb)
 
     #MLP classifier (NN)
     # grid_param = {
