@@ -304,10 +304,10 @@ def main():
     'criterion': ['gini', 'entropy'],
     'bootstrap': [True, False]
     }
-    rf_dist=nested_CV(X_train, y_train, RandomForestClassifier(), grid_param)
-    print("after without SMOTE")
-    rf_dist=nested_CV(X_train_smote, y_train_smote, RandomForestClassifier(), grid_param)
-    print("after with SMOTE")
+    #rf_dist=nested_CV(X_train, y_train, RandomForestClassifier(), grid_param)
+    #print("after without SMOTE")
+    #rf_dist=nested_CV(X_train_smote, y_train_smote, RandomForestClassifier(), grid_param)
+    #print("after with SMOTE")
 
     #cm_rf,accuracy_rf, rf= random_forest(X_train, X_test, y_train, y_test)
     #plot_accuracy("Random forest", cm_rf, accuracy_rf)
@@ -320,7 +320,10 @@ def main():
     'var_smoothing': [1e-9, 1e-10,1e-7],
     }
     
-    # nb_dist=nested_CV(X_train, y_train, GaussianNB(), grid_param)
+    nb_dist=nested_CV(X_train, y_train, GaussianNB(), grid_param)
+    print("after without SMOTE")
+    nb_dist=nested_CV(X_train_smote, y_train_smote, GaussianNB(), grid_param)
+    print("after with SMOTE")
     # cm_nb,accuracy_nb, nb= naive_bayes(X_train, X_test, y_train, y_test)
     # plot_accuracy("Naive bayes", cm_nb, accuracy_nb)
 
