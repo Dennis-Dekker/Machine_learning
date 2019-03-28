@@ -145,6 +145,13 @@ def main():
     #calculate PCA 
     pca, finalDf, all_compon = calculate_PCA(x, df_data)
     
+    fig_PCA = plt.scatter(finalDf.iloc[:,0], finalDf.iloc[:,1], s=4, alpha=0.3, cmap='RdYlBu_r')
+    path_PCA_figure = 'images/PCA_test_with_outliers.png'
+    plt.xlabel("PC1 (" + str(round(pca.explained_variance_ratio_[0]*100, 1)) + "%)")
+    plt.ylabel("PC2 (" + str(round(pca.explained_variance_ratio_[1]*100, 1)) + "%)")
+    fig_PCA.figure.savefig(path_PCA_figure)
+    print("Image saved to: " + path_PCA_figure)
+    
     outliers = []
     for i in finalDf.index.values:
         if finalDf.loc[i,"principal component 1"] > 200:
